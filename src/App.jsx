@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navigation from "./common/Navigation";
 import MovieList from "./features/movieList/MovieList";
 import MovieDetails from "./features/movieDetails/MovieDetails";
