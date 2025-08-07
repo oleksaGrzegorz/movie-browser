@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://oleksagrzegorz.github.io/movie-browser",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
