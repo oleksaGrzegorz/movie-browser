@@ -9,6 +9,8 @@ const MovieList = () => {
   const [genres, setGenres] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +20,7 @@ const MovieList = () => {
             `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`
           ),
           fetch(
-            `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+            `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=${currentPage}`
           ),
         ]);
 
@@ -36,6 +38,9 @@ const MovieList = () => {
 
         setGenres(genresMap);
         setMovies(moviesData.results);
+        setTotalPages(
+          moviesData.total_pages > 500 ? 500 : moviesData.total_pages
+        );
 
         setTimeout(() => {
           setLoading(false);
@@ -48,11 +53,18 @@ const MovieList = () => {
       }
     };
 
+    setLoading(true);
     fetchData();
-  }, []);
+  }, [currentPage]);
+
+  const goToFirstPage = () => setCurrentPage(1);
+  const goToPreviousPage = () =>
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const goToNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToLastPage = () => setCurrentPage(totalPages);
 
   if (loading) return <p>Loading...</p>;
-
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -78,7 +90,7 @@ const MovieList = () => {
               <h2>
                 {title} ({new Date(release_date).getFullYear()})
               </h2>
-              <p>{genre_ids.map((id) => genres[id]).join(", ")}</p>
+              <p>{genre_ids.map((genreId) => genres[genreId]).join(", ")}</p>
               <p>
                 Rating: {vote_average} / 10 ({vote_count} votes)
               </p>
@@ -86,6 +98,30 @@ const MovieList = () => {
           )
         )}
       </ul>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginTop: "20px",
+        }}
+      >
+        <button onClick={goToFirstPage} disabled={currentPage === 1}>
+          ⬅ First
+        </button>
+        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>
+          Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+        </span>
+        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+          Next
+        </button>
+        <button onClick={goToLastPage} disabled={currentPage === totalPages}>
+          Last
+        </button>
+      </div>
     </div>
   );
 };
