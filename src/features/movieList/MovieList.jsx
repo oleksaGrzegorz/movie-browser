@@ -44,12 +44,12 @@ const MovieList = () => {
 
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        }, 1000);
       } catch (err) {
         setTimeout(() => {
           setError(err.message);
           setLoading(false);
-        }, 3000);
+        }, 1000);
       }
     };
 
@@ -98,16 +98,9 @@ const MovieList = () => {
           )
         )}
       </ul>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          marginTop: "20px",
-        }}
-      >
+      <div>
         <button onClick={goToFirstPage} disabled={currentPage === 1}>
-          ⬅ First
+          First
         </button>
         <button onClick={goToPreviousPage} disabled={currentPage === 1}>
           Previous
