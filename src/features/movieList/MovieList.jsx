@@ -73,8 +73,6 @@ const MovieList = () => {
               ) : (
                 <div
                   className="posterPlaceholder"
-                  aria-label="No poster available"
-                  style={{ width: 200, height: 300, backgroundColor: "#ccc" }}
                 >
                   SVG Placeholder
                 </div>
