@@ -58,10 +58,8 @@ const MovieList = () => {
   }, [currentPage]);
 
   const goToFirstPage = () => setCurrentPage(1);
-  const goToPreviousPage = () =>
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const goToLastPage = () => setCurrentPage(totalPages);
 
   if (loading) return <p>Loading...</p>;
@@ -91,29 +89,19 @@ const MovieList = () => {
                 {title} ({new Date(release_date).getFullYear()})
               </h2>
               <p>{genre_ids.map((genreId) => genres[genreId]).join(", ")}</p>
-              <p>
-                Rating: {vote_average} / 10 ({vote_count} votes)
-              </p>
+              <p>X {vote_average} {vote_count} votes</p>
             </li>
           )
         )}
       </ul>
       <div>
-        <button onClick={goToFirstPage} disabled={currentPage === 1}>
-          First
-        </button>
-        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>
-          Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
-        </span>
-        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button>
-        <button onClick={goToLastPage} disabled={currentPage === totalPages}>
-          Last
-        </button>
+        <button onClick={goToFirstPage} disabled={currentPage === 1}>vFirst</button>
+        <button onClick={goToPreviousPage} disabled={currentPage === 1}>vPrevious</button>
+
+        <span>Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong></span>
+
+        <button onClick={goToNextPage} disabled={currentPage === totalPages}>Next v</button>
+        <button onClick={goToLastPage} disabled={currentPage === totalPages}>Last v</button>
       </div>
     </div>
   );
