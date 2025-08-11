@@ -20,8 +20,9 @@ export const List = styled.ul`
   list-style: none;
   padding: 0;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 667px) {
     grid-template-columns: repeat(1, 1fr);
+    width: 100%;
     gap: 20px;
   }
 `;
