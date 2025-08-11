@@ -110,6 +110,7 @@ export const VoteInfo = styled.span`
 export const PaginationWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin-top: 20px;
   font-family: Arial, sans-serif;
