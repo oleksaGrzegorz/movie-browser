@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 1368px;
-  height: 1391px;
+  max-width: 1368px;
+  width: 100%;
   margin: 0 auto;
 `;
 
@@ -10,7 +10,6 @@ export const MainHeader = styled.h1`
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
-  letter-spacing: 0px;
   vertical-align: middle;
 `;
 
@@ -20,6 +19,11 @@ export const List = styled.ul`
   gap: 20px;
   list-style: none;
   padding: 0;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
 `;
 
 export const MovieCard = styled.li`
@@ -49,7 +53,6 @@ export const Title = styled.h2`
   font-weight: 500;
   font-size: 22px;
   line-height: 130%;
-  letter-spacing: 0px;
   vertical-align: middle;
   margin: 0px;
 `;
@@ -58,7 +61,6 @@ export const Year = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
-  letter-spacing: 0px;
   vertical-align: middle;
   color: #7e839a;
   margin: 0px;
@@ -78,7 +80,6 @@ export const GenreButton = styled.span`
   font-weight: 400;
   font-size: 14px;
   line-height: 140%;
-  letter-spacing: 0%;
   vertical-align: middle;
 `;
 
@@ -92,7 +93,6 @@ export const VoteAverage = styled.span`
   font-weight: 600;
   font-size: 16px;
   line-height: 150%;
-  letter-spacing: 0px;
   vertical-align: middle;
   margin-right: 12px;
 `;
@@ -101,29 +101,27 @@ export const VoteInfo = styled.span`
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
-  letter-spacing: 0px;
   vertical-align: middle;
   color: #7e839a;
 `;
-
 
 export const PaginationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
-  font-family: Arial, sans-serif;
+  margin-top: 40px;
   font-size: 14px;
+  padding-bottom: 103px;
 `;
 
 export const PaginationButton = styled.button`
   background: #f0f0f0;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 6px 12px;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 
   &:hover:not(:disabled) {
