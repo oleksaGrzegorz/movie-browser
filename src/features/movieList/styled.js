@@ -44,6 +44,24 @@ export const Poster = styled.img`
   border-radius: 20px;
 `;
 
+export const PosterPlaceholder = styled.div`
+  width: 292px;
+  height: 414px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #c4c4c4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledVideoIcon = styled.img`
+  width: 48px;
+  height: 48px;
+  fill: #ffffff;
+  color: #ffffff;
+`;
+
 export const Description = styled.div`
   padding: 0px 16px;
   margin: 0px;
@@ -85,9 +103,12 @@ export const GenreButton = styled.span`
 `;
 
 export const Vote = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 0 16px 16px 16px;
   margin-top: auto;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 `;
 
 export const VoteAverage = styled.span`
@@ -116,14 +137,25 @@ export const PaginationWrapper = styled.div`
   padding-bottom: 103px;
 `;
 
+export const ButtonParagraph = styled.p`
+  color: black;
+`;
+
 export const PaginationButton = styled.button`
-  background: #f0f0f0;
+  background: #d6e4ff;
   border: none;
   border-radius: 5px;
   padding: 6px 12px;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 75px;
+  height: 36px;
+  color: #0044cc;
 
   &:hover:not(:disabled) {
     background: #e0e0e0;
@@ -132,9 +164,19 @@ export const PaginationButton = styled.button`
   &:disabled {
     opacity: 0.5;
     cursor: default;
+
+    color: #7e839a;
   }
 `;
 
 export const PageInfo = styled.span`
-  color: #333;
+  color: #7e839a;
+  font-size: 16px;
+`;
+
+export const Page = styled.span`
+  color: black;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
 `;
