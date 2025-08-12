@@ -18,7 +18,14 @@ import {
   PaginationWrapper,
   PaginationButton,
   PageInfo,
+  Page,
+  ButtonParagraph,
+  PosterPlaceholder,
+  StyledVideoIcon,
 } from "./styled";
+import StarIcon from "./StarIcon";
+import ArrowIcon from "./ArrowIcon";
+import VideoIcon from "./video.svg";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
@@ -94,7 +101,9 @@ const MovieList = () => {
               {poster_path ? (
                 <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
               ) : (
-                <div className="posterPlaceholder">SVG Placeholder</div>
+                <PosterPlaceholder>
+                  <StyledVideoIcon src={VideoIcon} alt="No poster available" />
+                </PosterPlaceholder>
               )}
 
               <Description>
@@ -115,7 +124,10 @@ const MovieList = () => {
               </Description>
 
               <Vote>
-                ⭐ <VoteAverage>{vote_average.toFixed(1)}</VoteAverage>{" "}
+                <StarIcon />
+                <VoteAverage>
+                  {vote_average.toFixed(1).replace(".", ",")}
+                </VoteAverage>{" "}
                 <VoteInfo>{vote_count} votes</VoteInfo>
               </Vote>
             </MovieCard>
@@ -124,28 +136,32 @@ const MovieList = () => {
       </List>
       <PaginationWrapper>
         <PaginationButton onClick={goToFirstPage} disabled={currentPage === 1}>
-          First
+          <ArrowIcon direction="left" />{" "}
+          <ButtonParagraph>First</ButtonParagraph>
         </PaginationButton>
         <PaginationButton
           onClick={goToPreviousPage}
           disabled={currentPage === 1}
         >
-          Previous
+          <ArrowIcon direction="left" />{" "}
+          <ButtonParagraph>Previous</ButtonParagraph>
         </PaginationButton>
         <PageInfo>
-          Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+          Page <Page>{currentPage}</Page> of <Page>{totalPages}</Page>
         </PageInfo>
         <PaginationButton
           onClick={goToNextPage}
           disabled={currentPage === totalPages}
         >
-          Next
+          <ButtonParagraph>Next</ButtonParagraph>{" "}
+          <ArrowIcon direction="right" />
         </PaginationButton>
         <PaginationButton
           onClick={goToLastPage}
           disabled={currentPage === totalPages}
         >
-          Last
+          <ButtonParagraph>Last</ButtonParagraph>{" "}
+          <ArrowIcon direction="right" />
         </PaginationButton>
       </PaginationWrapper>
     </Container>
