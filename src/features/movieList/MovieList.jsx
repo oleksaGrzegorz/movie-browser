@@ -24,8 +24,8 @@ import {
   StyledVideoIcon,
 } from "./styled";
 import StarIcon from "./StarIcon";
-import ArrowIcon from "./ArrowIcon";
 import VideoIcon from "./video.svg";
+import { StyledVectorLeft, StyledVectorRight } from "./styled";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
@@ -136,14 +136,14 @@ const MovieList = () => {
       </List>
       <PaginationWrapper>
         <PaginationButton onClick={goToFirstPage} disabled={currentPage === 1}>
-          <ArrowIcon direction="left" />{" "}
+          <StyledVectorLeft disabled={currentPage === 1} />
           <ButtonParagraph>First</ButtonParagraph>
         </PaginationButton>
         <PaginationButton
           onClick={goToPreviousPage}
           disabled={currentPage === 1}
         >
-          <ArrowIcon direction="left" />{" "}
+          <StyledVectorLeft disabled={currentPage === 1} />
           <ButtonParagraph>Previous</ButtonParagraph>
         </PaginationButton>
         <PageInfo>
@@ -154,14 +154,14 @@ const MovieList = () => {
           disabled={currentPage === totalPages}
         >
           <ButtonParagraph>Next</ButtonParagraph>{" "}
-          <ArrowIcon direction="right" />
+          <StyledVectorRight disabled={currentPage === totalPages} />
         </PaginationButton>
         <PaginationButton
           onClick={goToLastPage}
           disabled={currentPage === totalPages}
         >
           <ButtonParagraph>Last</ButtonParagraph>{" "}
-          <ArrowIcon direction="right" />
+          <StyledVectorRight disabled={currentPage === totalPages} />
         </PaginationButton>
       </PaginationWrapper>
     </Container>

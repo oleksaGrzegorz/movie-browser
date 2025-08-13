@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { ReactComponent as VectorRightIcon } from "./vectorRight.svg?react";
+import { ReactComponent as VectorLeftIcon } from "./vectorLeft.svg?react";
 
 export const Container = styled.div`
   max-width: 1368px;
@@ -139,6 +141,10 @@ export const PaginationWrapper = styled.div`
 
 export const ButtonParagraph = styled.p`
   color: black;
+
+  @media (max-width: 667px) {
+    display: none;
+  }
 `;
 
 export const PaginationButton = styled.button`
@@ -166,6 +172,24 @@ export const PaginationButton = styled.button`
     cursor: default;
 
     color: #7e839a;
+  }
+`;
+
+export const StyledVectorRight = styled(VectorRightIcon)`
+  width: 16px;
+  height: 16px;
+
+  & path {
+    fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
+  }
+`;
+
+export const StyledVectorLeft = styled(VectorLeftIcon)`
+  width: 16px;
+  height: 16px;
+
+  & path {
+    fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
   }
 `;
 
