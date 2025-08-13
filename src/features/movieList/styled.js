@@ -12,7 +12,6 @@ export const MainHeader = styled.h1`
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
-  vertical-align: middle;
 
   @media (max-width: 667px) {
     font-size: 18px;
@@ -100,7 +99,6 @@ export const Title = styled.h2`
   font-weight: 500;
   font-size: 22px;
   line-height: 130%;
-  vertical-align: middle;
   margin: 0px;
 `;
 
@@ -108,7 +106,6 @@ export const Year = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
-  vertical-align: middle;
   color: #7e839a;
   margin: 0px;
 `;
@@ -127,7 +124,6 @@ export const GenreButton = styled.span`
   font-weight: 400;
   font-size: 14px;
   line-height: 140%;
-  vertical-align: middle;
 `;
 
 export const Vote = styled.p`
@@ -143,7 +139,6 @@ export const VoteAverage = styled.span`
   font-weight: 600;
   font-size: 16px;
   line-height: 150%;
-  vertical-align: middle;
   margin-right: 12px;
 `;
 
@@ -151,7 +146,6 @@ export const VoteInfo = styled.span`
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
-  vertical-align: middle;
   color: #7e839a;
 `;
 
