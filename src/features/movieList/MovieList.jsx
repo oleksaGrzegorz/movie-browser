@@ -23,7 +23,7 @@ import {
   PosterPlaceholder,
   StyledVideoIcon,
 } from "./styled";
-import StarIcon from "./StarIcon";
+import StarIcon from "./star.svg";
 import VideoIcon from "./video.svg";
 import { StyledVectorLeft, StyledVectorRight } from "./styled";
 
@@ -121,22 +121,28 @@ const MovieList = () => {
                       ))
                     : "No genres"}
                 </Genre>
-              </Description>
 
-              <Vote>
-                <StarIcon />
-                <VoteAverage>
-                  {vote_average.toFixed(1).replace(".", ",")}
-                </VoteAverage>{" "}
-                <VoteInfo>{vote_count} votes</VoteInfo>
-              </Vote>
+                <Vote>
+                  <img src={StarIcon}/>
+                  <VoteAverage>
+                    {vote_average.toFixed(1).replace(".", ",")}
+                  </VoteAverage>{" "}
+                  <VoteInfo>{vote_count} votes</VoteInfo>
+                </Vote>
+              </Description>
             </MovieCard>
           )
         )}
       </List>
       <PaginationWrapper>
         <PaginationButton onClick={goToFirstPage} disabled={currentPage === 1}>
-          <StyledVectorLeft disabled={currentPage === 1} />
+          <span className="double-arrow">
+            <StyledVectorLeft disabled={currentPage === 1} />
+            <StyledVectorLeft
+              className="mobile-only"
+              disabled={currentPage === 1}
+            />
+          </span>
           <ButtonParagraph>First</ButtonParagraph>
         </PaginationButton>
         <PaginationButton
@@ -160,8 +166,14 @@ const MovieList = () => {
           onClick={goToLastPage}
           disabled={currentPage === totalPages}
         >
-          <ButtonParagraph>Last</ButtonParagraph>{" "}
-          <StyledVectorRight disabled={currentPage === totalPages} />
+          <ButtonParagraph>Last</ButtonParagraph>
+          <span className="double-arrow">
+            <StyledVectorRight disabled={currentPage === totalPages} />
+            <StyledVectorRight
+              className="mobile-only"
+              disabled={currentPage === totalPages}
+            />
+          </span>
         </PaginationButton>
       </PaginationWrapper>
     </Container>

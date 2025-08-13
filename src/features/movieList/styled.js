@@ -13,6 +13,10 @@ export const MainHeader = styled.h1`
   font-size: 36px;
   line-height: 120%;
   vertical-align: middle;
+
+  @media (max-width: 667px) {
+    font-size: 18px;
+  }
 `;
 
 export const List = styled.ul`
@@ -37,6 +41,12 @@ export const MovieCard = styled.li`
   flex-direction: column;
   overflow: hidden;
   border-radius: 5px;
+
+  @media (max-width: 667px) {
+    flex-direction: row;
+    width: 100%;
+    max-height: none;
+  }
 `;
 
 export const Poster = styled.img`
@@ -44,6 +54,12 @@ export const Poster = styled.img`
   height: 414px;
   padding: 16px;
   border-radius: 20px;
+
+  @media (max-width: 667px) {
+    width: 114px;
+    height: 169px;
+    padding: 8px;
+  }
 `;
 
 export const PosterPlaceholder = styled.div`
@@ -55,6 +71,12 @@ export const PosterPlaceholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 667px) {
+    width: 120px;
+    height: auto;
+    padding: 8px;
+  }
 `;
 
 export const StyledVideoIcon = styled.img`
@@ -68,6 +90,10 @@ export const Description = styled.div`
   padding: 0px 16px;
   margin: 0px;
   flex: 1;
+
+  @media (max-width: 667px) {
+    padding: 8px;
+  }
 `;
 
 export const Title = styled.h2`
@@ -170,8 +196,27 @@ export const PaginationButton = styled.button`
   &:disabled {
     opacity: 0.5;
     cursor: default;
-
     color: #7e839a;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  .double-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0px;
+  }
+
+  @media (max-width: 667px) {
+    min-width: 50px;
+    padding: 4px 8px;
+    gap: 4px;
+
+    .mobile-only {
+      display: inline;
+    }
   }
 `;
 
@@ -182,6 +227,11 @@ export const StyledVectorRight = styled(VectorRightIcon)`
   & path {
     fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
   }
+
+  @media (max-width: 667px) {
+    width: 10px;
+    height: 10px;
+  }
 `;
 
 export const StyledVectorLeft = styled(VectorLeftIcon)`
@@ -190,6 +240,11 @@ export const StyledVectorLeft = styled(VectorLeftIcon)`
 
   & path {
     fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
+  }
+
+  @media (max-width: 667px) {
+    width: 10px;
+    height: 10px;
   }
 `;
 
