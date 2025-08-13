@@ -17,3 +17,15 @@ export const fetchPopularMovies = async (page = 1) => {
     totalPages: data.total_pages,
   };
 };
+
+export const fetchPopularPeople = async (page = 1) => {
+  const res = await fetch(`${BASE_URL}/person/popular?api_key=${API_KEY}&language=en-US&page=${page}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch popular people");
+  }
+  const data = await res.json();
+  return {
+    people: data.results,
+    totalPages: data.total_pages,
+  };
+};
