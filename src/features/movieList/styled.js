@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ReactComponent as VectorRightIcon } from "./vectorRight.svg?react";
-import { ReactComponent as VectorLeftIcon } from "./vectorLeft.svg?react";
+import { ReactComponent as VectorRightIcon } from "./images/vectorRight.svg?react";
+import { ReactComponent as VectorLeftIcon } from "./images/vectorLeft.svg?react";
 
 export const Container = styled.div`
   max-width: 1368px;

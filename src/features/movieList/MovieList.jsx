@@ -23,8 +23,8 @@ import {
   PosterPlaceholder,
   StyledVideoIcon,
 } from "./styled";
-import StarIcon from "./star.svg";
-import VideoIcon from "./video.svg";
+import StarIcon from "./images/star.svg";
+import VideoIcon from "./images/video.svg";
 import { StyledVectorLeft, StyledVectorRight } from "./styled";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
