@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-const activeClassName = "link-active";
-
 export const StyledNav = styled.nav`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
@@ -23,23 +21,25 @@ export const StyledNav = styled.nav`
   }
 `;
 
-export const StyledNavLink = styled(NavLink).attrs(() => ({
-    activeClassName,
-}))`
-    color: ${({ theme }) => theme.color.white};
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 14px;
+export const StyledNavLink = styled(NavLink)`
+  color: ${({ theme }) => theme.color.white};
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-left: 30px;
+  padding: 8px 24px;
+  border: 2px solid transparent;
+  border-radius: 24px;
+  transition: all 0.2s ease-in-out;
+  font-weight: normal;
 
-    &.${activeClassName} {
-        font-weight: bold;
-    }
+  &.active {
+    border-color: ${({ theme }) => theme.color.white};
+  }
 
-    &:hover {
-        border: 2px solid;
-        border-radius: 24px;
-        padding: 8px 24px 8px 24px;
-    }
+  &:hover {
+    border-color: ${({ theme }) => theme.color.white};
+  }
 `;
 
 export const Menu = styled.div`
@@ -77,9 +77,9 @@ export const LogoText = styled.p`
 `;
 
 export const Browser = styled.input`
-    border: 1px;
-    border-radius: 33px;
-    width: 432px;
-    height: 48px;
-    padding: 16px 8px 16px 8px;
+  border: 1px;
+  border-radius: 33px;
+  width: 432px;
+  height: 48px;
+  padding: 16px 8px 16px 8px;
 `;
