@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import ProfilePlaceholder from "./Profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
 import {
   Container,
@@ -63,9 +64,21 @@ export default function PersonList() {
           <PersonItem key={id}>
             <PersonCard to={`/people/${id}`}>
               <PersonThumb>
-                {img(profile_path)
-                  ? <img src={img(profile_path)} alt={name} loading="lazy" />
-                  : null}
+                {profile_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w342${profile_path}`}
+                    alt={name}
+                    loading="lazy"
+                  />
+                ) : (
+                  <img
+                    src={ProfilePlaceholder}
+                    alt="No profile available"
+                    width="72"
+                    height="72"
+                    style={{ objectFit: "contain" }}
+                  />
+                )}
               </PersonThumb>
               <PersonName>{name}</PersonName>
             </PersonCard>
