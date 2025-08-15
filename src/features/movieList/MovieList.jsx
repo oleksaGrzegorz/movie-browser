@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchGenres, fetchPopularMovies } from "./fetchMovieApi";
+import { Link } from "react-router-dom";
 
 import {
   Container,
@@ -98,13 +99,18 @@ const MovieList = () => {
             vote_count,
           }) => (
             <MovieCard key={id}>
-              {poster_path ? (
-                <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
-              ) : (
-                <PosterPlaceholder>
-                  <StyledVideoIcon src={VideoIcon} alt="No poster available" />
-                </PosterPlaceholder>
-              )}
+              <Link to={`/movies/${id}`}>
+                {poster_path ? (
+                  <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
+                ) : (
+                  <PosterPlaceholder>
+                    <StyledVideoIcon
+                      src={VideoIcon}
+                      alt="No poster available"
+                    />
+                  </PosterPlaceholder>
+                )}
+              </Link>
 
               <Description>
                 <Title>{title}</Title>
@@ -123,7 +129,7 @@ const MovieList = () => {
                 </Genre>
 
                 <Vote>
-                  <img src={StarIcon}/>
+                  <img src={StarIcon} />
                   <VoteAverage>
                     {vote_average.toFixed(1).replace(".", ",")}
                   </VoteAverage>{" "}
