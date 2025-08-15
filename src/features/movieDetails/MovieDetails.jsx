@@ -8,6 +8,7 @@ import {
   BackdropTitle,
   BackdropRating,
   BackdropVotes,
+  ContentWrapper,
   InfoSection,
   Poster,
   MovieInfo,
@@ -23,6 +24,7 @@ import {
   GridItem,
   PlaceholderIcon,
   PosterPlaceholder,
+
 } from "./styled";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
@@ -93,6 +95,7 @@ const MovieDetails = () => {
         </Backdrop>
       )}
 
+      <ContentWrapper>
       <InfoSection>
         {posterUrl ? (
           <Poster src={posterUrl} alt={movie.title} />
@@ -160,6 +163,7 @@ const MovieDetails = () => {
           </Grid>
         </Section>
       )}
+      </ContentWrapper>
     </Container>
   );
 };

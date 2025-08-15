@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding: 20px;
-  max-width: 1200px;
   margin: 0 auto;
 `;
 
@@ -12,7 +10,6 @@ export const Backdrop = styled.div`
   justify-content: center;
   background-color: black;
   height: 60vh;
-  border-radius: 10px;
   margin-bottom: 20px;
   overflow: hidden;
 `;
@@ -33,7 +30,7 @@ export const BackdropContent = styled.div`
 export const BackdropTitle = styled.h1`
   font-size: 2.5rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 `;
 
 export const BackdropRating = styled.span`
@@ -41,13 +38,17 @@ export const BackdropRating = styled.span`
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: 5px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 `;
 
 export const BackdropVotes = styled.span`
   display: block;
   font-size: 1rem;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+`;
+export const ContentWrapper = styled.div`
+  max-width: 1368px;
+  margin: 0 auto;
 `;
 
 export const InfoSection = styled.div`
@@ -56,7 +57,7 @@ export const InfoSection = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background-color: white;
 `;
