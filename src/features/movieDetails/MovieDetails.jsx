@@ -22,12 +22,26 @@ import {
   Section,
   Grid,
   GridItem,
-  PlaceholderIcon,
   PosterPlaceholder,
   BackdropOverlay,
   BackdropImageContainer,
-
+  Label,
+  MovieRating,
+  MovieVotes,
+  StyledStarIcon,
+  BackdropRatingExtra,
+  RatingContainer,
+  RatingWrapper,
+  Header,
+  PosterImage,
+  PersonInfo,
+  ExtraPersonInfo,
+  PlaceholderIcon,
+  Icon,
 } from "./styled";
+
+import PersonIcon from "./Profile.svg";
+import StarIcon from "../movieList/images/star.svg";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -84,90 +98,110 @@ const MovieDetails = () => {
 
   return (
     <Container>
-{backdropUrl && (
-  <Backdrop>
-    <BackdropImageContainer>
-      <BackdropImage src={backdropUrl} alt={movie.title} />
-      <BackdropOverlay />
-      <BackdropContent>
-        <BackdropTitle>{movie.title}</BackdropTitle>
-        <BackdropRating>
-          ⭐ {movie.vote_average.toFixed(1).replace(".", ",")}/10
-        </BackdropRating>
-        <BackdropVotes>{movie.vote_count} głosów</BackdropVotes>
-      </BackdropContent>
-    </BackdropImageContainer>
-  </Backdrop>
-)}
+      {backdropUrl && (
+        <Backdrop>
+          <BackdropImageContainer>
+            <BackdropImage src={backdropUrl} alt={movie.title} />
+            <BackdropOverlay />
+            <BackdropContent>
+              <BackdropTitle>{movie.title}</BackdropTitle>
+              <BackdropRating>
+                <StyledStarIcon src={StarIcon} alt="star" size={40} />
+                <RatingWrapper>
+                  {movie.vote_average.toFixed(1).replace(".", ",")}
+                  <BackdropRatingExtra>/ 10</BackdropRatingExtra>
+                </RatingWrapper>
+              </BackdropRating>
+
+              <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
+            </BackdropContent>
+          </BackdropImageContainer>
+        </Backdrop>
+      )}
 
       <ContentWrapper>
-      <InfoSection>
-        {posterUrl ? (
-          <Poster src={posterUrl} alt={movie.title} />
-        ) : (
-          <PosterPlaceholder />
+        <InfoSection>
+          {posterUrl ? (
+            <Poster src={posterUrl} alt={movie.title} />
+          ) : (
+            <PosterPlaceholder />
+          )}
+          <MovieInfo>
+            <Title>{movie.title}</Title>
+            <Year>{movie.release_date?.slice(0, 4) || "N/A"}</Year>
+            <Production>
+              <Label>Production: </Label>
+              {movie.production_countries.length
+                ? movie.production_countries.map((c) => c.name).join(", ")
+                : "N/A"}
+            </Production>
+            <ReleaseDate>
+              {" "}
+              <Label>Release date:</Label> {releaseDateFormatted}
+            </ReleaseDate>
+            <Genres>
+              {movie.genres.map((genre) => (
+                <GenreTag key={genre.id}>{genre.name}</GenreTag>
+              ))}
+            </Genres>
+
+            <RatingContainer>
+              <StyledStarIcon src={StarIcon} alt="star" size={24} />
+              <MovieRating>
+                {movie.vote_average.toFixed(1).replace(".", ",")}
+              </MovieRating>
+
+              <MovieVotes>/ 10</MovieVotes>
+              <MovieVotes>{movie.vote_count} votes</MovieVotes>
+            </RatingContainer>
+
+            <Overview>{movie.overview}</Overview>
+          </MovieInfo>
+        </InfoSection>
+
+        {credits && (
+          <Section>
+            <Header>Cast</Header>
+            <Grid>
+              {credits.cast.map((actor) => (
+                <GridItem key={actor.cast_id}>
+                  {actor.profile_path ? (
+                    <PosterImage
+                      src={`${IMG_POSTER_URL}${actor.profile_path}`}
+                      alt={actor.name}
+                    />
+                  ) : (
+                    <PlaceholderIcon>
+                      <Icon src={PersonIcon} />
+                    </PlaceholderIcon>
+                  )}
+                  <PersonInfo>{actor.name}</PersonInfo>
+                  <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
+                </GridItem>
+              ))}
+            </Grid>
+
+            <Header>Crew</Header>
+            <Grid>
+              {credits.crew.map((member) => (
+                <GridItem key={member.credit_id}>
+                  {member.profile_path ? (
+                    <PosterImage
+                      src={`${IMG_POSTER_URL}${member.profile_path}`}
+                      alt={member.name}
+                    />
+                  ) : (
+                    <PlaceholderIcon>
+                      <Icon src={PersonIcon} />
+                    </PlaceholderIcon>
+                  )}
+                  <PersonInfo>{member.name}</PersonInfo>
+                  <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
+                </GridItem>
+              ))}
+            </Grid>
+          </Section>
         )}
-        <MovieInfo>
-          <Title>{movie.title}</Title>
-          <Year>{movie.release_date?.slice(0, 4) || "N/A"}</Year>
-          <Production>
-            Production:{" "}
-            {movie.production_countries.length
-              ? movie.production_countries.map((c) => c.name).join(", ")
-              : "N/A"}
-          </Production>
-          <ReleaseDate>Release date: {releaseDateFormatted}</ReleaseDate>
-          <Genres>
-            {movie.genres.map((genre) => (
-              <GenreTag key={genre.id}>{genre.name}</GenreTag>
-            ))}
-          </Genres>
-          <BackdropRating>
-            ⭐ {movie.vote_average.toFixed(1).replace(".", ",")}/10
-          </BackdropRating>
-          <Overview>{movie.overview}</Overview>
-        </MovieInfo>
-      </InfoSection>
-
-      {credits && (
-        <Section>
-          <h3>Cast</h3>
-          <Grid>
-            {credits.cast.map((actor) => (
-              <GridItem key={actor.cast_id}>
-                {actor.profile_path ? (
-                  <img
-                    src={`${IMG_POSTER_URL}${actor.profile_path}`}
-                    alt={actor.name}
-                  />
-                ) : (
-                  <PlaceholderIcon />
-                )}
-                <p>{actor.name}</p>
-                <p>{actor.character}</p>
-              </GridItem>
-            ))}
-          </Grid>
-
-          <h3>Crew</h3>
-          <Grid>
-            {credits.crew.map((member) => (
-              <GridItem key={member.credit_id}>
-                {member.profile_path ? (
-                  <img
-                    src={`${IMG_POSTER_URL}${member.profile_path}`}
-                    alt={member.name}
-                  />
-                ) : (
-                  <PlaceholderIcon />
-                )}
-                <p>{member.name}</p>
-                <p>{member.job}</p>
-              </GridItem>
-            ))}
-          </Grid>
-        </Section>
-      )}
       </ContentWrapper>
     </Container>
   );

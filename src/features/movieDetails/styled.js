@@ -9,7 +9,7 @@ export const Backdrop = styled.div`
   display: flex;
   justify-content: center;
   background-color: black;
-  height: 60vh;
+  height: 770px;
   margin-bottom: 20px;
   overflow: hidden;
 `;
@@ -74,20 +74,38 @@ export const BackdropContent = styled.div`
 `;
 
 export const BackdropTitle = styled.h1`
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 64px;
+  font-weight: 600;
   margin: 0 0 10px 0;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-  line-height: 1.1;
+  line-height: 120%;
 `;
 
-export const BackdropRating = styled.span`
+export const StyledStarIcon = styled.img`
+  width: ${(props) => props.size || 24}px;
+  height: ${(props) => props.size || 24}px;
+  margin-right: 8px;
+`;
+
+export const BackdropRating = styled.div`
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 130%;
+  letter-spacing: 0px;
+  margin-right: 7px;
   display: flex;
   align-items: center;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+`;
+
+export const RatingWrapper = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+
+export const BackdropRatingExtra = styled.span`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 120%;
+  margin-left: 7px;
 `;
 
 export const BackdropVotes = styled.span`
@@ -95,6 +113,8 @@ export const BackdropVotes = styled.span`
   font-size: 0.9rem;
   opacity: 0.9;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
+  margin-top: 16px;
+  margin-bottom: 56px;
 `;
 
 export const ContentWrapper = styled.div`
@@ -104,20 +124,17 @@ export const ContentWrapper = styled.div`
 
 export const InfoSection = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 40px;
   align-items: flex-start;
   flex-wrap: wrap;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0px 4px 12px 0px #bac7d580;
   background-color: white;
 `;
 
 export const Poster = styled.img`
-  width: 100%;
-  max-width: 300px;
-  border-radius: 10px;
-  flex-shrink: 0;
+  max-width: 312px;
+  border-radius: 5px;
 `;
 
 export const PosterPlaceholder = styled.div`
@@ -139,46 +156,93 @@ export const MovieInfo = styled.div`
   min-width: 250px;
 `;
 
-export const Title = styled.h2`
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+export const Title = styled.h1`
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 120%;
+  margin-top: 0px;
+  margin-bottom: 24px;
 `;
 
 export const Year = styled.p`
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 120%;
+  margin-top: 0px;
+  margin-bottom: 24px;
+`;
+
+export const Label = styled.span`
+  color: #74788b;
 `;
 
 export const Production = styled.p`
-  font-size: 1rem;
-  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  margin-bottom: 0px;
 `;
 
 export const ReleaseDate = styled.p`
-  font-size: 1rem;
-  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 120%;
+  margin-top: 8px;
+  margin-bottom: 24px;
 `;
 
 export const Genres = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
+  margin-bottom: 24px;
 `;
 
 export const GenreTag = styled.span`
-  background-color: #e0e0e0;
-  padding: 5px 10px;
+  background-color: #e4e6f0;
   border-radius: 5px;
-  font-size: 0.9rem;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+`;
+
+export const RatingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+export const MovieRating = styled.span`
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 130%;
+  margin-right: 8px;
+  margin-left: 0;
+`;
+
+export const MovieVotes = styled.span`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  margin-right: 12px;
 `;
 
 export const Section = styled.div`
   margin-top: 30px;
 `;
 
+export const Header = styled.h1`
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 120%;
+`;
+
 export const Overview = styled.p`
-  font-size: 1rem;
-  line-height: 1.5;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 160%;
   margin-top: 10px;
 `;
 
@@ -191,16 +255,36 @@ export const Grid = styled.div`
 
 export const GridItem = styled.div`
   text-align: center;
+  opacity: 1;
+  padding: 16px;
+  gap: 12px;
+  box-shadow: 0px 4px 12px 0px #bac7d580;
+`;
 
-  img {
-    width: 100%;
-    border-radius: 5px;
-  }
+export const PosterImage = styled.img`
+  width: 100%;
+  border-radius: 5px;
+  object-fit: cover;
+`;
 
-  p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-  }
+export const PersonInfo = styled.p`
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 130%;
+  letter-spacing: 0px;
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 8px;
+`;
+
+export const ExtraPersonInfo = styled.p`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0px;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
 `;
 
 export const PlaceholderIcon = styled.div`
@@ -209,12 +293,16 @@ export const PlaceholderIcon = styled.div`
   background-color: #ccc;
   border-radius: 5px;
   position: relative;
-  &::before {
-    content: "👤";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Icon = styled.img`
+  width: 72px;
+  height: 72px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
