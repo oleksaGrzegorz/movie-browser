@@ -14,38 +14,89 @@ export const Backdrop = styled.div`
   overflow: hidden;
 `;
 
+export const BackdropImageContainer = styled.div`
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
 export const BackdropImage = styled.img`
   width: auto;
   height: 100%;
   object-fit: cover;
 `;
 
+export const BackdropOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+      to right,
+      #000000 0%,
+      rgba(0, 0, 0, 0.8) 3%,
+      rgba(0, 0, 0, 0.4) 8%,
+      rgba(0, 0, 0, 0.1) 15%,
+      transparent 20%,
+      transparent 80%,
+      rgba(0, 0, 0, 0.1) 85%,
+      rgba(0, 0, 0, 0.4) 92%,
+      rgba(0, 0, 0, 0.8) 97%,
+      #000000 100%
+    ),
+    linear-gradient(
+      to bottom,
+      #000000 0%,
+      rgba(0, 0, 0, 0.6) 2%,
+      rgba(0, 0, 0, 0.2) 6%,
+      rgba(0, 0, 0, 0.05) 12%,
+      transparent 18%
+    ),
+    linear-gradient(
+      to top,
+      #000000 0%,
+      rgba(0, 0, 0, 0.9) 5%,
+      rgba(0, 0, 0, 0.6) 12%,
+      rgba(0, 0, 0, 0.3) 20%,
+      rgba(0, 0, 0, 0.1) 30%,
+      transparent 40%
+    );
+`;
+
 export const BackdropContent = styled.div`
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  bottom: 40px;
+  left: 0;
   color: white;
+  z-index: 2;
 `;
 
 export const BackdropTitle = styled.h1`
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+  line-height: 1.1;
 `;
 
 export const BackdropRating = styled.span`
-  display: block;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
   font-weight: bold;
-  margin-top: 5px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin-bottom: 5px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
 `;
 
 export const BackdropVotes = styled.span`
   display: block;
-  font-size: 1rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
 `;
+
 export const ContentWrapper = styled.div`
   max-width: 1368px;
   margin: 0 auto;

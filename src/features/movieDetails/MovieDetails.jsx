@@ -24,6 +24,8 @@ import {
   GridItem,
   PlaceholderIcon,
   PosterPlaceholder,
+  BackdropOverlay,
+  BackdropImageContainer,
 
 } from "./styled";
 
@@ -82,18 +84,21 @@ const MovieDetails = () => {
 
   return (
     <Container>
-      {backdropUrl && (
-        <Backdrop>
-          <BackdropImage src={backdropUrl} alt={movie.title} />
-          <BackdropContent>
-            <BackdropTitle>{movie.title}</BackdropTitle>
-            <BackdropRating>
-              ⭐ {movie.vote_average.toFixed(1).replace(".", ",")}/10
-            </BackdropRating>
-            <BackdropVotes>{movie.vote_count} głosów</BackdropVotes>
-          </BackdropContent>
-        </Backdrop>
-      )}
+{backdropUrl && (
+  <Backdrop>
+    <BackdropImageContainer>
+      <BackdropImage src={backdropUrl} alt={movie.title} />
+      <BackdropOverlay />
+      <BackdropContent>
+        <BackdropTitle>{movie.title}</BackdropTitle>
+        <BackdropRating>
+          ⭐ {movie.vote_average.toFixed(1).replace(".", ",")}/10
+        </BackdropRating>
+        <BackdropVotes>{movie.vote_count} głosów</BackdropVotes>
+      </BackdropContent>
+    </BackdropImageContainer>
+  </Backdrop>
+)}
 
       <ContentWrapper>
       <InfoSection>
