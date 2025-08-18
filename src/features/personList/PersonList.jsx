@@ -1,8 +1,7 @@
-// src/features/personList/PersonList.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useTheme } from "styled-components";
-import ProfilePlaceholder from "./images/Profile.svg";
+import Loading from "../../components/loader";
+import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
 import {
   Container,
@@ -22,10 +21,9 @@ import {
 const img = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-// mapowanie szerokości -> liczba kolumn (spójne z media queries w styled.js)
-const getDesktopCols = (w, bp) => {
-  if (w <= bp.mobileM) return 1;      // <= 480
-  if (w <= bp.mobileL) return 2;      // <= 667
+const getCols = (w) => {
+  if (w <= 480) return 1;
+  if (w <= 667) return 2;
   if (w <= 900) return 3;
   if (w <= 1100) return 4;
   if (w <= 1366) return 5;
@@ -33,9 +31,6 @@ const getDesktopCols = (w, bp) => {
 };
 
 export default function PersonList() {
-  const theme = useTheme();
-  const bp = theme.breakpoint || theme.breakpoints;
-
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page") || 1));
 
@@ -47,23 +42,35 @@ export default function PersonList() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const { people: list, totalPages } = await fetchPopularPeople(page);
+
+        const [res] = await Promise.all([
+          fetchPopularPeople(page),
+          new Promise(resolve => setTimeout(resolve, 1000)),
+        ]);
+
         if (!cancelled) {
-          setPeople(list || []);
-          setTotalPages(totalPages > 500 ? 500 : totalPages || 1);
+          setPeople(res.people || []);
+          setTotalPages(res.totalPages > 500 ? 500 : res.totalPages || 1);
         }
       } catch (e) {
         if (!cancelled) setError(e.message || "Error");
       } finally {
         if (!cancelled) setLoading(false);
       }
-    })();
-    return () => { cancelled = true; };
+    };
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
   }, [page]);
+
 
   useEffect(() => {
     const onResize = () => setWidth(window.innerWidth);
@@ -71,7 +78,7 @@ export default function PersonList() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const cols = useMemo(() => getDesktopCols(width, bp), [width, bp]);
+  const cols = useMemo(() => getCols(width), [width]);
   const pad = useMemo(() => {
     if (!people.length) return 0;
     return (cols - (people.length % cols)) % cols;
@@ -82,7 +89,7 @@ export default function PersonList() {
   const goToNext = () => setSearchParams({ page: String(Math.min(totalPages, page + 1)) });
   const goToLast = () => setSearchParams({ page: String(totalPages) });
 
-  if (loading) return <Container>Loading...</Container>;
+  if (loading) return <Loading full />;
   if (error) return <Container>Error: {error}</Container>;
 
   return (
@@ -110,7 +117,6 @@ export default function PersonList() {
             </PersonCard>
           </PersonItem>
         ))}
-
         {Array.from({ length: pad }).map((_, i) => (
           <GhostItem key={`ghost-${i}`} aria-hidden="true" />
         ))}
@@ -119,7 +125,9 @@ export default function PersonList() {
       <PaginationWrapper>
         <PaginationButton onClick={goToFirst} disabled={page === 1}>First</PaginationButton>
         <PaginationButton onClick={goToPrev} disabled={page === 1}>Previous</PaginationButton>
-        <PageInfo>Page <Page>{page}</Page> of <Page>{totalPages}</Page></PageInfo>
+        <PageInfo>
+          Page <Page>{page}</Page> of <Page>{totalPages}</Page>
+        </PageInfo>
         <PaginationButton onClick={goToNext} disabled={page === totalPages}>Next</PaginationButton>
         <PaginationButton onClick={goToLast} disabled={page === totalPages}>Last</PaginationButton>
       </PaginationWrapper>
