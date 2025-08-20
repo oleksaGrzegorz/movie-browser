@@ -17,10 +17,6 @@ import Pagination from "../../common/Pagination/Pagination";
 
 const img = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
-
-const getCols = (w) => {
-  if (w <= 480) return 1;
-  if (w <= 667) return 2;
   if (w <= 900) return 3;
   if (w <= 1100) return 4;
   if (w <= 1366) return 5;
@@ -59,10 +55,6 @@ export default function PersonList() {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    };
-
-    fetchData();
-    return () => { cancelled = true; };
   }, [page]);
 
   useEffect(() => {
@@ -77,7 +69,6 @@ export default function PersonList() {
     return (cols - (people.length % cols)) % cols;
   }, [people.length, cols]);
 
-  if (loading) return <Loading full />;
   if (error) return <Container>Error: {error}</Container>;
 
   return (
