@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Container = styled.div`
     max-width: 1368px;
     width: 100%;
-    margin: 0 auto;
+    margin: 50px auto;
     padding: 0 16px;
     box-sizing: border-box;
 `;
@@ -108,60 +108,4 @@ export const PersonName = styled.h2`
     display: flex;
     align-items: center;
     justify-content: center;
-`;
-
-export const PaginationWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 40px;
-    padding-bottom: 80px;
-    font-size: ${({ theme }) => theme.typography?.caption?.size || "16px"};
-    color: ${({ theme }) => theme.color.textSecondary};
-`;
-
-export const PaginationButton = styled.button`
-    background: ${({ theme }) => theme.color.brandMuted};
-    color: ${({ theme }) => theme.color.brand};
-    border: 0;
-    border-radius: ${({ theme }) => theme.radii?.sm || "5px"};
-    padding: 6px 12px;
-    min-width: 75px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: ${({ theme }) =>
-        theme.shadows?.soft || "0 1px 2px rgba(0,0,0,0.08)"};
-    transition: background-color 0.2s ease;
-
-    &:hover:not(:disabled) {
-        background: #e0e6ff;
-    }
-    &:disabled {
-        opacity: 0.5;
-        cursor: default;
-    }
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        min-width: 50px;
-        padding: 4px 8px;
-        gap: 4px;
-    }
-`;
-
-export const PageInfo = styled.span`
-    color: ${({ theme }) => theme.color.textSecondary};
-    font-size: ${({ theme }) => theme.typography?.caption?.size || "16px"};
-`;
-
-export const Page = styled.span`
-    color: ${({ theme }) => theme.color.textPrimary};
-    font-weight: 600;
-    font-size: ${({ theme }) =>
-        theme.typography?.captionSemibold?.size || "16px"};
-    line-height: ${({ theme }) =>
-        theme.typography?.captionSemibold?.lineHeight || "150%"};
 `;
