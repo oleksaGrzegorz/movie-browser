@@ -8,13 +8,12 @@ import {
   ButtonParagraph,
 } from "./styled.js";
 
-const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
-  const goToFirstPage = () => setCurrentPage(1);
-  const goToPreviousPage = () =>
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const goToFirstPage = () => onPageChange(1);
+  const goToPreviousPage = () => onPageChange(Math.max(currentPage - 1, 1));
   const goToNextPage = () =>
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const goToLastPage = () => setCurrentPage(totalPages);
+    onPageChange(Math.min(currentPage + 1, totalPages));
+  const goToLastPage = () => onPageChange(totalPages);
 
   return (
     <PaginationWrapper>
@@ -28,20 +27,24 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
         </span>
         <ButtonParagraph>First</ButtonParagraph>
       </PaginationButton>
+
       <PaginationButton onClick={goToPreviousPage} disabled={currentPage === 1}>
         <StyledVectorLeft disabled={currentPage === 1} />
         <ButtonParagraph>Previous</ButtonParagraph>
       </PaginationButton>
+
       <PageInfo>
         Page <Page>{currentPage}</Page> of <Page>{totalPages}</Page>
       </PageInfo>
+
       <PaginationButton
         onClick={goToNextPage}
         disabled={currentPage === totalPages}
       >
-        <ButtonParagraph>Next</ButtonParagraph>{" "}
+        <ButtonParagraph>Next</ButtonParagraph>
         <StyledVectorRight disabled={currentPage === totalPages} />
       </PaginationButton>
+
       <PaginationButton
         onClick={goToLastPage}
         disabled={currentPage === totalPages}
@@ -58,4 +61,5 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
     </PaginationWrapper>
   );
 };
+
 export default Pagination;

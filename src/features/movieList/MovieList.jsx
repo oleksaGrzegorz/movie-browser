@@ -55,12 +55,10 @@ const MovieList = () => {
           moviesData.totalPages > 500 ? 500 : moviesData.totalPages
         );
 
+        setTimeout(() => setLoading(false), 1000);
+      } catch (error) {
         setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      } catch (err) {
-        setTimeout(() => {
-          setError(err.message);
+          setError(error.message);
           setLoading(false);
         }, 1000);
       }
@@ -132,7 +130,7 @@ const MovieList = () => {
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        setCurrentPage={setCurrentPage}
+        onPageChange={setCurrentPage}
       />
     </Container>
   );

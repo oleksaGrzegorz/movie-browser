@@ -1,4 +1,3 @@
-// src/features/personList/PersonList.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "styled-components";
@@ -12,20 +11,16 @@ import {
   PersonCard,
   PersonThumb,
   PersonName,
-  PaginationWrapper,
-  PaginationButton,
-  PageInfo,
-  Page,
   GhostItem,
 } from "./styled";
+import Pagination from "../../common/Pagination/Pagination";
 
 const img = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-// mapowanie szerokości -> liczba kolumn (spójne z media queries w styled.js)
 const getDesktopCols = (w, bp) => {
-  if (w <= bp.mobileM) return 1;      // <= 480
-  if (w <= bp.mobileL) return 2;      // <= 667
+  if (w <= bp.mobileM) return 1;
+  if (w <= bp.mobileL) return 2;
   if (w <= 900) return 3;
   if (w <= 1100) return 4;
   if (w <= 1366) return 5;
@@ -62,7 +57,9 @@ export default function PersonList() {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [page]);
 
   useEffect(() => {
@@ -76,11 +73,6 @@ export default function PersonList() {
     if (!people.length) return 0;
     return (cols - (people.length % cols)) % cols;
   }, [people.length, cols]);
-
-  const goToFirst = () => setSearchParams({ page: "1" });
-  const goToPrev = () => setSearchParams({ page: String(Math.max(1, page - 1)) });
-  const goToNext = () => setSearchParams({ page: String(Math.min(totalPages, page + 1)) });
-  const goToLast = () => setSearchParams({ page: String(totalPages) });
 
   if (loading) return <Container>Loading...</Container>;
   if (error) return <Container>Error: {error}</Container>;
@@ -116,13 +108,11 @@ export default function PersonList() {
         ))}
       </List>
 
-      <PaginationWrapper>
-        <PaginationButton onClick={goToFirst} disabled={page === 1}>First</PaginationButton>
-        <PaginationButton onClick={goToPrev} disabled={page === 1}>Previous</PaginationButton>
-        <PageInfo>Page <Page>{page}</Page> of <Page>{totalPages}</Page></PageInfo>
-        <PaginationButton onClick={goToNext} disabled={page === totalPages}>Next</PaginationButton>
-        <PaginationButton onClick={goToLast} disabled={page === totalPages}>Last</PaginationButton>
-      </PaginationWrapper>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => setSearchParams({ page: String(newPage) })}
+      />
     </Container>
   );
 }
