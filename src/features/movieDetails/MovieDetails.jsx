@@ -112,7 +112,6 @@ const MovieDetails = () => {
                   <BackdropRatingExtra>/ 10</BackdropRatingExtra>
                 </RatingWrapper>
               </BackdropRating>
-
               <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
             </BackdropContent>
           </BackdropImageContainer>

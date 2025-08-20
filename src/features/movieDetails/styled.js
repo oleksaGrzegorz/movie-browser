@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   margin: 0 auto;
   margin-bottom: 336px;
+  overflow-x: hidden;
 `;
 
 export const Backdrop = styled.div`
@@ -13,6 +14,11 @@ export const Backdrop = styled.div`
   height: 770px;
   margin-bottom: 20px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    max-height: 248px;
+    width: 100%;
+  }
 `;
 
 export const BackdropImageContainer = styled.div`
@@ -26,6 +32,10 @@ export const BackdropImage = styled.img`
   width: auto;
   height: 100%;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const BackdropOverlay = styled.div`
@@ -64,14 +74,45 @@ export const BackdropOverlay = styled.div`
       rgba(0, 0, 0, 0.1) 30%,
       transparent 40%
     );
+
+  @media (max-width: 768px) {
+    background: linear-gradient(
+        to right,
+        #000000 0%,
+        rgba(0, 0, 0, 0.8) 5%,
+        transparent 20%,
+        transparent 80%,
+        rgba(0, 0, 0, 0.8) 95%,
+        #000000 100%
+      ),
+      linear-gradient(
+        to bottom,
+        #000000 0%,
+        rgba(0, 0, 0, 0.5) 20%,
+        rgba(0, 0, 0, 0.2) 50%,
+        transparent 80%
+      );
+  }
 `;
 
 export const BackdropContent = styled.div`
   position: absolute;
   bottom: 40px;
-  left: 0;
+  left: 40px;
   color: white;
   z-index: 2;
+  padding: 16px;
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    bottom: 1px;
+    left: 1px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    margin-left: 16px;
+  }
 `;
 
 export const BackdropTitle = styled.h1`
@@ -79,27 +120,40 @@ export const BackdropTitle = styled.h1`
   font-weight: 600;
   margin: 0 0 10px 0;
   line-height: 120%;
-`;
 
-export const StyledStarIcon = styled.img`
-  width: ${(props) => props.size || 24}px;
-  height: ${(props) => props.size || 24}px;
-  margin-right: 8px;
+  @media (max-width: 768px) {
+    font-size: 24px;
+    color: white;
+    flex-basis: 100%;
+  }
 `;
 
 export const BackdropRating = styled.div`
   font-weight: 500;
   font-size: 30px;
   line-height: 130%;
-  letter-spacing: 0px;
-  margin-right: 7px;
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+`;
+
+export const StyledStarIcon = styled.img`
+  width: ${(props) => props.size || 24}px;
+  height: ${(props) => props.size || 24}px;
+  margin-right: 8px;
+  @media (max-width: 768px) {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 export const RatingWrapper = styled.div`
   display: flex;
   align-items: baseline;
+  
 `;
 
 export const BackdropRatingExtra = styled.span`
@@ -107,15 +161,24 @@ export const BackdropRatingExtra = styled.span`
   font-size: 16px;
   line-height: 120%;
   margin-left: 7px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 export const BackdropVotes = styled.span`
   display: block;
   font-size: 0.9rem;
   opacity: 0.9;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
   margin-top: 16px;
   margin-bottom: 56px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    margin: 0px;
+    margin-left: 8px;
+  }
 `;
 
 export const ContentWrapper = styled.div`
@@ -131,11 +194,21 @@ export const InfoSection = styled.div`
   padding: 40px;
   box-shadow: 0px 4px 12px 0px #bac7d580;
   background-color: white;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 export const Poster = styled.img`
   max-width: 312px;
   border-radius: 5px;
+
+  @media (max-width: 768px) {
+    max-width: 114px;
+  }
 `;
 
 export const PosterPlaceholder = styled.div`
@@ -150,6 +223,12 @@ export const PosterPlaceholder = styled.div`
   flex-shrink: 0;
   font-size: 3rem;
   color: #666;
+
+  @media (max-width: 768px) {
+    max-width: 200px;
+    height: 300px;
+    font-size: 2rem;
+  }
 `;
 
 export const MovieInfo = styled.div`
@@ -163,6 +242,11 @@ export const Title = styled.h1`
   line-height: 120%;
   margin-top: 0px;
   margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+    text-align: center;
+  }
 `;
 
 export const Year = styled.p`
@@ -171,6 +255,11 @@ export const Year = styled.p`
   line-height: 120%;
   margin-top: 0px;
   margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    text-align: center;
+  }
 `;
 
 export const Label = styled.span`
@@ -181,8 +270,11 @@ export const Production = styled.p`
   font-weight: 400;
   font-size: 18px;
   line-height: 120%;
-  letter-spacing: 0px;
   margin-bottom: 0px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const ReleaseDate = styled.p`
@@ -191,6 +283,11 @@ export const ReleaseDate = styled.p`
   line-height: 120%;
   margin-top: 8px;
   margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    text-align: center;
+  }
 `;
 
 export const Genres = styled.div`
@@ -198,21 +295,30 @@ export const Genres = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
+  justify-content: flex-start;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 export const GenreTag = styled.span`
   background-color: #e4e6f0;
   border-radius: 5px;
-  padding-top: 8px;
-  padding-right: 16px;
-  padding-bottom: 8px;
-  padding-left: 16px;
+  padding: 8px 16px;
 `;
 
 export const RatingContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 24px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
 `;
 
 export const MovieRating = styled.span`
@@ -220,7 +326,10 @@ export const MovieRating = styled.span`
   font-size: 22px;
   line-height: 130%;
   margin-right: 8px;
-  margin-left: 0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 export const MovieVotes = styled.span`
@@ -228,6 +337,10 @@ export const MovieVotes = styled.span`
   font-size: 14px;
   line-height: 120%;
   margin-right: 12px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 export const Section = styled.div`
@@ -238,6 +351,11 @@ export const Header = styled.h1`
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    text-align: center;
+  }
 `;
 
 export const Overview = styled.p`
@@ -245,6 +363,11 @@ export const Overview = styled.p`
   font-size: 20px;
   line-height: 160%;
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    text-align: center;
+  }
 `;
 
 export const Grid = styled.div`
@@ -252,6 +375,10 @@ export const Grid = styled.div`
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 export const GridItem = styled.div`
@@ -272,20 +399,26 @@ export const PersonInfo = styled.p`
   font-weight: 500;
   font-size: 22px;
   line-height: 130%;
-  letter-spacing: 0px;
   text-align: center;
   margin-top: 12px;
   margin-bottom: 8px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 export const ExtraPersonInfo = styled.p`
   font-weight: 400;
   font-size: 18px;
   line-height: 150%;
-  letter-spacing: 0px;
   text-align: center;
   margin-top: 8px;
   margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const PlaceholderIcon = styled.div`
@@ -306,4 +439,9 @@ export const Icon = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @media (max-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
 `;
