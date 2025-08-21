@@ -10,9 +10,11 @@ export const MainHeader = styled.h1`
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
+  margin-top: 56px;
 
   @media (max-width: 667px) {
     font-size: 18px;
+    margin-top: 24px;
   }
 `;
 
