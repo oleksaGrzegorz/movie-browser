@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Loader from "../../components/loader";
@@ -15,10 +16,11 @@ import {
   MetaValue,
   Bio,
   SectionTitle,
-  CreditsGrid,
-  CreditCard,
+  MoviesGrid,
+  MovieCard,
   Poster,
   PosterPlaceholder,
+  CContent,
   CTitle,
   CMeta,
   VoteRow,
@@ -28,14 +30,7 @@ import {
 
 const img = (path, size = "w342") => (path ? `https://image.tmdb.org/t/p/${size}${path}` : null);
 const poster = (path) => (path ? `https://image.tmdb.org/t/p/w342${path}` : null);
-const fmt = (dateStr) => {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const yyyy = d.getFullYear();
-  return `${dd}.${mm}.${yyyy}`;
-};
+const fmt = (d) => (d ? new Date(d).toLocaleDateString("en-GB") : "—");
 
 export default function PersonDetails() {
   const { id } = useParams();
@@ -54,12 +49,12 @@ export default function PersonDetails() {
         const [d, c] = await Promise.all([
           fetchPersonDetails(id),
           fetchPersonCredits(id),
-          new Promise((r) => setTimeout(r, 1000)),
+          new Promise((r) => setTimeout(r, 800)),
         ]);
         if (!cancelled) {
           setPerson(d);
-          setCast(c.cast);
-          setCrew(c.crew);
+          setCast(c.cast || []);
+          setCrew(c.crew || []);
         }
       } catch (e) {
         if (!cancelled) setError(e.message || "Error");
@@ -71,15 +66,11 @@ export default function PersonDetails() {
   }, [id]);
 
   const castClean = useMemo(
-    () => cast
-      .filter(m => m.release_date || m.first_air_date || m.poster_path)
-      .sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
+    () => cast.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
     [cast]
   );
   const crewClean = useMemo(
-    () => crew
-      .filter(m => m.release_date || m.first_air_date || m.poster_path)
-      .sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
+    () => crew.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
     [crew]
   );
 
@@ -99,57 +90,47 @@ export default function PersonDetails() {
         </Avatar>
         <Info>
           <Name>{person.name}</Name>
-          <MetaRow>
-            <MetaLabel>Date of birth:</MetaLabel>
-            <MetaValue>{fmt(person.birthday)}</MetaValue>
-          </MetaRow>
-          <MetaRow>
-            <MetaLabel>Place of birth:</MetaLabel>
-            <MetaValue>{person.place_of_birth || "—"}</MetaValue>
-          </MetaRow>
+          <MetaRow><MetaLabel>Birth:</MetaLabel><MetaValue>{fmt(person.birthday)}</MetaValue></MetaRow>
+          <MetaRow><MetaLabel>Place of birth:</MetaLabel><MetaValue>{person.place_of_birth || "—"}</MetaValue></MetaRow>
           {person.biography && <Bio>{person.biography}</Bio>}
         </Info>
       </HeaderCard>
 
       <SectionTitle>Movies – cast ({castClean.length})</SectionTitle>
-      <CreditsGrid>
+      <MoviesGrid>
         {castClean.map(({ id: mid, title, original_title, poster_path, release_date, vote_average, vote_count, character }) => (
-          <CreditCard key={mid} as={Link} to={`/movies/${mid}`}>
-            {poster_path ? (
-              <Poster src={poster(poster_path)} alt={title || original_title} />
-            ) : (
-              <PosterPlaceholder />
-            )}
-            <CTitle>{title || original_title}</CTitle>
-            <CMeta>{character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
-            <VoteRow>
-              <img src={StarIcon} alt="" />
-              <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-              <VoteInfo>{vote_count || 0} votes</VoteInfo>
-            </VoteRow>
-          </CreditCard>
+          <MovieCard key={mid} as={Link} to={`/movies/${mid}`}>
+            {poster_path ? <Poster src={poster(poster_path)} alt={title || original_title} /> : <PosterPlaceholder />}
+            <CContent>
+              <CTitle>{title || original_title}</CTitle>
+              <CMeta>{character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
+              <VoteRow>
+                <img src={StarIcon} alt="" />
+                <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
+                <VoteInfo>{vote_count || 0} votes</VoteInfo>
+              </VoteRow>
+            </CContent>
+          </MovieCard>
         ))}
-      </CreditsGrid>
+      </MoviesGrid>
 
       <SectionTitle>Movies – crew ({crewClean.length})</SectionTitle>
-      <CreditsGrid>
+      <MoviesGrid>
         {crewClean.map(({ id: mid, title, original_title, poster_path, release_date, vote_average, vote_count, job }) => (
-          <CreditCard key={mid} as={Link} to={`/movies/${mid}`}>
-            {poster_path ? (
-              <Poster src={poster(poster_path)} alt={title || original_title} />
-            ) : (
-              <PosterPlaceholder />
-            )}
-            <CTitle>{title || original_title}</CTitle>
-            <CMeta>{job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
-            <VoteRow>
-              <img src={StarIcon} alt="" />
-              <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-              <VoteInfo>{vote_count || 0} votes</VoteInfo>
-            </VoteRow>
-          </CreditCard>
+          <MovieCard key={mid} as={Link} to={`/movies/${mid}`}>
+            {poster_path ? <Poster src={poster(poster_path)} alt={title || original_title} /> : <PosterPlaceholder />}
+            <CContent>
+              <CTitle>{title || original_title}</CTitle>
+              <CMeta>{job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
+              <VoteRow>
+                <img src={StarIcon} alt="" />
+                <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
+                <VoteInfo>{vote_count || 0} votes</VoteInfo>
+              </VoteRow>
+            </CContent>
+          </MovieCard>
         ))}
-      </CreditsGrid>
+      </MoviesGrid>
     </Page>
   );
 }
