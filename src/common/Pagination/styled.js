@@ -14,6 +14,10 @@ export const PaginationWrapper = styled.div`
 
 export const ButtonParagraph = styled.p`
   color: black;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 667px) {
     display: none;
@@ -70,6 +74,7 @@ export const PaginationButton = styled.button`
 export const StyledVectorRight = styled(VectorRightIcon)`
   width: 16px;
   height: 16px;
+  vertical-align: middle;
 
   & path {
     fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
@@ -84,6 +89,7 @@ export const StyledVectorRight = styled(VectorRightIcon)`
 export const StyledVectorLeft = styled(VectorLeftIcon)`
   width: 16px;
   height: 16px;
+  vertical-align: middle;
 
   & path {
     fill: ${({ disabled }) => (disabled ? "#7e839a" : "#0044cc")};
