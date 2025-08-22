@@ -22,6 +22,7 @@ import {
 import StarIcon from "./images/star.svg";
 import VideoIcon from "./images/video.svg";
 import Pagination from "../../common/Pagination/Pagination";
+import Loader from "../../components/loader/index";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
@@ -67,7 +68,7 @@ const MovieList = () => {
     fetchData();
   }, [currentPage]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader full />;
   if (error) return <p>Error: {error}</p>;
 
   return (
