@@ -42,6 +42,7 @@ export const MovieCard = styled.li`
   flex-direction: column;
   overflow: hidden;
   border-radius: 5px;
+  height: 100%;
 
   @media (max-width: 667px) {
     flex-direction: row;
@@ -49,20 +50,22 @@ export const MovieCard = styled.li`
     margin-left: 16px;
     margin-right: 16px;
     padding: 16px;
+    height: auto;
   }
 `;
 
 export const Poster = styled.img`
   width: 292px;
-  height: 414px;
-  padding: 16px;
+  height: 434px;
   border-radius: 20px;
-
+  margin-left: 16px;
+  margin-top: 16px;
   @media (max-width: 667px) {
     max-width: 114px;
     max-height: 169px;
     padding: 0px;
     border-radius: 5px;
+    margin: 0;
   }
 `;
 
@@ -91,12 +94,17 @@ export const StyledVideoIcon = styled.img`
 `;
 
 export const Description = styled.div`
-  padding: 0px 16px;
   margin: 0px;
   flex: 1;
+  padding: 0px 16px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 667px) {
-    padding-right: 0;
+    padding: 0px 16px;
+    margin: 0;
+    display: block;
   }
 `;
 
