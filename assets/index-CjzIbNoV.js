@@ -160,9 +160,11 @@ Please change the parent <Route path="${U}"> to <Route path="${U==="/"?"*":`${U}
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
+  margin-top: 56px;
 
   @media (max-width: 667px) {
     font-size: 18px;
+    margin-top: 24px;
   }
 `,gv=q.ul`
   display: grid;
@@ -279,6 +281,10 @@ Please change the parent <Route path="${U}"> to <Route path="${U==="/"?"*":`${U}
   padding-bottom: 103px;
 `,Ni=q.p`
   color: black;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 667px) {
     display: none;
@@ -331,6 +337,7 @@ Please change the parent <Route path="${U}"> to <Route path="${U==="/"?"*":`${U}
 `,Cf=q(Ov)`
   width: 16px;
   height: 16px;
+  vertical-align: middle;
 
   & path {
     fill: ${({disabled:n})=>n?"#7e839a":"#0044cc"};
@@ -343,6 +350,7 @@ Please change the parent <Route path="${U}"> to <Route path="${U==="/"?"*":`${U}
 `,Of=q(jv)`
   width: 16px;
   height: 16px;
+  vertical-align: middle;
 
   & path {
     fill: ${({disabled:n})=>n?"#7e839a":"#0044cc"};
