@@ -120,6 +120,7 @@ export const BackdropTitle = styled.h1`
   font-weight: 600;
   margin: 0 0 10px 0;
   line-height: 120%;
+  color: white;
 
   @media (max-width: 768px) {
     font-size: 24px;
@@ -153,7 +154,6 @@ export const StyledStarIcon = styled.img`
 export const RatingWrapper = styled.div`
   display: flex;
   align-items: baseline;
-  
 `;
 
 export const BackdropRatingExtra = styled.span`
@@ -373,7 +373,8 @@ export const Overview = styled.p`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+  gap: 24px;
+  margin-bottom: 10px;
   margin-top: 10px;
 
   @media (max-width: 768px) {
