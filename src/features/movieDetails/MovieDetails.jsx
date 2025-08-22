@@ -42,6 +42,7 @@ import {
 
 import PersonIcon from "./Profile.svg";
 import StarIcon from "../movieList/images/star.svg";
+import Loader from "../../components/loader/index";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -75,14 +76,16 @@ const MovieDetails = () => {
       } catch (err) {
         setError(err.message);
       } finally {
+        setTimeout(() => {
         setLoading(false);
+      }, 1000);
       }
     };
 
     fetchMovieDetails();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader full/>;
   if (error) return <p>Error: {error}</p>;
   if (!movie) return null;
 
