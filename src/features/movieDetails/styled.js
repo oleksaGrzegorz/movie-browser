@@ -353,8 +353,10 @@ export const Header = styled.h1`
   line-height: 120%;
 
   @media (max-width: 768px) {
-    font-size: 24px;
-    text-align: center;
+    font-size: 20px;
+    padding: 0 16px;
+    margin-bottom: 0;
+    margin-top: 21px;
   }
 `;
 
@@ -379,6 +381,8 @@ export const Grid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    padding: 16px;
+    margin-top: 0;
   }
 `;
 
@@ -388,6 +392,9 @@ export const GridItem = styled.div`
   padding: 16px;
   gap: 12px;
   box-shadow: 0px 4px 12px 0px #bac7d580;
+
+  @media (max-width: 768px) {
+  }
 `;
 
 export const PosterImage = styled.img`
@@ -405,7 +412,7 @@ export const PersonInfo = styled.p`
   margin-bottom: 8px;
 
   @media (max-width: 768px) {
-    font-size: 16px;
+    font-size: 14px;
   }
 `;
 
@@ -418,7 +425,7 @@ export const ExtraPersonInfo = styled.p`
   margin-bottom: 16px;
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 13px;
   }
 `;
 
