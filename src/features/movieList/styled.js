@@ -3,9 +3,11 @@ import styled from "styled-components";
 export const Container = styled.div`
   max-width: 1368px;
   margin: 0 auto;
+  padding: 0 16px;
 
   @media (max-width: 667px) {
     margin: 0 auto;
+    padding: 0;
   }
 `;
 
@@ -18,7 +20,7 @@ export const MainHeader = styled.h1`
   @media (max-width: 667px) {
     font-size: 18px;
     margin-top: 24px;
-    margin-left: 16px;
+    padding-left: 16px;
   }
 `;
 
@@ -28,6 +30,14 @@ export const List = styled.ul`
   gap: 20px;
   list-style: none;
   padding: 0;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: 667px) {
     grid-template-columns: repeat(1, 1fr);
@@ -43,13 +53,13 @@ export const MovieCard = styled.li`
   overflow: hidden;
   border-radius: 5px;
   height: 100%;
+  padding: 16px;
 
   @media (max-width: 667px) {
     flex-direction: row;
     max-height: none;
     margin-left: 16px;
     margin-right: 16px;
-    padding: 16px;
     height: auto;
   }
 `;
@@ -58,8 +68,9 @@ export const Poster = styled.img`
   width: 292px;
   height: 434px;
   border-radius: 20px;
-  margin-left: 16px;
-  margin-top: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   @media (max-width: 667px) {
     max-width: 114px;
     max-height: 169px;
@@ -78,11 +89,14 @@ export const PosterPlaceholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
 
   @media (max-width: 667px) {
     width: 120px;
     height: auto;
     padding: 8px;
+    margin: 0;
   }
 `;
 
@@ -96,7 +110,6 @@ export const StyledVideoIcon = styled.img`
 export const Description = styled.div`
   margin: 0px;
   flex: 1;
-  padding: 0px 16px;
   margin-top: 16px;
   display: flex;
   flex-direction: column;
