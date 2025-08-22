@@ -2,8 +2,11 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   max-width: 1368px;
-  width: 100%;
   margin: 0 auto;
+
+  @media (max-width: 667px) {
+    margin: 0 auto;
+  }
 `;
 
 export const MainHeader = styled.h1`
@@ -15,6 +18,7 @@ export const MainHeader = styled.h1`
   @media (max-width: 667px) {
     font-size: 18px;
     margin-top: 24px;
+    margin-left: 16px;
   }
 `;
 
@@ -33,8 +37,6 @@ export const List = styled.ul`
 `;
 
 export const MovieCard = styled.li`
-  width: 324px;
-  max-height: 670px;
   box-shadow: 0px 4px 12px 0px #bac7d580;
   display: flex;
   flex-direction: column;
@@ -43,8 +45,10 @@ export const MovieCard = styled.li`
 
   @media (max-width: 667px) {
     flex-direction: row;
-    width: 100%;
     max-height: none;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 16px;
   }
 `;
 
@@ -55,9 +59,10 @@ export const Poster = styled.img`
   border-radius: 20px;
 
   @media (max-width: 667px) {
-    width: 114px;
-    height: 169px;
-    padding: 8px;
+    max-width: 114px;
+    max-height: 169px;
+    padding: 0px;
+    border-radius: 5px;
   }
 `;
 
@@ -91,7 +96,7 @@ export const Description = styled.div`
   flex: 1;
 
   @media (max-width: 667px) {
-    padding: 8px;
+    padding-right: 0;
   }
 `;
 
@@ -100,6 +105,10 @@ export const Title = styled.h2`
   font-size: 22px;
   line-height: 130%;
   margin: 0px;
+
+  @media (max-width: 667px) {
+    font-size: 16px;
+  }
 `;
 
 export const Year = styled.p`
@@ -108,6 +117,10 @@ export const Year = styled.p`
   line-height: 150%;
   color: #7e839a;
   margin: 0px;
+
+  @media (max-width: 667px) {
+    font-size: 13px;
+  }
 `;
 
 export const Genre = styled.p`
@@ -124,6 +137,14 @@ export const GenreButton = styled.span`
   font-weight: 400;
   font-size: 14px;
   line-height: 140%;
+
+  @media (max-width: 667px) {
+    font-size: 10px;
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+  }
 `;
 
 export const Vote = styled.p`
@@ -133,6 +154,10 @@ export const Vote = styled.p`
   padding: 0 16px 16px 16px;
   margin-top: auto;
   margin-bottom: 0;
+
+  @media (max-width: 667px) {
+    padding: 0;
+  }
 `;
 
 export const VoteAverage = styled.span`
@@ -140,6 +165,10 @@ export const VoteAverage = styled.span`
   font-size: 16px;
   line-height: 150%;
   margin-right: 12px;
+
+  @media (max-width: 667px) {
+    font-size: 13px;
+  }
 `;
 
 export const VoteInfo = styled.span`
@@ -147,4 +176,8 @@ export const VoteInfo = styled.span`
   font-size: 16px;
   line-height: 150%;
   color: #7e839a;
+
+  @media (max-width: 667px) {
+    font-size: 13px;
+  }
 `;

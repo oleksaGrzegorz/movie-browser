@@ -10,6 +10,10 @@ export const PaginationWrapper = styled.div`
   margin-top: 40px;
   font-size: 14px;
   padding-bottom: 103px;
+
+  @media (max-width: 667px) {
+    padding-bottom: 31px;
+  }
 `;
 
 export const ButtonParagraph = styled.p`
