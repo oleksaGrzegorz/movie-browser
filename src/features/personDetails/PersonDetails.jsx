@@ -6,7 +6,7 @@ import ProfilePlaceholder from "../../images/profile.svg";
 import StarIcon from "../movieList/images/star.svg";
 import { fetchPersonDetails, fetchPersonCredits } from "../movieList/fetchMovieApi";
 import {
-  Page,
+  Container,
   HeaderCard,
   Avatar,
   Info,
@@ -75,11 +75,11 @@ export default function PersonDetails() {
   );
 
   if (loading) return <Loader full />;
-  if (error) return <Page>Error: {error}</Page>;
-  if (!person) return <Page />;
+  if (error) return <Container>Error: {error}</Container>;
+  if (!person) return <Container />;
 
   return (
-    <Page>
+    <Container>
       <HeaderCard>
         <Avatar>
           {person.profile_path ? (
@@ -131,6 +131,6 @@ export default function PersonDetails() {
           </MovieCard>
         ))}
       </MoviesGrid>
-    </Page>
+    </Container>
   );
 }
