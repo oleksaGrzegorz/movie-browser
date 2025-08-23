@@ -38,6 +38,9 @@ import {
   ExtraPersonInfo,
   PlaceholderIcon,
   Icon,
+  ExtraMovieInfo,
+  MovieVotes10,
+  BackdropInfo,
 } from "./styled";
 
 import PersonIcon from "./Profile.svg";
@@ -108,6 +111,7 @@ const MovieDetails = () => {
             <BackdropOverlay />
             <BackdropContent>
               <BackdropTitle>{movie.title}</BackdropTitle>
+              <BackdropInfo>
               <BackdropRating>
                 <StyledStarIcon src={StarIcon} alt="star" size={40} />
                 <RatingWrapper>
@@ -116,6 +120,7 @@ const MovieDetails = () => {
                 </RatingWrapper>
               </BackdropRating>
               <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
+              </BackdropInfo>
             </BackdropContent>
           </BackdropImageContainer>
         </Backdrop>
@@ -153,13 +158,14 @@ const MovieDetails = () => {
                 {movie.vote_average.toFixed(1).replace(".", ",")}
               </MovieRating>
 
-              <MovieVotes>/ 10</MovieVotes>
+              <MovieVotes10>/ 10</MovieVotes10>
               <MovieVotes>{movie.vote_count} votes</MovieVotes>
             </RatingContainer>
-
-            <Overview>{movie.overview}</Overview>
           </MovieInfo>
+          <ExtraMovieInfo><Overview>{movie.overview}</Overview></ExtraMovieInfo>
+          
         </InfoSection>
+        
 
         {credits && (
           <Section>

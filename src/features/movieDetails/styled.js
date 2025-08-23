@@ -4,6 +4,10 @@ export const Container = styled.div`
   margin: 0 auto;
   margin-bottom: 336px;
   overflow-x: hidden;
+
+  @media (max-width: 768px) {
+    margin-bottom: 88px;
+  }
 `;
 
 export const Backdrop = styled.div`
@@ -121,11 +125,22 @@ export const BackdropTitle = styled.h1`
   margin: 0 0 10px 0;
   line-height: 120%;
   color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 
   @media (max-width: 768px) {
     font-size: 24px;
     color: white;
     flex-basis: 100%;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  }
+`;
+
+export const BackdropInfo = styled.div`
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   }
 `;
 
@@ -172,12 +187,15 @@ export const BackdropVotes = styled.span`
   font-size: 0.9rem;
   opacity: 0.9;
   margin-top: 16px;
-  margin-bottom: 56px;
+  margin-bottom: 36px;
 
   @media (max-width: 768px) {
     font-size: 12px;
     margin: 0px;
+    display: inline;
+    position: relative;
     margin-left: 8px;
+    top: 2px;
   }
 `;
 
@@ -187,24 +205,32 @@ export const ContentWrapper = styled.div`
 `;
 
 export const InfoSection = styled.div`
-  display: flex;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
   padding: 40px;
   box-shadow: 0px 4px 12px 0px #bac7d580;
+  align-items: start;
 
   @media (max-width: 768px) {
-    padding: 20px;
-    flex-direction: row;
-    align-items: center;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    padding: 16px;
+    margin: 0 16px;
+    margin-top: 16px;
+    align-items: start;
   }
 `;
 
 export const Poster = styled.img`
   max-width: 312px;
   border-radius: 5px;
+  grid-row: span 2;
 
   @media (max-width: 768px) {
     max-width: 114px;
+    grid-row: auto;
+    margin-bottom: 16px;
   }
 `;
 
@@ -229,8 +255,17 @@ export const PosterPlaceholder = styled.div`
 `;
 
 export const MovieInfo = styled.div`
-  flex: 1;
   min-width: 250px;
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  margin-left: 40px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-left: 16px;
+  }
 `;
 
 export const Title = styled.h1`
@@ -256,11 +291,16 @@ export const Year = styled.p`
   @media (max-width: 768px) {
     font-size: 13px;
     margin-bottom: 8px;
+    color: #74788b;
   }
 `;
 
 export const Label = styled.span`
   color: #74788b;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const Production = styled.p`
@@ -299,6 +339,7 @@ export const Genres = styled.div`
     font-size: 10px;
     border-radius: 5px;
     margin-bottom: 8px;
+    gap: 8px;
   }
 `;
 
@@ -306,6 +347,9 @@ export const GenreTag = styled.span`
   background-color: #e4e6f0;
   border-radius: 5px;
   padding: 8px 16px;
+  @media (max-width: 768px) {
+    padding: 4px 8px;
+  }
 `;
 
 export const RatingContainer = styled.div`
@@ -331,6 +375,14 @@ export const MovieRating = styled.span`
   }
 `;
 
+export const MovieVotes10 = styled.span`
+  margin-right: 12px;
+  font-size: 14px;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 export const MovieVotes = styled.span`
   font-weight: 400;
   font-size: 14px;
@@ -339,6 +391,7 @@ export const MovieVotes = styled.span`
 
   @media (max-width: 768px) {
     font-size: 12px;
+    color: #74788b;
   }
 `;
 
@@ -359,6 +412,19 @@ export const Header = styled.h1`
   }
 `;
 
+export const ExtraMovieInfo = styled.div`
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  margin-left: 40px;
+
+  @media (max-width: 768px) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 0;
+  }
+`;
+
 export const Overview = styled.p`
   font-weight: 400;
   font-size: 20px;
@@ -366,8 +432,8 @@ export const Overview = styled.p`
   margin-top: 10px;
 
   @media (max-width: 768px) {
-    font-size: 16px;
-    text-align: center;
+    font-size: 13px;
+    margin: 0;
   }
 `;
 
