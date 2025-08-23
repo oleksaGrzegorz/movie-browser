@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Link as RouterLink} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 export const Container = styled.div`
   margin: 0 auto;
@@ -237,21 +237,29 @@ export const Poster = styled.img`
 
 export const PosterPlaceholder = styled.div`
   width: 100%;
-  max-width: 300px;
-  height: 450px;
-  border-radius: 10px;
+  width: 312px;
+  height: 468px;
+  border-radius: 5px;
   background-color: #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 3rem;
-  color: #666;
 
   @media (max-width: 768px) {
-    max-width: 200px;
-    height: 300px;
+    width: 114px;
+    height: 171px;
     font-size: 2rem;
+  }
+`;
+
+export const StyledVideoIcon = styled.img`
+  width: 74px;
+  height: 56px;
+
+  @media (max-width: 768px) {
+    width: 37px;
+    height: 28px;
   }
 `;
 

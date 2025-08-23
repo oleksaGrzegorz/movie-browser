@@ -81,9 +81,8 @@ export const Poster = styled.img`
 `;
 
 export const PosterPlaceholder = styled.div`
-  width: 292px;
-  height: 414px;
-  padding: 16px;
+  width: 287px;
+  height: 434px;
   border-radius: 20px;
   background: #c4c4c4;
   display: flex;
@@ -93,9 +92,10 @@ export const PosterPlaceholder = styled.div`
   margin-right: auto;
 
   @media (max-width: 667px) {
-    width: 120px;
-    height: auto;
-    padding: 8px;
+    max-width: 114px;
+    max-height: 169px;
+    padding: 0px;
+    border-radius: 5px;
     margin: 0;
   }
 `;
@@ -172,9 +172,10 @@ export const Vote = styled.p`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 16px 16px 16px;
+  padding: 0 16px 0 16px;
   margin-top: auto;
   margin-bottom: 0;
+
 
   @media (max-width: 667px) {
     padding: 0;
