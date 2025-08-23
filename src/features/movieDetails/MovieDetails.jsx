@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Container,
   Backdrop,
@@ -41,6 +41,7 @@ import {
   ExtraMovieInfo,
   MovieVotes10,
   BackdropInfo,
+  StyledLink,
 } from "./styled";
 
 import PersonIcon from "./Profile.svg";
@@ -80,15 +81,15 @@ const MovieDetails = () => {
         setError(err.message);
       } finally {
         setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+          setLoading(false);
+        }, 1000);
       }
     };
 
     fetchMovieDetails();
   }, [id]);
 
-  if (loading) return <Loader full/>;
+  if (loading) return <Loader full />;
   if (error) return <p>Error: {error}</p>;
   if (!movie) return null;
 
@@ -112,14 +113,14 @@ const MovieDetails = () => {
             <BackdropContent>
               <BackdropTitle>{movie.title}</BackdropTitle>
               <BackdropInfo>
-              <BackdropRating>
-                <StyledStarIcon src={StarIcon} alt="star" size={40} />
-                <RatingWrapper>
-                  {movie.vote_average.toFixed(1).replace(".", ",")}
-                  <BackdropRatingExtra>/ 10</BackdropRatingExtra>
-                </RatingWrapper>
-              </BackdropRating>
-              <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
+                <BackdropRating>
+                  <StyledStarIcon src={StarIcon} alt="star" size={40} />
+                  <RatingWrapper>
+                    {movie.vote_average.toFixed(1).replace(".", ",")}
+                    <BackdropRatingExtra>/ 10</BackdropRatingExtra>
+                  </RatingWrapper>
+                </BackdropRating>
+                <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
               </BackdropInfo>
             </BackdropContent>
           </BackdropImageContainer>
@@ -162,50 +163,60 @@ const MovieDetails = () => {
               <MovieVotes>{movie.vote_count} votes</MovieVotes>
             </RatingContainer>
           </MovieInfo>
-          <ExtraMovieInfo><Overview>{movie.overview}</Overview></ExtraMovieInfo>
-          
+          <ExtraMovieInfo>
+            <Overview>{movie.overview}</Overview>
+          </ExtraMovieInfo>
         </InfoSection>
-        
 
         {credits && (
           <Section>
             <Header>Cast</Header>
             <Grid>
               {credits.cast.map((actor) => (
-                <GridItem key={actor.cast_id}>
-                  {actor.profile_path ? (
-                    <PosterImage
-                      src={`${IMG_POSTER_URL}${actor.profile_path}`}
-                      alt={actor.name}
-                    />
-                  ) : (
-                    <PlaceholderIcon>
-                      <Icon src={PersonIcon} />
-                    </PlaceholderIcon>
-                  )}
-                  <PersonInfo>{actor.name}</PersonInfo>
-                  <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
-                </GridItem>
+                <StyledLink
+                  to={`/people/${actor.id}`}
+                  key={actor.cast_id}
+                >
+                  <GridItem>
+                    {actor.profile_path ? (
+                      <PosterImage
+                        src={`${IMG_POSTER_URL}${actor.profile_path}`}
+                        alt={actor.name}
+                      />
+                    ) : (
+                      <PlaceholderIcon>
+                        <Icon src={PersonIcon} />
+                      </PlaceholderIcon>
+                    )}
+                    <PersonInfo>{actor.name}</PersonInfo>
+                    <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
+                  </GridItem>
+                </StyledLink>
               ))}
             </Grid>
 
             <Header>Crew</Header>
             <Grid>
               {credits.crew.map((member) => (
-                <GridItem key={member.credit_id}>
-                  {member.profile_path ? (
-                    <PosterImage
-                      src={`${IMG_POSTER_URL}${member.profile_path}`}
-                      alt={member.name}
-                    />
-                  ) : (
-                    <PlaceholderIcon>
-                      <Icon src={PersonIcon} />
-                    </PlaceholderIcon>
-                  )}
-                  <PersonInfo>{member.name}</PersonInfo>
-                  <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
-                </GridItem>
+                <StyledLink
+                  to={`/people/${member.id}`}
+                  key={member.credit_id}
+                >
+                  <GridItem>
+                    {member.profile_path ? (
+                      <PosterImage
+                        src={`${IMG_POSTER_URL}${member.profile_path}`}
+                        alt={member.name}
+                      />
+                    ) : (
+                      <PlaceholderIcon>
+                        <Icon src={PersonIcon} />
+                      </PlaceholderIcon>
+                    )}
+                    <PersonInfo>{member.name}</PersonInfo>
+                    <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
+                  </GridItem>
+                </StyledLink>
               ))}
             </Grid>
           </Section>

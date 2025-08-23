@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Link as RouterLink} from "react-router-dom";
 
 export const Container = styled.div`
   margin: 0 auto;
@@ -435,6 +436,10 @@ export const Overview = styled.p`
     font-size: 13px;
     margin: 0;
   }
+`;
+
+export const StyledLink = styled(RouterLink)`
+  display: contents;
 `;
 
 export const Grid = styled.div`
