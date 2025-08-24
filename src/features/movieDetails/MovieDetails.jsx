@@ -47,7 +47,7 @@ import {
 
 import PersonIcon from "./Profile.svg";
 import StarIcon from "../movieList/images/star.svg";
-import Loader from "../../components/loader/index";
+import Loader from "../../common/loader/index";
 import VideoIcon from "../movieList/images/video.svg";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;

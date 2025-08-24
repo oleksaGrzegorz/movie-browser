@@ -1,7 +1,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import Loader from "../../components/loader";
+import Loader from "../../common/loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import StarIcon from "../movieList/images/star.svg";
 import { fetchPersonDetails, fetchPersonCredits } from "../movieList/fetchMovieApi";

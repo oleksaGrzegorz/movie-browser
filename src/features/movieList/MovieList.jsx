@@ -23,7 +23,7 @@ import {
 import StarIcon from "./images/star.svg";
 import VideoIcon from "./images/video.svg";
 import Pagination from "../../common/Pagination/Pagination";
-import Loader from "../../components/loader/index";
+import Loader from "../../common/loader/index";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
