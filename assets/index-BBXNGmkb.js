@@ -704,7 +704,6 @@ Please change the parent <Route path="${U}"> to <Route path="${U==="/"?"*":`${U}
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  grid-row: span 2;
 
   @media (max-width: 768px) {
     width: 114px;
