@@ -244,11 +244,14 @@ export const PosterPlaceholder = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  grid-row: span 2;
 
   @media (max-width: 768px) {
     width: 114px;
     height: 171px;
     font-size: 2rem;
+    grid-row: auto;
+    margin-bottom: 16px;
   }
 `;
 
