@@ -133,7 +133,6 @@ const MovieDetails = () => {
           </BackdropImageContainer>
         </Backdrop>
       )}
-
       <ContentWrapper>
         <InfoSection>
           {posterUrl ? (
@@ -176,7 +175,6 @@ const MovieDetails = () => {
               <MovieRating>
                 {movie.vote_average.toFixed(1).replace(".", ",")}
               </MovieRating>
-
               <MovieVotes10>/ 10</MovieVotes10>
               <MovieVotes>{movie.vote_count} votes</MovieVotes>
             </RatingContainer>
@@ -185,7 +183,6 @@ const MovieDetails = () => {
             <Overview>{movie.overview}</Overview>
           </ExtraMovieInfo>
         </InfoSection>
-
         {credits && (
           <Section>
             <Header>Cast</Header>
@@ -209,7 +206,6 @@ const MovieDetails = () => {
                 </StyledLink>
               ))}
             </Grid>
-
             <Header>Crew</Header>
             <Grid>
               {credits.crew.map((member) => (
