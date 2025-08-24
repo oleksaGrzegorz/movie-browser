@@ -250,6 +250,8 @@ export const PosterPlaceholder = styled.div`
     width: 114px;
     height: 171px;
     font-size: 2rem;
+    grid-row: auto;
+    margin-bottom: 16px;
   }
 `;
 
