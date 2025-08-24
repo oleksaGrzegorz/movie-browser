@@ -5,7 +5,6 @@ export const Container = styled.div`
   margin: 0 auto;
   margin-bottom: 336px;
   overflow-x: hidden;
-
   @media (max-width: 768px) {
     margin-bottom: 88px;
   }
@@ -412,6 +411,7 @@ export const Header = styled.h1`
   font-weight: 600;
   font-size: 36px;
   line-height: 120%;
+  margin-top: 64px;
 
   @media (max-width: 768px) {
     font-size: 20px;
@@ -465,6 +465,7 @@ export const Grid = styled.div`
 `;
 
 export const GridItem = styled.div`
+  max-width: 208px;
   text-align: center;
   opacity: 1;
   padding: 16px;
@@ -476,9 +477,9 @@ export const GridItem = styled.div`
 `;
 
 export const PosterImage = styled.img`
-  width: 100%;
   border-radius: 5px;
   object-fit: cover;
+  width: 176px;
 `;
 
 export const PersonInfo = styled.p`
@@ -488,6 +489,7 @@ export const PersonInfo = styled.p`
   text-align: center;
   margin-top: 12px;
   margin-bottom: 8px;
+  word-break: break-word;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -508,7 +510,8 @@ export const ExtraPersonInfo = styled.p`
 `;
 
 export const PlaceholderIcon = styled.div`
-  width: 100%;
+  max-width: 176px;
+  height: 231px;
   padding-top: 150%;
   background-color: #ccc;
   border-radius: 5px;
