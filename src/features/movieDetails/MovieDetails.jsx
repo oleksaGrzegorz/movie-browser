@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Container,
   Backdrop,
@@ -116,7 +116,12 @@ const MovieDetails = () => {
               <BackdropTitle>{movie.title}</BackdropTitle>
               <BackdropInfo>
                 <BackdropRating>
-                  <StyledStarIcon src={StarIcon} alt="star" size={40} />
+                  <StyledStarIcon
+                    src={StarIcon}
+                    alt=""
+                    aria-hidden="true"
+                    size={40}
+                  />
                   <RatingWrapper>
                     {movie.vote_average.toFixed(1).replace(".", ",")}
                     <BackdropRatingExtra>/ 10</BackdropRatingExtra>
@@ -135,7 +140,11 @@ const MovieDetails = () => {
             <Poster src={posterUrl} alt={movie.title} />
           ) : (
             <PosterPlaceholder>
-              <StyledVideoIcon src={VideoIcon}></StyledVideoIcon>
+              <StyledVideoIcon
+                src={VideoIcon}
+                alt=""
+                aria-hidden="true"
+              ></StyledVideoIcon>
             </PosterPlaceholder>
           )}
           <MovieInfo>
@@ -158,7 +167,12 @@ const MovieDetails = () => {
             </Genres>
 
             <RatingContainer>
-              <StyledStarIcon src={StarIcon} alt="star" size={24} />
+              <StyledStarIcon
+                src={StarIcon}
+                alt=""
+                aria-hidden="true"
+                size={24}
+              />
               <MovieRating>
                 {movie.vote_average.toFixed(1).replace(".", ",")}
               </MovieRating>
@@ -177,10 +191,7 @@ const MovieDetails = () => {
             <Header>Cast</Header>
             <Grid>
               {credits.cast.map((actor) => (
-                <StyledLink
-                  to={`/people/${actor.id}`}
-                  key={actor.cast_id}
-                >
+                <StyledLink to={`/people/${actor.id}`} key={actor.cast_id}>
                   <GridItem>
                     {actor.profile_path ? (
                       <PosterImage
@@ -189,7 +200,7 @@ const MovieDetails = () => {
                       />
                     ) : (
                       <PlaceholderIcon>
-                        <Icon src={PersonIcon} />
+                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
                       </PlaceholderIcon>
                     )}
                     <PersonInfo>{actor.name}</PersonInfo>
@@ -202,10 +213,7 @@ const MovieDetails = () => {
             <Header>Crew</Header>
             <Grid>
               {credits.crew.map((member) => (
-                <StyledLink
-                  to={`/people/${member.id}`}
-                  key={member.credit_id}
-                >
+                <StyledLink to={`/people/${member.id}`} key={member.credit_id}>
                   <GridItem>
                     {member.profile_path ? (
                       <PosterImage
@@ -214,7 +222,7 @@ const MovieDetails = () => {
                       />
                     ) : (
                       <PlaceholderIcon>
-                        <Icon src={PersonIcon} />
+                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
                       </PlaceholderIcon>
                     )}
                     <PersonInfo>{member.name}</PersonInfo>
