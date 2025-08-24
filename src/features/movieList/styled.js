@@ -46,6 +46,7 @@ export const MovieCard = styled.li`
   border-radius: 5px;
   height: 100%;
   padding: 16px;
+  transition: 0.2s;
 
   @media (max-width: 667px) {
     flex-direction: row;
@@ -53,6 +54,10 @@ export const MovieCard = styled.li`
     margin-left: 16px;
     margin-right: 16px;
     height: auto;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
   }
 `;
 
