@@ -18,6 +18,7 @@ import {
   Year,
   PosterPlaceholder,
   StyledVideoIcon,
+  StyledStarIcon,
 } from "./styled";
 import StarIcon from "./images/star.svg";
 import VideoIcon from "./images/video.svg";
@@ -73,7 +74,7 @@ const MovieList = () => {
 
   return (
     <Container>
-      <MainHeader>Popular Movies</MainHeader>
+      <MainHeader>Popular movies</MainHeader>
       <List>
         {movies.map(
           ({
@@ -116,7 +117,7 @@ const MovieList = () => {
                 </Genre>
 
                 <Vote>
-                  <img src={StarIcon} />
+                  <StyledStarIcon src={StarIcon} alt="" aria-hidden="true" />
                   <VoteAverage>
                     {vote_average.toFixed(1).replace(".", ",")}
                   </VoteAverage>{" "}

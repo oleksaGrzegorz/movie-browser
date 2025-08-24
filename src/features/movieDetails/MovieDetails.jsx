@@ -38,10 +38,17 @@ import {
   ExtraPersonInfo,
   PlaceholderIcon,
   Icon,
+  ExtraMovieInfo,
+  MovieVotes10,
+  BackdropInfo,
+  StyledLink,
+  StyledVideoIcon,
 } from "./styled";
 
 import PersonIcon from "./Profile.svg";
 import StarIcon from "../movieList/images/star.svg";
+import Loader from "../../components/loader/index";
+import VideoIcon from "../movieList/images/video.svg";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -75,14 +82,16 @@ const MovieDetails = () => {
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
 
     fetchMovieDetails();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader full />;
   if (error) return <p>Error: {error}</p>;
   if (!movie) return null;
 
@@ -105,25 +114,37 @@ const MovieDetails = () => {
             <BackdropOverlay />
             <BackdropContent>
               <BackdropTitle>{movie.title}</BackdropTitle>
-              <BackdropRating>
-                <StyledStarIcon src={StarIcon} alt="star" size={40} />
-                <RatingWrapper>
-                  {movie.vote_average.toFixed(1).replace(".", ",")}
-                  <BackdropRatingExtra>/ 10</BackdropRatingExtra>
-                </RatingWrapper>
-              </BackdropRating>
-              <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
+              <BackdropInfo>
+                <BackdropRating>
+                  <StyledStarIcon
+                    src={StarIcon}
+                    alt=""
+                    aria-hidden="true"
+                    size={40}
+                  />
+                  <RatingWrapper>
+                    {movie.vote_average.toFixed(1).replace(".", ",")}
+                    <BackdropRatingExtra>/ 10</BackdropRatingExtra>
+                  </RatingWrapper>
+                </BackdropRating>
+                <BackdropVotes>{movie.vote_count} votes</BackdropVotes>
+              </BackdropInfo>
             </BackdropContent>
           </BackdropImageContainer>
         </Backdrop>
       )}
-
       <ContentWrapper>
         <InfoSection>
           {posterUrl ? (
             <Poster src={posterUrl} alt={movie.title} />
           ) : (
-            <PosterPlaceholder />
+            <PosterPlaceholder>
+              <StyledVideoIcon
+                src={VideoIcon}
+                alt=""
+                aria-hidden="true"
+              ></StyledVideoIcon>
+            </PosterPlaceholder>
           )}
           <MovieInfo>
             <Title>{movie.title}</Title>
@@ -145,58 +166,65 @@ const MovieDetails = () => {
             </Genres>
 
             <RatingContainer>
-              <StyledStarIcon src={StarIcon} alt="star" size={24} />
+              <StyledStarIcon
+                src={StarIcon}
+                alt=""
+                aria-hidden="true"
+                size={24}
+              />
               <MovieRating>
                 {movie.vote_average.toFixed(1).replace(".", ",")}
               </MovieRating>
-
-              <MovieVotes>/ 10</MovieVotes>
+              <MovieVotes10>/ 10</MovieVotes10>
               <MovieVotes>{movie.vote_count} votes</MovieVotes>
             </RatingContainer>
-
-            <Overview>{movie.overview}</Overview>
           </MovieInfo>
+          <ExtraMovieInfo>
+            <Overview>{movie.overview}</Overview>
+          </ExtraMovieInfo>
         </InfoSection>
-
         {credits && (
           <Section>
             <Header>Cast</Header>
             <Grid>
               {credits.cast.map((actor) => (
-                <GridItem key={actor.cast_id}>
-                  {actor.profile_path ? (
-                    <PosterImage
-                      src={`${IMG_POSTER_URL}${actor.profile_path}`}
-                      alt={actor.name}
-                    />
-                  ) : (
-                    <PlaceholderIcon>
-                      <Icon src={PersonIcon} />
-                    </PlaceholderIcon>
-                  )}
-                  <PersonInfo>{actor.name}</PersonInfo>
-                  <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
-                </GridItem>
+                <StyledLink to={`/people/${actor.id}`} key={actor.cast_id}>
+                  <GridItem>
+                    {actor.profile_path ? (
+                      <PosterImage
+                        src={`${IMG_POSTER_URL}${actor.profile_path}`}
+                        alt={actor.name}
+                      />
+                    ) : (
+                      <PlaceholderIcon>
+                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
+                      </PlaceholderIcon>
+                    )}
+                    <PersonInfo>{actor.name}</PersonInfo>
+                    <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
+                  </GridItem>
+                </StyledLink>
               ))}
             </Grid>
-
             <Header>Crew</Header>
             <Grid>
               {credits.crew.map((member) => (
-                <GridItem key={member.credit_id}>
-                  {member.profile_path ? (
-                    <PosterImage
-                      src={`${IMG_POSTER_URL}${member.profile_path}`}
-                      alt={member.name}
-                    />
-                  ) : (
-                    <PlaceholderIcon>
-                      <Icon src={PersonIcon} />
-                    </PlaceholderIcon>
-                  )}
-                  <PersonInfo>{member.name}</PersonInfo>
-                  <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
-                </GridItem>
+                <StyledLink to={`/people/${member.id}`} key={member.credit_id}>
+                  <GridItem>
+                    {member.profile_path ? (
+                      <PosterImage
+                        src={`${IMG_POSTER_URL}${member.profile_path}`}
+                        alt={member.name}
+                      />
+                    ) : (
+                      <PlaceholderIcon>
+                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
+                      </PlaceholderIcon>
+                    )}
+                    <PersonInfo>{member.name}</PersonInfo>
+                    <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
+                  </GridItem>
+                </StyledLink>
               ))}
             </Grid>
           </Section>
