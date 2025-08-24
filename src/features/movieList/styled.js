@@ -26,18 +26,10 @@ export const MainHeader = styled.h1`
 
 export const List = styled.ul`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(292px, 1fr));
   gap: 20px;
   list-style: none;
   padding: 0;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
 
   @media (max-width: 667px) {
     grid-template-columns: repeat(1, 1fr);
@@ -67,15 +59,14 @@ export const MovieCard = styled.li`
 export const Poster = styled.img`
   width: 292px;
   height: 434px;
-  border-radius: 20px;
+  border-radius: 5px;
   display: block;
   margin-left: auto;
   margin-right: auto;
   @media (max-width: 667px) {
     max-width: 114px;
     max-height: 169px;
-    padding: 0px;
-    border-radius: 5px;
+    padding: 0;
     margin: 0;
   }
 `;
@@ -83,7 +74,7 @@ export const Poster = styled.img`
 export const PosterPlaceholder = styled.div`
   width: 287px;
   height: 434px;
-  border-radius: 20px;
+  border-radius: 5px;
   background: #c4c4c4;
   display: flex;
   justify-content: center;
@@ -126,9 +117,12 @@ export const Title = styled.h2`
   font-size: 22px;
   line-height: 130%;
   margin: 0px;
+  word-break: break-word;
+  margin-bottom: 8px;
 
   @media (max-width: 667px) {
     font-size: 16px;
+    margin: 0px;
   }
 `;
 
@@ -172,13 +166,17 @@ export const Vote = styled.p`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 16px 0 16px;
   margin-top: auto;
   margin-bottom: 0;
+`;
 
+export const StyledStarIcon = styled.img`
+  width: 24px;
+  height: 24px;
 
   @media (max-width: 667px) {
-    padding: 0;
+    width: 16px;
+    height: 16px;
   }
 `;
 
