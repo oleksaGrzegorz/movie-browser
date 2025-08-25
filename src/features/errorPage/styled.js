@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const ErrorWrapper = styled.div`
   min-width: 375px;
@@ -6,7 +7,7 @@ export const ErrorWrapper = styled.div`
   align-items: center;
 `;
 
-export const ErrorIMG = styled.img`
+export const ErrorImage = styled.img`
   width: 120px;
   height: 120px;
 `;
@@ -33,13 +34,13 @@ export const TextBreaker = styled.span`
   display: block;
 `;
 
-export const IMGWrapper = styled.div`
+export const ImageWrapper = styled.div`
   display: grid;
   justify-content: center;
   margin-top: 100px;
 `;
 
-export const Button = styled.a`
+export const HomeLink = styled(Link)`
   background: ${({ theme }) => theme.color.blue};
   color: ${({ theme }) => theme.color.white};
   padding: 14px 20px;
