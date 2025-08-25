@@ -13,12 +13,12 @@ export const ErrorIMG = styled.img`
 
 export const ErrorTitle = styled.h1`
   display: flex;
-  font-size: xx-large;
+  font-size: 32px;
   justify-content: center;
   margin-top: 20px;
 
   @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-    font-size: x-large;
+    font-size: 24px;
     text-align: center;
   }
 `;
@@ -27,6 +27,10 @@ export const ErrorText = styled.p`
   text-align: center;
   text-shadow: 0px 4px 4px #00000061;
   font-weight: 500;
+`;
+
+export const TextBreaker = styled.span`
+  display: block;
 `;
 
 export const IMGWrapper = styled.div`
