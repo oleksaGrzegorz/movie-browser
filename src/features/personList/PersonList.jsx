@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Loading from "../../components/loader";
+import Loading from "../../common/loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
 import {
