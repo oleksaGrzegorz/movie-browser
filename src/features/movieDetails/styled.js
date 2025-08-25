@@ -506,7 +506,7 @@ export const ExtraPersonInfo = styled.p`
   text-align: center;
   margin-top: 8px;
   margin-bottom: 16px;
-
+  color: #7e839a;
   @media (max-width: 768px) {
     font-size: 13px;
   }
