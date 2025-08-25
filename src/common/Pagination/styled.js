@@ -108,7 +108,7 @@ export const StyledVectorLeft = styled(VectorLeftIcon)`
 export const PageInfo = styled.span`
   color: #7e839a;
   font-size: 16px;
-  padding: 0px 15px;
+  padding: 0 15px;
 `;
 
 export const Page = styled.span`
@@ -116,5 +116,5 @@ export const Page = styled.span`
   font-weight: 600;
   font-size: 16px;
   line-height: 150%;
-  padding: 0px 5px;
+  padding: 0 5px;
 `;
