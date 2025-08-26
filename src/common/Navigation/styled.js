@@ -5,16 +5,20 @@ export const StyledNav = styled.nav`
     background: ${({ theme }) => theme.color.black};
     color: ${({ theme }) => theme.color.white};
     width: 100%;
-    height: 94px;
+    min-height: 94px;
     display: flex;
     align-items: center;
 
-    @media (min-width: 668px) and (max-width: 964px) {
-        height: 120px;
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        min-height: 142px;
+        align-items: flex-start;
     }
 
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        height: 142px;
+    @media (min-width: ${({ theme }) =>
+            theme.breakpoint.mobileL + 1}px) and (max-width: ${({ theme }) =>
+            theme.breakpoint.laptop - 1}px) {
+        min-height: 150px;
+        align-items: flex-start;
     }
 `;
 
@@ -29,14 +33,16 @@ export const Container = styled.div`
     gap: 16px;
     flex-wrap: wrap;
 
-    @media (min-width: 668px) and (max-width: 964px) {
-        padding-top: 8px;
-        row-gap: 12px;
-    }
-
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         padding-top: 12px;
         row-gap: 12px;
+    }
+
+    @media (min-width: ${({ theme }) =>
+            theme.breakpoint.mobileL + 1}px) and (max-width: ${({ theme }) =>
+            theme.breakpoint.laptop - 1}px) {
+        padding-top: 18px;
+        row-gap: 6px;
     }
 `;
 
@@ -53,8 +59,8 @@ export const LogoIMG = styled.img`
     height: 40px;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        width: 13px;
-        height: 13px;
+        width: 18px;
+        height: 18px;
     }
 `;
 
@@ -64,7 +70,7 @@ export const LogoText = styled.span`
     line-height: 1;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 13px;
+        font-size: 16px;
     }
 `;
 
@@ -74,7 +80,9 @@ export const Menu = styled.nav`
     gap: 8px;
     margin-left: 50px;
 
-    @media (min-width: 668px) and (max-width: 964px) {
+    @media (min-width: ${({ theme }) =>
+            theme.breakpoint.mobileL + 1}px) and (max-width: ${({ theme }) =>
+            theme.breakpoint.laptop - 1}px) {
         margin-left: 30px;
     }
 
@@ -114,11 +122,13 @@ export const SearchWrapper = styled.div`
     height: 48px;
     margin-left: auto;
 
-    @media (min-width: 668px) and (max-width: 964px) {
+    @media (min-width: ${({ theme }) =>
+            theme.breakpoint.mobileL + 1}px) and (max-width: ${({ theme }) =>
+            theme.breakpoint.laptop - 1}px) {
         order: 3;
         flex: 1 1 100%;
         width: 100%;
-        margin-top: 12px;
+        margin-top: 16px;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
@@ -138,6 +148,10 @@ export const Browser = styled.input`
     background: ${({ theme }) => theme.color.white};
     color: ${({ theme }) => theme.color.black};
     font-size: 14px;
+
+    &:focus {
+        outline: none;
+    }
 
     &::placeholder {
         color: ${({ theme }) => theme.color.darkerGrey};

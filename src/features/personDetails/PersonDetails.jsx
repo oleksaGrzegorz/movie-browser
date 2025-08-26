@@ -1,10 +1,7 @@
 
-import { useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import Loader from "../../common/loader";
-import ProfilePlaceholder from "../../images/profile.svg";
-import StarIcon from "../movieList/images/star.svg";
-import { fetchPersonDetails, fetchPersonCredits } from "../movieList/fetchMovieApi";
+import { useEffect, useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../movieList/fetchMovieApi";
 import {
   Container,
   HeaderCard,
@@ -12,12 +9,15 @@ import {
   Info,
   Name,
   MetaRow,
-  MetaLabel,
+  MetaRowStackOnMobile,
+  LabelDesktop,
+  LabelMobile,
   MetaValue,
   Bio,
   SectionTitle,
   MoviesGrid,
   MovieCard,
+  CardLink,
   Poster,
   PosterPlaceholder,
   CContent,
@@ -26,111 +26,207 @@ import {
   VoteRow,
   VoteAverage,
   VoteInfo,
+  Genre,
+  GenreButton,
 } from "./styled";
+import StarIcon from "../../images/star.svg";
+import ProfilePlaceholder from "../../images/profile.svg";
 
-const img = (path, size = "w342") => (path ? `https://image.tmdb.org/t/p/${size}${path}` : null);
-const poster = (path) => (path ? `https://image.tmdb.org/t/p/w342${path}` : null);
-const fmt = (d) => (d ? new Date(d).toLocaleDateString("en-GB") : "—");
+const poster = (path, size = "w500") =>
+  path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-export default function PersonDetails() {
+const fmt = (v) => (v ? v : "—");
+
+const PersonDetails = () => {
   const { id } = useParams();
-  const [person, setPerson] = useState(null);
+  const [details, setDetails] = useState(null);
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [genresMap, setGenresMap] = useState({});
 
   useEffect(() => {
-    let cancelled = false;
     (async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const [d, c] = await Promise.all([
-          fetchPersonDetails(id),
-          fetchPersonCredits(id),
-          new Promise((r) => setTimeout(r, 800)),
-        ]);
-        if (!cancelled) {
-          setPerson(d);
-          setCast(c.cast || []);
-          setCrew(c.crew || []);
-        }
-      } catch (e) {
-        if (!cancelled) setError(e.message || "Error");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+      const d = await fetchPersonDetails(id);
+      setDetails(d);
+      const credits = await fetchPersonCredits(id);
+      setCast(credits.cast || []);
+      setCrew(credits.crew || []);
+      const genres = await fetchGenres();
+      const map = {};
+      for (const { id, name } of genres) map[id] = name;
+      setGenresMap(map);
     })();
-    return () => { cancelled = true; };
   }, [id]);
 
   const castClean = useMemo(
-    () => cast.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
+    () => [...cast].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
     [cast]
   );
   const crewClean = useMemo(
-    () => crew.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
+    () => [...crew].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
     [crew]
   );
 
-  if (loading) return <Loader full />;
-  if (error) return <Container>Error: {error}</Container>;
-  if (!person) return <Container />;
+  if (!details) return <Container />;
+
+  const castCount = castClean.length;
+  const crewCount = crewClean.length;
 
   return (
     <Container>
       <HeaderCard>
         <Avatar>
-          {person.profile_path ? (
-            <img src={img(person.profile_path, "w342")} alt={person.name} />
+          {details.profile_path ? (
+            <img
+              src={poster(details.profile_path)}
+              alt={details.name || "Profile photo"}
+              loading="lazy"
+              decoding="async"
+              width={400}
+              height={600}
+            />
           ) : (
-            <img src={ProfilePlaceholder} alt="No profile available" width="120" height="120" />
+            <img
+              src={ProfilePlaceholder}
+              alt={details.name || "Profile photo"}
+              loading="lazy"
+              decoding="async"
+              width={400}
+              height={600}
+            />
           )}
         </Avatar>
+
         <Info>
-          <Name>{person.name}</Name>
-          <MetaRow><MetaLabel>Birth:</MetaLabel><MetaValue>{fmt(person.birthday)}</MetaValue></MetaRow>
-          <MetaRow><MetaLabel>Place of birth:</MetaLabel><MetaValue>{person.place_of_birth || "—"}</MetaValue></MetaRow>
-          {person.biography && <Bio>{person.biography}</Bio>}
+          <Name>{details.name}</Name>
+
+          <MetaRow>
+            <LabelDesktop>Date of birth:</LabelDesktop>
+            <LabelMobile>Birth:</LabelMobile>
+            <MetaValue>{fmt(details.birthday)}</MetaValue>
+          </MetaRow>
+
+          <MetaRowStackOnMobile>
+            <LabelDesktop>Place of birth:</LabelDesktop>
+            <LabelMobile>Place of</LabelMobile>
+            <MetaValue>{fmt(details.place_of_birth)}</MetaValue>
+          </MetaRowStackOnMobile>
         </Info>
+
+        <Bio>{fmt(details.biography)}</Bio>
       </HeaderCard>
 
-      <SectionTitle>Movies – cast ({castClean.length})</SectionTitle>
+      <SectionTitle>Movies – cast ({castCount})</SectionTitle>
       <MoviesGrid>
-        {castClean.map(({ id: mid, title, original_title, poster_path, release_date, vote_average, vote_count, character }) => (
-          <MovieCard key={mid} as={Link} to={`/movies/${mid}`}>
-            {poster_path ? <Poster src={poster(poster_path)} alt={title || original_title} /> : <PosterPlaceholder />}
-            <CContent>
-              <CTitle>{title || original_title}</CTitle>
-              <CMeta>{character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
-              <VoteRow>
-                <img src={StarIcon} alt="" />
-                <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-                <VoteInfo>{vote_count || 0} votes</VoteInfo>
-              </VoteRow>
-            </CContent>
-          </MovieCard>
-        ))}
+        {castClean.map(
+          ({
+            id: mid,
+            poster_path,
+            title,
+            original_title,
+            character,
+            release_date,
+            vote_average,
+            vote_count,
+            genre_ids = [],
+          }) => (
+            <MovieCard key={mid}>
+              <CardLink to={`/movies/${mid}`}>
+                {poster_path ? (
+                  <Poster
+                    src={poster(poster_path)}
+                    alt={title || original_title || "Movie poster"}
+                    loading="lazy"
+                    decoding="async"
+                    width={500}
+                    height={750}
+                  />
+                ) : (
+                  <PosterPlaceholder aria-label="No poster available" role="img" />
+                )}
+
+                <CContent>
+                  <CTitle>{title || original_title || "—"}</CTitle>
+                  <CMeta>
+                    {character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
+                  </CMeta>
+
+                  <Genre>
+                    {genre_ids.length
+                      ? genre_ids.map((gid) => (
+                        <GenreButton key={gid}>{genresMap[gid]}</GenreButton>
+                      ))
+                      : <GenreButton as="span">No genres</GenreButton>}
+                  </Genre>
+
+                  <VoteRow>
+                    <img src={StarIcon} alt="" />
+                    <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
+                    <VoteInfo>{vote_count || 0} votes</VoteInfo>
+                  </VoteRow>
+                </CContent>
+              </CardLink>
+            </MovieCard>
+          )
+        )}
       </MoviesGrid>
 
-      <SectionTitle>Movies – crew ({crewClean.length})</SectionTitle>
+      <SectionTitle>Movies – crew ({crewCount})</SectionTitle>
       <MoviesGrid>
-        {crewClean.map(({ id: mid, title, original_title, poster_path, release_date, vote_average, vote_count, job }) => (
-          <MovieCard key={mid} as={Link} to={`/movies/${mid}`}>
-            {poster_path ? <Poster src={poster(poster_path)} alt={title || original_title} /> : <PosterPlaceholder />}
-            <CContent>
-              <CTitle>{title || original_title}</CTitle>
-              <CMeta>{job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}</CMeta>
-              <VoteRow>
-                <img src={StarIcon} alt="" />
-                <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-                <VoteInfo>{vote_count || 0} votes</VoteInfo>
-              </VoteRow>
-            </CContent>
-          </MovieCard>
-        ))}
+        {crewClean.map(
+          ({
+            id: mid,
+            poster_path,
+            title,
+            original_title,
+            job,
+            release_date,
+            vote_average,
+            vote_count,
+            genre_ids = [],
+          }) => (
+            <MovieCard key={mid}>
+              <CardLink to={`/movies/${mid}`}>
+                {poster_path ? (
+                  <Poster
+                    src={poster(poster_path)}
+                    alt={title || original_title || "Movie poster"}
+                    loading="lazy"
+                    decoding="async"
+                    width={500}
+                    height={750}
+                  />
+                ) : (
+                  <PosterPlaceholder aria-label="No poster available" role="img" />
+                )}
+
+                <CContent>
+                  <CTitle>{title || original_title || "—"}</CTitle>
+                  <CMeta>
+                    {job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
+                  </CMeta>
+
+                  <Genre>
+                    {genre_ids.length
+                      ? genre_ids.map((gid) => (
+                        <GenreButton key={gid}>{genresMap[gid]}</GenreButton>
+                      ))
+                      : <GenreButton as="span">No genres</GenreButton>}
+                  </Genre>
+
+                  <VoteRow>
+                    <img src={StarIcon} alt="" />
+                    <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
+                    <VoteInfo>{vote_count || 0} votes</VoteInfo>
+                  </VoteRow>
+                </CContent>
+              </CardLink>
+            </MovieCard>
+          )
+        )}
       </MoviesGrid>
     </Container>
   );
-}
+};
+
+export default PersonDetails;
