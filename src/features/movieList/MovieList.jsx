@@ -23,7 +23,7 @@ import {
 import StarIcon from "./images/star.svg";
 import VideoIcon from "./images/video.svg";
 import Pagination from "../../common/Pagination/Pagination";
-import Loader from "../../common/loader/index";
+import Loader from "../../common/Loader/Loader";
 
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
@@ -109,10 +109,10 @@ const MovieList = () => {
                 <Genre>
                   {genre_ids.length
                     ? genre_ids.map((genreId) => (
-                        <GenreButton key={genreId}>
-                          {genres[genreId]}
-                        </GenreButton>
-                      ))
+                      <GenreButton key={genreId}>
+                        {genres[genreId]}
+                      </GenreButton>
+                    ))
                     : "No genres"}
                 </Genre>
 
