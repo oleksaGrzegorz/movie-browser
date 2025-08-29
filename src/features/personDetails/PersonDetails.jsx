@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../movieList/fetchMovieApi";
@@ -20,9 +19,9 @@ import {
   CardLink,
   Poster,
   PosterPlaceholder,
-  CContent,
-  CTitle,
-  CMeta,
+  CardContent,
+  CardTitle,
+  CardMeta,
   VoteRow,
   VoteAverage,
   VoteInfo,
@@ -35,7 +34,7 @@ import ProfilePlaceholder from "../../images/profile.svg";
 const poster = (path, size = "w500") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-const fmt = (v) => (v ? v : "—");
+const displayValue = (v) => (v ? v : "—");
 
 const PersonDetails = () => {
   const { id } = useParams();
@@ -53,7 +52,7 @@ const PersonDetails = () => {
       setCrew(credits.crew || []);
       const genres = await fetchGenres();
       const map = {};
-      for (const { id, name } of genres) map[id] = name;
+      for (const { id: gid, name } of genres) map[gid] = name;
       setGenresMap(map);
     })();
   }, [id]);
@@ -103,17 +102,17 @@ const PersonDetails = () => {
           <MetaRow>
             <LabelDesktop>Date of birth:</LabelDesktop>
             <LabelMobile>Birth:</LabelMobile>
-            <MetaValue>{fmt(details.birthday)}</MetaValue>
+            <MetaValue>{displayValue(details.birthday)}</MetaValue>
           </MetaRow>
 
           <MetaRowStackOnMobile>
             <LabelDesktop>Place of birth:</LabelDesktop>
             <LabelMobile>Place of</LabelMobile>
-            <MetaValue>{fmt(details.place_of_birth)}</MetaValue>
+            <MetaValue>{displayValue(details.place_of_birth)}</MetaValue>
           </MetaRowStackOnMobile>
         </Info>
 
-        <Bio>{fmt(details.biography)}</Bio>
+        <Bio>{displayValue(details.biography)}</Bio>
       </HeaderCard>
 
       <SectionTitle>Movies – cast ({castCount})</SectionTitle>
@@ -145,11 +144,11 @@ const PersonDetails = () => {
                   <PosterPlaceholder aria-label="No poster available" role="img" />
                 )}
 
-                <CContent>
-                  <CTitle>{title || original_title || "—"}</CTitle>
-                  <CMeta>
+                <CardContent>
+                  <CardTitle>{title || original_title || "—"}</CardTitle>
+                  <CardMeta>
                     {character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
-                  </CMeta>
+                  </CardMeta>
 
                   <Genre>
                     {genre_ids.length
@@ -164,7 +163,7 @@ const PersonDetails = () => {
                     <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
                     <VoteInfo>{vote_count || 0} votes</VoteInfo>
                   </VoteRow>
-                </CContent>
+                </CardContent>
               </CardLink>
             </MovieCard>
           )
@@ -200,11 +199,11 @@ const PersonDetails = () => {
                   <PosterPlaceholder aria-label="No poster available" role="img" />
                 )}
 
-                <CContent>
-                  <CTitle>{title || original_title || "—"}</CTitle>
-                  <CMeta>
+                <CardContent>
+                  <CardTitle>{title || original_title || "—"}</CardTitle>
+                  <CardMeta>
                     {job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
-                  </CMeta>
+                  </CardMeta>
 
                   <Genre>
                     {genre_ids.length
@@ -219,7 +218,7 @@ const PersonDetails = () => {
                     <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
                     <VoteInfo>{vote_count || 0} votes</VoteInfo>
                   </VoteRow>
-                </CContent>
+                </CardContent>
               </CardLink>
             </MovieCard>
           )

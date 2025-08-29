@@ -203,7 +203,7 @@ export const PosterPlaceholder = styled.div`
     }
 `;
 
-export const CContent = styled.div`
+export const CardContent = styled.div`
     display: flex;
     flex-direction: column;
     padding: 12px 12px 16px;
@@ -213,7 +213,7 @@ export const CContent = styled.div`
     }
 `;
 
-export const CTitle = styled.h3`
+export const CardTitle = styled.h3`
     font-size: 22px;
     line-height: 130%;
     font-weight: 500;
@@ -224,7 +224,7 @@ export const CTitle = styled.h3`
     }
 `;
 
-export const CMeta = styled.p`
+export const CardMeta = styled.p`
     margin: 0 0 8px;
     color: ${({ theme }) => theme.color.textSecondary};
     font-size: 16px;
