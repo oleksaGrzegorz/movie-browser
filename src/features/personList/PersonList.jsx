@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Loading from "../../common/loader";
+import Loader from "../../common/Loader/Loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
 import {
@@ -80,7 +80,7 @@ export default function PersonList() {
     return (cols - (people.length % cols)) % cols;
   }, [people.length, cols]);
 
-  if (loading) return <Loading full />;
+  if (loading) return <Loader full />;
   if (error) return <Container>Error: {error}</Container>;
 
   return (
