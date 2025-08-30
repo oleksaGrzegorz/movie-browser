@@ -45,7 +45,7 @@ const Navigation = () => {
         dispatch(searchMovies(trimmed));
         navigate("/movies");
       }
-    }, 1500)
+    }, 500)
   );
 
   const handleChange = (e) => {
