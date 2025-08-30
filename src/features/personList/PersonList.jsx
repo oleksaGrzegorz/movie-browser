@@ -88,7 +88,7 @@ export default function PersonList() {
           {Array.from({ length: pad }).map((_, i) => <GhostItem key={`ghost-${i}`} aria-hidden="true" />)}
         </List>
       )}
-      {isPeopleTab && !peopleQuery && people.length > 0 && (
+      {isPeopleTab && people.length > 0 && (
   <Pagination currentPage={page} totalPages={totalPages} onPageChange={(newPage) => setSearchParams({ page: String(newPage) })} />
 )}
     </Container>

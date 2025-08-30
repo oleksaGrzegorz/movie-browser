@@ -104,7 +104,7 @@ const MovieList = () => {
           ))}
         </List>
       )}
-      {isMovieTab && !moviesQuery && movies.length > 0 && (
+      {isMovieTab && movies.length > 0 && (
   <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 )}
     </Container>
