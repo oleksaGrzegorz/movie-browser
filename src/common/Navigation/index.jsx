@@ -3,8 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 import {
-  StyledNav, Container, Brand, LogoIMG, LogoText,
-  Menu, SearchWrapper, Browser, StyledNavLink, SearchIcon
+  StyledNav,
+  Container,
+  Brand,
+  LogoIMG,
+  LogoText,
+  Menu,
+  SearchWrapper,
+  Browser,
+  StyledNavLink,
+  SearchIcon,
 } from "./styled";
 import logoIMG from "../../images/logoIMG.svg";
 import searchIcon from "../../images/search.svg";
@@ -14,7 +22,7 @@ import {
   searchMovies,
   searchPeople,
   clearMoviesResults,
-  clearPeopleResults
+  clearPeopleResults,
 } from "../../store/searchSlice";
 
 const Navigation = () => {
@@ -22,7 +30,9 @@ const Navigation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isPeopleTab = pathname.includes("/people");
-  const placeholder = isPeopleTab ? "Search for people..." : "Search for movies...";
+  const placeholder = isPeopleTab
+    ? "Search for people..."
+    : "Search for movies...";
   const [input, setInput] = useState("");
 
   const debounceRef = useRef(
@@ -34,7 +44,7 @@ const Navigation = () => {
           return;
         }
         dispatch(setPeopleQuery(trimmed));
-        dispatch(searchPeople(trimmed));
+        dispatch(searchPeople({ query: trimmed, page: 1 }));
         navigate("/people");
       } else {
         if (!trimmed) {
@@ -42,7 +52,7 @@ const Navigation = () => {
           return;
         }
         dispatch(setMoviesQuery(trimmed));
-        dispatch(searchMovies(trimmed));
+        dispatch(searchMovies({ query: trimmed, page: 1 }));
         navigate("/movies");
       }
     }, 500)

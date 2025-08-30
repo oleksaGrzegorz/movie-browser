@@ -42,6 +42,10 @@ const MovieList = () => {
   const isMovieTab = location.pathname.startsWith("/movies");
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [moviesQuery, isMovieTab]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -49,17 +53,23 @@ const MovieList = () => {
 
         const genresData = await fetchGenres();
         const genresMap = {};
-        genresData.forEach(({ id, name }) => { genresMap[id] = name; });
+        genresData.forEach(({ id, name }) => {
+          genresMap[id] = name;
+        });
         setGenres(genresMap);
 
-        if (isMovieTab && moviesQuery) {
-          const results = await dispatch(searchMovies({ query: moviesQuery, page: currentPage })).unwrap();
-          setMovies(results.results || results);
+        if (isMovieTab && moviesQuery && moviesQuery.trim() !== "") {
+          const results = await dispatch(
+            searchMovies({ query: moviesQuery, page: currentPage })
+          ).unwrap();
+          setMovies(results.results || []);
           setTotalPages(results.total_pages || 1);
         } else if (isMovieTab) {
           const moviesData = await fetchPopularMovies(currentPage);
           setMovies(moviesData.movies);
-          setTotalPages(moviesData.totalPages > 500 ? 500 : moviesData.totalPages);
+          setTotalPages(
+            moviesData.totalPages > 500 ? 500 : moviesData.totalPages
+          );
         } else {
           setMovies([]);
         }
@@ -79,34 +89,72 @@ const MovieList = () => {
   return (
     <Container>
       <MainHeader>
-        {isMovieTab && (moviesQuery ? `Search results for "${moviesQuery}"` : "Popular movies")}
+        {isMovieTab &&
+          (moviesQuery
+            ? `Search results for "${moviesQuery}"`
+            : "Popular movies")}
       </MainHeader>
-      {movies.length === 0 && isMovieTab ? <p>Brak wyników</p> : (
+      {movies.length === 0 && isMovieTab ? (
+        <p>Brak wyników</p>
+      ) : (
         <List>
-          {movies.map(({ id, poster_path, title, release_date, genre_ids, vote_average, vote_count }) => (
-            <MovieCard key={id}>
-              <Link to={`/movies/${id}`}>
-                {poster_path ? <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} /> : (
-                  <PosterPlaceholder><StyledVideoIcon src={VideoIcon} alt="No poster available" /></PosterPlaceholder>
-                )}
-              </Link>
-              <Description>
-                <Title>{title}</Title>
-                <Year>{release_date ? new Date(release_date).getFullYear() : "N/A"}</Year>
-                <Genre>{genre_ids.length ? genre_ids.map((id) => <GenreButton key={id}>{genres[id]}</GenreButton>) : "No genres"}</Genre>
-                <Vote>
-                  <StyledStarIcon src={StarIcon} alt="" aria-hidden="true" />
-                  <VoteAverage>{vote_average.toFixed(1).replace(".", ",")}</VoteAverage>
-                  <VoteInfo>{vote_count} votes</VoteInfo>
-                </Vote>
-              </Description>
-            </MovieCard>
-          ))}
+          {movies.map(
+            ({
+              id,
+              poster_path,
+              title,
+              release_date,
+              genre_ids,
+              vote_average,
+              vote_count,
+            }) => (
+              <MovieCard key={id}>
+                <Link to={`/movies/${id}`}>
+                  {poster_path ? (
+                    <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
+                  ) : (
+                    <PosterPlaceholder>
+                      <StyledVideoIcon
+                        src={VideoIcon}
+                        alt="No poster available"
+                      />
+                    </PosterPlaceholder>
+                  )}
+                </Link>
+                <Description>
+                  <Title>{title}</Title>
+                  <Year>
+                    {release_date
+                      ? new Date(release_date).getFullYear()
+                      : "N/A"}
+                  </Year>
+                  <Genre>
+                    {genre_ids.length
+                      ? genre_ids.map((id) => (
+                          <GenreButton key={id}>{genres[id]}</GenreButton>
+                        ))
+                      : "No genres"}
+                  </Genre>
+                  <Vote>
+                    <StyledStarIcon src={StarIcon} alt="" aria-hidden="true" />
+                    <VoteAverage>
+                      {vote_average.toFixed(1).replace(".", ",")}
+                    </VoteAverage>
+                    <VoteInfo>{vote_count} votes</VoteInfo>
+                  </Vote>
+                </Description>
+              </MovieCard>
+            )
+          )}
         </List>
       )}
       {isMovieTab && movies.length > 0 && (
-  <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-)}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </Container>
   );
 };
