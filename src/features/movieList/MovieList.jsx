@@ -104,7 +104,9 @@ const MovieList = () => {
           ))}
         </List>
       )}
-      {isMovieTab && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />}
+      {isMovieTab && !moviesQuery && movies.length > 0 && (
+  <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+)}
     </Container>
   );
 };
