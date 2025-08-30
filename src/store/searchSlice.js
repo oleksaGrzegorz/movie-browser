@@ -3,17 +3,23 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
-export const searchMovies = createAsyncThunk("search/movies", async (query) => {
-  const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`);
-  const data = await res.json();
-  return data.results;
-});
+export const searchMovies = createAsyncThunk(
+  "search/movies",
+  async ({ query, page = 1 }) => {
+    const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`);
+    const data = await res.json();
+    return data;
+  }
+);
 
-export const searchPeople = createAsyncThunk("search/people", async (query) => {
-  const res = await fetch(`${BASE_URL}/search/person?api_key=${API_KEY}&query=${query}`);
-  const data = await res.json();
-  return data.results;
-});
+export const searchPeople = createAsyncThunk(
+  "search/people",
+  async ({ query, page = 1 }) => {
+    const res = await fetch(`${BASE_URL}/search/person?api_key=${API_KEY}&query=${query}&page=${page}`);
+    const data = await res.json();
+    return data;
+  }
+);
 
 const searchSlice = createSlice({
   name: "search",
@@ -48,16 +54,18 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(searchMovies.fulfilled, (state, action) => {
-        state.loading = false;
-        state.moviesResults = action.payload;
-      })
-      .addCase(searchPeople.fulfilled, (state, action) => {
-        state.loading = false;
-        state.peopleResults = action.payload;
-      });
-  },
+  builder
+    .addCase(searchMovies.fulfilled, (state, action) => {
+      state.loading = false;
+      state.moviesResults = action.payload.results || [];
+      state.totalMoviesPages = action.payload.total_pages || 1;
+    })
+    .addCase(searchPeople.fulfilled, (state, action) => {
+      state.loading = false;
+      state.peopleResults = action.payload.results || [];
+      state.totalPeoplePages = action.payload.total_pages || 1;
+    });
+},
 });
 
 export const {
