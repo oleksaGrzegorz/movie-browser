@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../movieList/fetchMovieApi";
+import Loader from "../../common/Loader/Loader";
 import {
   Container,
   HeaderCard,
@@ -42,9 +43,11 @@ const PersonDetails = () => {
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
   const [genresMap, setGenresMap] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const d = await fetchPersonDetails(id);
       setDetails(d);
       const credits = await fetchPersonCredits(id);
@@ -54,6 +57,7 @@ const PersonDetails = () => {
       const map = {};
       for (const { id: gid, name } of genres) map[gid] = name;
       setGenresMap(map);
+      setTimeout(() => setLoading(false), 1000);
     })();
   }, [id]);
 
@@ -66,6 +70,7 @@ const PersonDetails = () => {
     [crew]
   );
 
+  if (loading) return <Loader full />;
   if (!details) return <Container />;
 
   const castCount = castClean.length;

@@ -1,3 +1,7 @@
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import debounce from "lodash.debounce";
 import {
   StyledNav,
   Container,
@@ -10,15 +14,69 @@ import {
   StyledNavLink,
   SearchIcon,
 } from "./styled";
-import { useLocation } from "react-router-dom";
 import logoIMG from "../../images/logoIMG.svg";
 import searchIcon from "../../images/search.svg";
+import {
+  setMoviesQuery,
+  setPeopleQuery,
+  searchMovies,
+  searchPeople,
+  clearMoviesResults,
+  clearPeopleResults,
+} from "../../store/searchSlice";
 
 const Navigation = () => {
   const { pathname } = useLocation();
-  const placeholder = pathname.startsWith("/people")
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isPeopleTab = pathname.includes("/people");
+  const placeholder = isPeopleTab
     ? "Search for people..."
     : "Search for movies...";
+  const [input, setInput] = useState("");
+
+  const debounceRef = useRef(
+    debounce((query, isPeople) => {
+      const trimmed = query.trim();
+      if (isPeople) {
+        if (!trimmed) {
+          dispatch(clearPeopleResults());
+          return;
+        }
+        dispatch(setPeopleQuery(trimmed));
+        dispatch(searchPeople({ query: trimmed, page: 1 }));
+        navigate("/people");
+      } else {
+        if (!trimmed) {
+          dispatch(clearMoviesResults());
+          return;
+        }
+        dispatch(setMoviesQuery(trimmed));
+        dispatch(searchMovies({ query: trimmed, page: 1 }));
+        navigate("/movies");
+      }
+    }, 500)
+  );
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+    debounceRef.current(value, isPeopleTab);
+  };
+
+  useEffect(() => {
+    setInput("");
+    if (isPeopleTab) {
+      dispatch(clearPeopleResults());
+    } else {
+      dispatch(clearMoviesResults());
+    }
+  }, [isPeopleTab, dispatch]);
+
+  useEffect(() => {
+    const currentDebounce = debounceRef.current;
+    return () => currentDebounce.cancel();
+  }, []);
 
   return (
     <StyledNav>
@@ -27,15 +85,19 @@ const Navigation = () => {
           <LogoIMG src={logoIMG} alt="Movies Browser logo" />
           <LogoText>Movies Browser</LogoText>
         </Brand>
-
         <Menu>
           <StyledNavLink to="/movies">Movies</StyledNavLink>
           <StyledNavLink to="/people">People</StyledNavLink>
         </Menu>
-
         <SearchWrapper>
           <SearchIcon src={searchIcon} alt="" aria-hidden="true" />
-          <Browser type="search" placeholder={placeholder} aria-label={placeholder} />
+          <Browser
+            type="search"
+            placeholder={placeholder}
+            value={input}
+            onChange={handleChange}
+            aria-label={placeholder}
+          />
         </SearchWrapper>
       </Container>
     </StyledNav>
