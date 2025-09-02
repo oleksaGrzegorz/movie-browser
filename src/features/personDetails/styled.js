@@ -163,6 +163,11 @@ export const MovieCard = styled.li`
     overflow: hidden;
     color: inherit;
     padding: 16px;
+    transition: 0.2s;
+
+    &:hover {
+    transform: translateY(-2px);
+  }
 `;
 
 export const CardLink = styled(Link)`

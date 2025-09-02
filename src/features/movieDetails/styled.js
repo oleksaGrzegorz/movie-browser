@@ -474,8 +474,10 @@ export const GridItem = styled.div`
   padding: 16px;
   gap: 12px;
   box-shadow: 0px 4px 12px 0px #bac7d580;
+  transition: 0.2s;
 
-  @media (max-width: 768px) {
+  &:hover {
+    transform: translateY(-2px);
   }
 `;
 
