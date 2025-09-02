@@ -4,6 +4,7 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
+import NoResult from "../noResult/noResult";
 import {
   Container,
   MainHeader,
@@ -92,7 +93,7 @@ export default function PersonList() {
               setTotalPages(results.total_pages || 1);
               setShowHeaderLoader(false);
             }
-          }, 1000);
+          }, 2000);
         } else if (isPeopleTab) {
           const res = await fetchPopularPeople(page);
           setTimeout(() => {
@@ -101,7 +102,7 @@ export default function PersonList() {
               setTotalPages(res.totalPages > 500 ? 500 : res.totalPages || 1);
               setShowHeaderLoader(false);
             }
-          }, 1000);
+          }, 2000);
         } else {
           setPeople([]);
           setTimeout(() => {
@@ -120,19 +121,24 @@ export default function PersonList() {
 
   if (error) return <Container>Error: {error}</Container>;
 
+  const hasNoResults =
+    !showHeaderLoader && people.length === 0 && debouncedQuery;
+
   return (
     <Container>
-      <MainHeader>
-        {isPeopleTab &&
-          (debouncedQuery
-            ? `Search results for "${debouncedQuery}"`
-            : "Popular people")}
-      </MainHeader>
+      {!hasNoResults && (
+        <MainHeader>
+          {isPeopleTab &&
+            (debouncedQuery
+              ? `Search results for "${debouncedQuery}"`
+              : "Popular people")}
+        </MainHeader>
+      )}
 
       {showHeaderLoader ? (
         <Loader full text="Loading..." />
-      ) : people.length === 0 && isPeopleTab ? (
-        <p>Brak wyników</p>
+      ) : hasNoResults ? (
+        <NoResult query={debouncedQuery} />
       ) : (
         <>
           <List>
@@ -157,7 +163,7 @@ export default function PersonList() {
               <GhostItem key={`ghost-${i}`} aria-hidden="true" />
             ))}
           </List>
-          {isPeopleTab && people.length > 0 && (
+          {people.length > 0 && (
             <Pagination
               currentPage={page}
               totalPages={totalPages}

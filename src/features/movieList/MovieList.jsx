@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import Pagination from "../../common/Pagination/Pagination";
+import NoResult from "../noResult/noResult";
 import { fetchGenres, fetchPopularMovies } from "./fetchMovieApi";
 import { searchMovies } from "../../store/searchSlice";
 import {
@@ -58,8 +59,9 @@ const MovieList = () => {
   }, [debouncedQuery, isMovieTab]);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
-      let cancelled = false;
       try {
         setShowHeaderLoader(true);
         const genresData = await fetchGenres();
@@ -67,7 +69,7 @@ const MovieList = () => {
         genresData.forEach(({ id, name }) => (genresMap[id] = name));
         setGenres(genresMap);
 
-        if (isMovieTab && debouncedQuery && debouncedQuery.trim() !== "") {
+        if (isMovieTab && debouncedQuery.trim() !== "") {
           const results = await dispatch(
             searchMovies({ query: debouncedQuery, page: currentPage })
           ).unwrap();
@@ -77,7 +79,7 @@ const MovieList = () => {
               setTotalPages(results.total_pages || 1);
               setShowHeaderLoader(false);
             }
-          }, 1000);
+          }, 2000);
         } else if (isMovieTab) {
           const moviesData = await fetchPopularMovies(currentPage);
           setTimeout(() => {
@@ -88,38 +90,41 @@ const MovieList = () => {
               );
               setShowHeaderLoader(false);
             }
-          }, 1000);
+          }, 2000);
         } else {
           setMovies([]);
           setTimeout(() => {
             if (!cancelled) setShowHeaderLoader(false);
-          }, 1000);
+          }, 500);
         }
       } catch (err) {
         if (!cancelled) setError(err.message);
       }
-      return () => {
-        cancelled = true;
-      };
     };
+
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, [currentPage, debouncedQuery, dispatch, isMovieTab]);
 
   if (error) return <p>Error: {error}</p>;
 
+  const hasNoResults = !showHeaderLoader && movies.length === 0 && debouncedQuery;
+
   return (
     <Container>
-      <MainHeader>
-        {isMovieTab &&
-          (debouncedQuery
-            ? `Search results for "${debouncedQuery}"`
-            : "Popular movies")}
-      </MainHeader>
+      {!hasNoResults && (
+        <MainHeader>
+          {isMovieTab &&
+            (debouncedQuery ? `Search results for "${debouncedQuery}"` : "Popular movies")}
+        </MainHeader>
+      )}
 
       {showHeaderLoader ? (
         <Loader full text="Loading..." />
-      ) : movies.length === 0 && isMovieTab ? (
-        <p>Brak wyników</p>
+      ) : hasNoResults ? (
+        <NoResult query={debouncedQuery} />
       ) : (
         <>
           <List>
@@ -136,42 +141,24 @@ const MovieList = () => {
                 <MovieCard key={id}>
                   <Link to={`/movies/${id}`}>
                     {poster_path ? (
-                      <Poster
-                        src={`${IMG_BASE_URL}${poster_path}`}
-                        alt={title}
-                      />
+                      <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
                     ) : (
                       <PosterPlaceholder>
-                        <StyledVideoIcon
-                          src={VideoIcon}
-                          alt="No poster available"
-                        />
+                        <StyledVideoIcon src={VideoIcon} alt="No poster available" />
                       </PosterPlaceholder>
                     )}
                   </Link>
                   <Description>
                     <Title>{title}</Title>
-                    <Year>
-                      {release_date
-                        ? new Date(release_date).getFullYear()
-                        : "N/A"}
-                    </Year>
+                    <Year>{release_date ? new Date(release_date).getFullYear() : "N/A"}</Year>
                     <Genre>
                       {genre_ids.length
-                        ? genre_ids.map((id) => (
-                            <GenreButton key={id}>{genres[id]}</GenreButton>
-                          ))
+                        ? genre_ids.map((id) => <GenreButton key={id}>{genres[id]}</GenreButton>)
                         : "No genres"}
                     </Genre>
                     <Vote>
-                      <StyledStarIcon
-                        src={StarIcon}
-                        alt=""
-                        aria-hidden="true"
-                      />
-                      <VoteAverage>
-                        {vote_average.toFixed(1).replace(".", ",")}
-                      </VoteAverage>
+                      <StyledStarIcon src={StarIcon} alt="" aria-hidden="true" />
+                      <VoteAverage>{vote_average.toFixed(1).replace(".", ",")}</VoteAverage>
                       <VoteInfo>{vote_count} votes</VoteInfo>
                     </Vote>
                   </Description>
@@ -179,7 +166,7 @@ const MovieList = () => {
               )
             )}
           </List>
-          {isMovieTab && movies.length > 0 && (
+          {movies.length > 0 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
