@@ -5,6 +5,7 @@ import Loader from "../../common/Loader/Loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
 import NoResult from "../noResult/noResult";
+import ErrorPage from "../errorPage/ErrorPage";
 import {
   Container,
   MainHeader,
@@ -119,7 +120,7 @@ export default function PersonList() {
     fetchData();
   }, [page, debouncedQuery, dispatch, isPeopleTab]);
 
-  if (error) return <Container>Error: {error}</Container>;
+  if (error) return <ErrorPage />;
 
   const hasNoResults =
     !showHeaderLoader && people.length === 0 && debouncedQuery;

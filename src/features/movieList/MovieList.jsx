@@ -4,6 +4,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import Pagination from "../../common/Pagination/Pagination";
 import NoResult from "../noResult/noResult";
+import ErrorPage from "../errorPage/ErrorPage";
 import { fetchGenres, fetchPopularMovies } from "./fetchMovieApi";
 import { searchMovies } from "../../store/searchSlice";
 import {
@@ -108,7 +109,7 @@ const MovieList = () => {
     };
   }, [currentPage, debouncedQuery, dispatch, isMovieTab]);
 
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <ErrorPage />;
 
   const hasNoResults = !showHeaderLoader && movies.length === 0 && debouncedQuery;
 
