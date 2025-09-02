@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { fetchPopularPeople } from "../movieList/fetchMovieApi";
+import NoResult from "../noResult/noResult";
+import ErrorPage from "../errorPage/ErrorPage";
 import {
   Container,
   MainHeader,
@@ -29,16 +31,27 @@ const getCols = (w) => {
   return 6;
 };
 
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
+
 export default function PersonList() {
   const dispatch = useDispatch();
-  const { peopleQuery } = useSelector((state) => state.search);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const page = Math.max(1, Number(searchParams.get("page") || 1));
+  const peopleQuery = searchParams.get("search") || "";
+  const debouncedQuery = useDebounce(peopleQuery, 500);
   const isPeopleTab = location.pathname.startsWith("/people");
 
   const [people, setPeople] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [showHeaderLoader, setShowHeaderLoader] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const [width, setWidth] = useState(() => window.innerWidth);
@@ -56,88 +69,116 @@ export default function PersonList() {
   }, []);
 
   useEffect(() => {
-    setSearchParams({ page: "1" });
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set("page", "1");
+      if (peopleQuery) params.set("search", peopleQuery);
+      else params.delete("search");
+      return params;
+    });
   }, [peopleQuery, isPeopleTab, setSearchParams]);
 
   useEffect(() => {
     const fetchData = async () => {
       let cancelled = false;
       try {
-        setLoading(true);
-        setError(null);
+        setShowHeaderLoader(true);
 
-        if (isPeopleTab && peopleQuery && peopleQuery.trim() !== "") {
+        if (isPeopleTab && debouncedQuery && debouncedQuery.trim() !== "") {
           const results = await dispatch(
-            searchPeople({ query: peopleQuery, page })
+            searchPeople({ query: debouncedQuery, page })
           ).unwrap();
-          if (!cancelled) {
-            setPeople(results.results || []);
-            setTotalPages(results.total_pages || 1);
-          }
+          setTimeout(() => {
+            if (!cancelled) {
+              setPeople(results.results || []);
+              setTotalPages(results.total_pages || 1);
+              setShowHeaderLoader(false);
+            }
+          }, 2000);
         } else if (isPeopleTab) {
-          const [res] = await Promise.all([
-            fetchPopularPeople(page),
-            new Promise((resolve) => setTimeout(resolve, 1000)),
-          ]);
-          if (!cancelled) {
-            setPeople(res.people || []);
-            setTotalPages(res.totalPages > 500 ? 500 : res.totalPages || 1);
-          }
+          const res = await fetchPopularPeople(page);
+          setTimeout(() => {
+            if (!cancelled) {
+              setPeople(res.people || []);
+              setTotalPages(res.totalPages > 500 ? 500 : res.totalPages || 1);
+              setShowHeaderLoader(false);
+            }
+          }, 2000);
         } else {
           setPeople([]);
+          setTimeout(() => {
+            if (!cancelled) setShowHeaderLoader(false);
+          }, 1000);
         }
       } catch (err) {
         if (!cancelled) setError(err.message || "Error");
-      } finally {
-        setLoading(false);
       }
       return () => {
         cancelled = true;
       };
     };
     fetchData();
-  }, [page, peopleQuery, dispatch, isPeopleTab]);
+  }, [page, debouncedQuery, dispatch, isPeopleTab]);
 
-  if (loading) return <Loader full />;
-  if (error) return <Container>Error: {error}</Container>;
+  if (error) return <ErrorPage />;
+
+  const hasNoResults =
+    !showHeaderLoader && people.length === 0 && debouncedQuery;
 
   return (
     <Container>
-      <MainHeader>
-        {isPeopleTab &&
-          (peopleQuery
-            ? `Search results for "${peopleQuery}"`
-            : "Popular people")}
-      </MainHeader>
-      {people.length === 0 && isPeopleTab ? (
-        <p>Brak wyników</p>
-      ) : (
-        <List>
-          {people.map(({ id, profile_path, name }) => (
-            <PersonItem key={id}>
-              <PersonCard to={`/people/${id}`}>
-                <PersonThumb>
-                  {profile_path ? (
-                    <img src={img(profile_path)} alt={name} loading="lazy" />
-                  ) : (
-                    <img src={ProfilePlaceholder} alt="No profile available" />
-                  )}
-                </PersonThumb>
-                <PersonName>{name}</PersonName>
-              </PersonCard>
-            </PersonItem>
-          ))}
-          {Array.from({ length: pad }).map((_, i) => (
-            <GhostItem key={`ghost-${i}`} aria-hidden="true" />
-          ))}
-        </List>
+      {!hasNoResults && (
+        <MainHeader>
+          {isPeopleTab &&
+            (debouncedQuery
+              ? `Search results for "${debouncedQuery}"`
+              : "Popular people")}
+        </MainHeader>
       )}
-      {isPeopleTab && people.length > 0 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => setSearchParams({ page: String(newPage) })}
-        />
+
+      {showHeaderLoader ? (
+        <Loader full text="Loading..." />
+      ) : hasNoResults ? (
+        <NoResult query={debouncedQuery} />
+      ) : (
+        <>
+          <List>
+            {people.map(({ id, profile_path, name }) => (
+              <PersonItem key={id}>
+                <PersonCard to={`/people/${id}`}>
+                  <PersonThumb>
+                    {profile_path ? (
+                      <img src={img(profile_path)} alt={name} loading="lazy" />
+                    ) : (
+                      <img
+                        src={ProfilePlaceholder}
+                        alt="No profile available"
+                      />
+                    )}
+                  </PersonThumb>
+                  <PersonName>{name}</PersonName>
+                </PersonCard>
+              </PersonItem>
+            ))}
+            {Array.from({ length: pad }).map((_, i) => (
+              <GhostItem key={`ghost-${i}`} aria-hidden="true" />
+            ))}
+          </List>
+          {people.length > 0 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) =>
+                setSearchParams((prev) => {
+                  const params = new URLSearchParams(prev);
+                  params.set("page", String(newPage));
+                  if (peopleQuery) params.set("search", peopleQuery);
+                  return params;
+                })
+              }
+            />
+          )}
+        </>
       )}
     </Container>
   );
