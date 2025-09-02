@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import ProfilePlaceholder from "../../images/profile.svg";
@@ -31,10 +31,11 @@ const getCols = (w) => {
 
 export default function PersonList() {
   const dispatch = useDispatch();
-  const { peopleQuery } = useSelector((state) => state.search);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const page = Math.max(1, Number(searchParams.get("page") || 1));
+  const peopleQuery = searchParams.get("search") || "";
   const isPeopleTab = location.pathname.startsWith("/people");
 
   const [people, setPeople] = useState([]);
@@ -56,7 +57,16 @@ export default function PersonList() {
   }, []);
 
   useEffect(() => {
-    setSearchParams({ page: "1" });
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set("page", "1");
+      if (peopleQuery) {
+        params.set("search", peopleQuery);
+      } else {
+        params.delete("search");
+      }
+      return params;
+    });
   }, [peopleQuery, isPeopleTab, setSearchParams]);
 
   useEffect(() => {
@@ -136,7 +146,16 @@ export default function PersonList() {
         <Pagination
           currentPage={page}
           totalPages={totalPages}
-          onPageChange={(newPage) => setSearchParams({ page: String(newPage) })}
+          onPageChange={(newPage) =>
+            setSearchParams((prev) => {
+              const params = new URLSearchParams(prev);
+              params.set("page", String(newPage));
+              if (peopleQuery) {
+                params.set("search", peopleQuery);
+              }
+              return params;
+            })
+          }
         />
       )}
     </Container>

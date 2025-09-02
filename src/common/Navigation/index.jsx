@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 import {
@@ -29,10 +29,13 @@ const Navigation = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const isPeopleTab = pathname.includes("/people");
   const placeholder = isPeopleTab
     ? "Search for people..."
     : "Search for movies...";
+
   const [input, setInput] = useState("");
 
   const debounceRef = useRef(
@@ -45,7 +48,7 @@ const Navigation = () => {
         }
         dispatch(setPeopleQuery(trimmed));
         dispatch(searchPeople({ query: trimmed, page: 1 }));
-        navigate("/people");
+        navigate("/people?search=" + encodeURIComponent(trimmed));
       } else {
         if (!trimmed) {
           dispatch(clearMoviesResults());
@@ -53,7 +56,7 @@ const Navigation = () => {
         }
         dispatch(setMoviesQuery(trimmed));
         dispatch(searchMovies({ query: trimmed, page: 1 }));
-        navigate("/movies");
+        navigate("/movies?search=" + encodeURIComponent(trimmed));
       }
     }, 500)
   );
@@ -61,17 +64,28 @@ const Navigation = () => {
   const handleChange = (e) => {
     const value = e.target.value;
     setInput(value);
+
+    if (value) {
+      setSearchParams({ search: value });
+    } else {
+      setSearchParams({});
+    }
+
     debounceRef.current(value, isPeopleTab);
   };
 
   useEffect(() => {
-    setInput("");
-    if (isPeopleTab) {
-      dispatch(clearPeopleResults());
-    } else {
-      dispatch(clearMoviesResults());
+    const queryFromUrl = searchParams.get("search") || "";
+    setInput(queryFromUrl);
+
+    if (!queryFromUrl) {
+      if (isPeopleTab) {
+        dispatch(clearPeopleResults());
+      } else {
+        dispatch(clearMoviesResults());
+      }
     }
-  }, [isPeopleTab, dispatch]);
+  }, [isPeopleTab, dispatch, searchParams]);
 
   useEffect(() => {
     const currentDebounce = debounceRef.current;

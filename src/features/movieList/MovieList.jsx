@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import Pagination from "../../common/Pagination/Pagination";
 import { fetchGenres, fetchPopularMovies } from "./fetchMovieApi";
@@ -30,8 +30,10 @@ const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
 const MovieList = () => {
   const dispatch = useDispatch();
-  const { moviesQuery } = useSelector((state) => state.search);
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const moviesQuery = searchParams.get("search") || "";
+
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState({});
   const [loading, setLoading] = useState(true);
