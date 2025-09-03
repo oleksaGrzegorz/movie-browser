@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams, useLocation, Link } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
 import NoResult from "../noResult/noResult";
 import ErrorPage from "../errorPage/ErrorPage";
@@ -102,6 +102,7 @@ export default function MovieList() {
 
   useEffect(() => {
     let cancelled = false;
+    let t;
     setLoading(true);
 
     (async () => {
@@ -124,12 +125,15 @@ export default function MovieList() {
       } catch (e) {
         if (!cancelled) setError(e?.message || "Error");
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          t = setTimeout(() => setLoading(false), 1000);
+        }
       }
     })();
 
     return () => {
       cancelled = true;
+      if (t) clearTimeout(t);
     };
   }, [page, debouncedQuery, isMoviesTab]);
 
