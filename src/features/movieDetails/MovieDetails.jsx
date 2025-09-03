@@ -185,48 +185,60 @@ const MovieDetails = () => {
         </InfoSection>
         {credits && (
           <Section>
-            <Header>Cast</Header>
-            <Grid>
-              {credits.cast.map((actor) => (
-                <StyledLink to={`/people/${actor.id}`} key={actor.cast_id}>
-                  <GridItem>
-                    {actor.profile_path ? (
-                      <PosterImage
-                        src={`${IMG_POSTER_URL}${actor.profile_path}`}
-                        alt={actor.name}
-                      />
-                    ) : (
-                      <PlaceholderIcon>
-                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
-                      </PlaceholderIcon>
-                    )}
-                    <PersonInfo>{actor.name}</PersonInfo>
-                    <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
-                  </GridItem>
-                </StyledLink>
-              ))}
-            </Grid>
-            <Header>Crew</Header>
-            <Grid>
-              {credits.crew.map((member) => (
-                <StyledLink to={`/people/${member.id}`} key={member.credit_id}>
-                  <GridItem>
-                    {member.profile_path ? (
-                      <PosterImage
-                        src={`${IMG_POSTER_URL}${member.profile_path}`}
-                        alt={member.name}
-                      />
-                    ) : (
-                      <PlaceholderIcon>
-                        <Icon src={PersonIcon} alt="" aria-hidden="true" />
-                      </PlaceholderIcon>
-                    )}
-                    <PersonInfo>{member.name}</PersonInfo>
-                    <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
-                  </GridItem>
-                </StyledLink>
-              ))}
-            </Grid>
+            {credits.cast && credits.cast.length > 0 && (
+              <>
+                <Header>Cast</Header>
+                <Grid>
+                  {credits.cast.map((actor) => (
+                    <StyledLink to={`/people/${actor.id}`} key={actor.cast_id}>
+                      <GridItem>
+                        {actor.profile_path ? (
+                          <PosterImage
+                            src={`${IMG_POSTER_URL}${actor.profile_path}`}
+                            alt={actor.name}
+                          />
+                        ) : (
+                          <PlaceholderIcon>
+                            <Icon src={PersonIcon} alt="" aria-hidden="true" />
+                          </PlaceholderIcon>
+                        )}
+                        <PersonInfo>{actor.name}</PersonInfo>
+                        <ExtraPersonInfo>{actor.character}</ExtraPersonInfo>
+                      </GridItem>
+                    </StyledLink>
+                  ))}
+                </Grid>
+              </>
+            )}
+
+            {credits.crew && credits.crew.length > 0 && (
+              <>
+                <Header>Crew</Header>
+                <Grid>
+                  {credits.crew.map((member) => (
+                    <StyledLink
+                      to={`/people/${member.id}`}
+                      key={member.credit_id}
+                    >
+                      <GridItem>
+                        {member.profile_path ? (
+                          <PosterImage
+                            src={`${IMG_POSTER_URL}${member.profile_path}`}
+                            alt={member.name}
+                          />
+                        ) : (
+                          <PlaceholderIcon>
+                            <Icon src={PersonIcon} alt="" aria-hidden="true" />
+                          </PlaceholderIcon>
+                        )}
+                        <PersonInfo>{member.name}</PersonInfo>
+                        <ExtraPersonInfo>{member.job}</ExtraPersonInfo>
+                      </GridItem>
+                    </StyledLink>
+                  ))}
+                </Grid>
+              </>
+            )}
           </Section>
         )}
       </ContentWrapper>
