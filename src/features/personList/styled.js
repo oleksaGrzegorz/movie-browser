@@ -40,9 +40,8 @@ export const List = styled.ul`
     }
     @media (max-width: 667px) {
         --cols: 2;
-    }
-    @media (max-width: 480px) {
-        --cols: 1;
+        gap: 16px;
+        margin: 24px 0 40px 0;
     }
 `;
 
@@ -73,6 +72,12 @@ export const PersonCard = styled(Link)`
     &:hover {
         transform: translateY(-2px);
     }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileS}px) {
+        height: 245px;
+        padding: 12px;
+        gap: 10px;
+    }
 `;
 
 export const PersonThumb = styled.div`
@@ -97,6 +102,12 @@ export const PersonThumb = styled.div`
         height: 72px;
         object-fit: contain;
     }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileS}px) {
+        height: 178px;
+        aspect-ratio: auto;
+        border-radius: ${({ theme }) => theme.radii?.sm || "5px"};
+    }
 `;
 
 export const PersonName = styled.h2`
@@ -105,7 +116,15 @@ export const PersonName = styled.h2`
     line-height: ${({ theme }) => theme.typography?.h2.lineHeight || "130%"};
     text-align: center;
     min-height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileM}px) {
+        font-size: 14px;
+        line-height: 130%;
+        min-height: 36px;
+    }
 `;
