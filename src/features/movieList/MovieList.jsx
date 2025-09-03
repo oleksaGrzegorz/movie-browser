@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
@@ -42,22 +42,32 @@ function useDebounce(value, delay) {
 const MovieList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const moviesQuery = searchParams.get("search") || "";
+  const page = Math.max(1, Number(searchParams.get("page") || 1));
   const debouncedQuery = useDebounce(moviesQuery, 500);
 
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState({});
   const [showHeaderLoader, setShowHeaderLoader] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const isMovieTab = location.pathname.startsWith("/movies");
+  const prevQueryRef = useRef("");
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedQuery, isMovieTab]);
+    if (debouncedQuery && prevQueryRef.current !== debouncedQuery) {
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        params.set("search", debouncedQuery);
+        params.set("page", "1");
+        return params;
+      });
+    }
+    prevQueryRef.current = debouncedQuery;
+  }, [debouncedQuery, setSearchParams]);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,7 +82,7 @@ const MovieList = () => {
 
         if (isMovieTab && debouncedQuery.trim() !== "") {
           const results = await dispatch(
-            searchMovies({ query: debouncedQuery, page: currentPage })
+            searchMovies({ query: debouncedQuery, page })
           ).unwrap();
           setTimeout(() => {
             if (!cancelled) {
@@ -82,12 +92,12 @@ const MovieList = () => {
             }
           }, 2000);
         } else if (isMovieTab) {
-          const moviesData = await fetchPopularMovies(currentPage);
+          const moviesData = await fetchPopularMovies(page);
           setTimeout(() => {
             if (!cancelled) {
-              setMovies(moviesData.movies);
+              setMovies(moviesData.movies || []);
               setTotalPages(
-                moviesData.totalPages > 500 ? 500 : moviesData.totalPages
+                moviesData.totalPages > 500 ? 500 : moviesData.totalPages || 1
               );
               setShowHeaderLoader(false);
             }
@@ -107,18 +117,21 @@ const MovieList = () => {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, debouncedQuery, dispatch, isMovieTab]);
+  }, [page, debouncedQuery, dispatch, isMovieTab]);
 
   if (error) return <ErrorPage />;
 
-  const hasNoResults = !showHeaderLoader && movies.length === 0 && debouncedQuery;
+  const hasNoResults =
+    !showHeaderLoader && (!movies || movies.length === 0) && debouncedQuery;
 
   return (
     <Container>
       {!hasNoResults && (
         <MainHeader>
           {isMovieTab &&
-            (debouncedQuery ? `Search results for "${debouncedQuery}"` : "Popular movies")}
+            (debouncedQuery
+              ? `Search results for "${debouncedQuery}"`
+              : "Popular movies")}
         </MainHeader>
       )}
 
@@ -129,7 +142,7 @@ const MovieList = () => {
       ) : (
         <>
           <List>
-            {movies.map(
+            {(movies || []).map(
               ({
                 id,
                 poster_path,
@@ -142,24 +155,42 @@ const MovieList = () => {
                 <MovieCard key={id}>
                   <Link to={`/movies/${id}`}>
                     {poster_path ? (
-                      <Poster src={`${IMG_BASE_URL}${poster_path}`} alt={title} />
+                      <Poster
+                        src={`${IMG_BASE_URL}${poster_path}`}
+                        alt={title}
+                      />
                     ) : (
                       <PosterPlaceholder>
-                        <StyledVideoIcon src={VideoIcon} alt="No poster available" />
+                        <StyledVideoIcon
+                          src={VideoIcon}
+                          alt="No poster available"
+                        />
                       </PosterPlaceholder>
                     )}
                   </Link>
                   <Description>
                     <Title>{title}</Title>
-                    <Year>{release_date ? new Date(release_date).getFullYear() : "N/A"}</Year>
+                    <Year>
+                      {release_date
+                        ? new Date(release_date).getFullYear()
+                        : "N/A"}
+                    </Year>
                     <Genre>
-                      {genre_ids.length
-                        ? genre_ids.map((id) => <GenreButton key={id}>{genres[id]}</GenreButton>)
+                      {(genre_ids || []).length
+                        ? (genre_ids || []).map((id) => (
+                            <GenreButton key={id}>{genres[id]}</GenreButton>
+                          ))
                         : "No genres"}
                     </Genre>
                     <Vote>
-                      <StyledStarIcon src={StarIcon} alt="" aria-hidden="true" />
-                      <VoteAverage>{vote_average.toFixed(1).replace(".", ",")}</VoteAverage>
+                      <StyledStarIcon
+                        src={StarIcon}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <VoteAverage>
+                        {vote_average?.toFixed(1).replace(".", ",")}
+                      </VoteAverage>
                       <VoteInfo>{vote_count} votes</VoteInfo>
                     </Vote>
                   </Description>
@@ -167,11 +198,18 @@ const MovieList = () => {
               )
             )}
           </List>
-          {movies.length > 0 && (
+          {movies && movies.length > 0 && (
             <Pagination
-              currentPage={currentPage}
+              currentPage={page}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={(newPage) =>
+                setSearchParams((prev) => {
+                  const params = new URLSearchParams(prev);
+                  params.set("page", String(newPage));
+                  if (moviesQuery) params.set("search", moviesQuery);
+                  return params;
+                })
+              }
             />
           )}
         </>

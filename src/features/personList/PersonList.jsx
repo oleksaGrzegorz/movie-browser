@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
@@ -68,12 +68,22 @@ export default function PersonList() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const prevQueryRef = useRef("");
+
   useEffect(() => {
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
-      params.set("page", "1");
-      if (peopleQuery) params.set("search", peopleQuery);
-      else params.delete("search");
+
+      if (peopleQuery) {
+        params.set("search", peopleQuery);
+        if (prevQueryRef.current !== peopleQuery) {
+          params.set("page", "1");
+        }
+      } else {
+        params.delete("search");
+      }
+
+      prevQueryRef.current = peopleQuery;
       return params;
     });
   }, [peopleQuery, isPeopleTab, setSearchParams]);
@@ -83,7 +93,6 @@ export default function PersonList() {
       let cancelled = false;
       try {
         setShowHeaderLoader(true);
-
         if (isPeopleTab && debouncedQuery && debouncedQuery.trim() !== "") {
           const results = await dispatch(
             searchPeople({ query: debouncedQuery, page })
@@ -135,7 +144,6 @@ export default function PersonList() {
               : "Popular people")}
         </MainHeader>
       )}
-
       {showHeaderLoader ? (
         <Loader full text="Loading..." />
       ) : hasNoResults ? (
