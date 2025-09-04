@@ -1,204 +1,220 @@
-import { useEffect, useState, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Loader from "../../common/Loader/Loader";
-import Pagination from "../../common/Pagination/Pagination";
 import NoResult from "../noResult/noResult";
 import ErrorPage from "../errorPage/ErrorPage";
-import { fetchGenres, fetchPopularMovies } from "./fetchMovieApi";
-import { searchMovies } from "../../store/searchSlice";
+import Pagination from "../../common/Pagination/Pagination";
+import StarIcon from "../../images/star.svg";
 import {
   Container,
-  Description,
-  Genre,
-  GenreButton,
-  List,
   MainHeader,
+  List,
+  MovieItem,
   MovieCard,
+  CardLink,
   Poster,
-  Title,
-  Vote,
+  PosterPlaceholder,
+  CardContent,
+  CardTitle,
+  CardMeta,
+  GenreRow,
+  GenreTag,
+  VoteRow,
   VoteAverage,
   VoteInfo,
-  Year,
-  PosterPlaceholder,
-  StyledVideoIcon,
-  StyledStarIcon,
 } from "./styled";
-import VideoIcon from "./images/video.svg";
-import StarIcon from "./images/star.svg";
+import { fetchPopularMovies, fetchGenres, searchMovies } from "../../api/fetchMovieApi";
 
-const IMG_BASE_URL = "https://image.tmdb.org/t/p/w300";
+const poster = (path, size = "w342") =>
+  path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
+
+const getCols = (w) => {
+  if (w <= 667) return 1;
+  if (w <= 900) return 2;
+  if (w <= 1200) return 3;
+  return 4;
+};
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
+    const h = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(h);
   }, [value, delay]);
   return debouncedValue;
 }
 
-const MovieList = () => {
-  const dispatch = useDispatch();
+export default function MovieList() {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const moviesQuery = searchParams.get("search") || "";
   const page = Math.max(1, Number(searchParams.get("page") || 1));
-  const debouncedQuery = useDebounce(moviesQuery, 500);
+  const query = searchParams.get("search") || "";
+  const debouncedQuery = useDebounce(query, 500);
+  const isMoviesTab = location.pathname.startsWith("/movies");
 
   const [movies, setMovies] = useState([]);
-  const [genres, setGenres] = useState({});
-  const [showHeaderLoader, setShowHeaderLoader] = useState(true);
+  const [genresMap, setGenresMap] = useState({});
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [width, setWidth] = useState(() => window.innerWidth);
 
-  const isMovieTab = location.pathname.startsWith("/movies");
-  const prevQueryRef = useRef("");
+  const cols = useMemo(() => getCols(width), [width]);
 
   useEffect(() => {
-    if (debouncedQuery && prevQueryRef.current !== debouncedQuery) {
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        params.set("search", debouncedQuery);
-        params.set("page", "1");
-        return params;
-      });
-    }
-    prevQueryRef.current = debouncedQuery;
-  }, [debouncedQuery, setSearchParams]);
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
-
-    const fetchData = async () => {
+    (async () => {
       try {
-        setShowHeaderLoader(true);
-        const genresData = await fetchGenres();
-        const genresMap = {};
-        genresData.forEach(({ id, name }) => (genresMap[id] = name));
-        setGenres(genresMap);
-
-        if (isMovieTab && debouncedQuery.trim() !== "") {
-          const results = await dispatch(
-            searchMovies({ query: debouncedQuery, page })
-          ).unwrap();
-          setTimeout(() => {
-            if (!cancelled) {
-              setMovies(results.results || []);
-              setTotalPages(results.total_pages || 1);
-              setShowHeaderLoader(false);
-            }
-          }, 2000);
-        } else if (isMovieTab) {
-          const moviesData = await fetchPopularMovies(page);
-          setTimeout(() => {
-            if (!cancelled) {
-              setMovies(moviesData.movies || []);
-              setTotalPages(
-                moviesData.totalPages > 500 ? 500 : moviesData.totalPages || 1
-              );
-              setShowHeaderLoader(false);
-            }
-          }, 2000);
-        } else {
-          setMovies([]);
-          setTimeout(() => {
-            if (!cancelled) setShowHeaderLoader(false);
-          }, 500);
-        }
-      } catch (err) {
-        if (!cancelled) setError(err.message);
-      }
-    };
-
-    fetchData();
+        const list = await fetchGenres();
+        if (cancelled) return;
+        const map = {};
+        for (const { id, name } of list) map[id] = name;
+        setGenresMap(map);
+      } catch { }
+    })();
     return () => {
       cancelled = true;
     };
-  }, [page, debouncedQuery, dispatch, isMovieTab]);
+  }, []);
+
+  const prevQueryRef = useRef("");
+
+  useEffect(() => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (query) {
+        params.set("search", query);
+        if (prevQueryRef.current !== query) params.set("page", "1");
+      } else {
+        params.delete("search");
+      }
+      prevQueryRef.current = query;
+      return params;
+    });
+  }, [query, isMoviesTab, setSearchParams]);
+
+  useEffect(() => {
+    let cancelled = false;
+    let t;
+    setLoading(true);
+
+    (async () => {
+      try {
+        if (isMoviesTab && debouncedQuery.trim()) {
+          const res = await searchMovies({ query: debouncedQuery, page });
+          if (!cancelled) {
+            setMovies(res.results || []);
+            setTotalPages(Math.min(res.total_pages || 1, 500));
+          }
+        } else if (isMoviesTab) {
+          const res = await fetchPopularMovies(page);
+          if (!cancelled) {
+            setMovies(res.movies || []);
+            setTotalPages(Math.min(res.totalPages || 1, 500));
+          }
+        } else {
+          if (!cancelled) setMovies([]);
+        }
+      } catch (e) {
+        if (!cancelled) setError(e?.message || "Error");
+      } finally {
+        if (!cancelled) {
+          t = setTimeout(() => setLoading(false), 1000);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      if (t) clearTimeout(t);
+    };
+  }, [page, debouncedQuery, isMoviesTab]);
 
   if (error) return <ErrorPage />;
 
-  const hasNoResults =
-    !showHeaderLoader && (!movies || movies.length === 0) && debouncedQuery;
+  const hasNoResults = !loading && movies.length === 0 && debouncedQuery;
 
   return (
     <Container>
       {!hasNoResults && (
         <MainHeader>
-          {isMovieTab &&
-            (debouncedQuery
-              ? `Search results for "${debouncedQuery}"`
-              : "Popular movies")}
+          {isMoviesTab &&
+            (debouncedQuery ? `Search results for "${debouncedQuery}"` : "Popular movies")}
         </MainHeader>
       )}
 
-      {showHeaderLoader ? (
+      {loading ? (
         <Loader full text="Loading..." />
       ) : hasNoResults ? (
         <NoResult query={debouncedQuery} />
       ) : (
         <>
-          <List>
-            {(movies || []).map(
+          <List style={{ ["--cols"]: cols }}>
+            {movies.map(
               ({
                 id,
                 poster_path,
                 title,
+                original_title,
                 release_date,
-                genre_ids,
+                genre_ids = [],
                 vote_average,
                 vote_count,
-              }) => (
-                <MovieCard key={id}>
-                  <Link to={`/movies/${id}`}>
-                    {poster_path ? (
-                      <Poster
-                        src={`${IMG_BASE_URL}${poster_path}`}
-                        alt={title}
-                      />
-                    ) : (
-                      <PosterPlaceholder>
-                        <StyledVideoIcon
-                          src={VideoIcon}
-                          alt="No poster available"
-                        />
-                      </PosterPlaceholder>
-                    )}
-                  </Link>
-                  <Description>
-                    <Title>{title}</Title>
-                    <Year>
-                      {release_date
-                        ? new Date(release_date).getFullYear()
-                        : "N/A"}
-                    </Year>
-                    <Genre>
-                      {(genre_ids || []).length
-                        ? (genre_ids || []).map((id) => (
-                            <GenreButton key={id}>{genres[id]}</GenreButton>
-                          ))
-                        : "No genres"}
-                    </Genre>
-                    <Vote>
-                      <StyledStarIcon
-                        src={StarIcon}
-                        alt=""
-                        aria-hidden="true"
-                      />
-                      <VoteAverage>
-                        {vote_average?.toFixed(1).replace(".", ",")}
-                      </VoteAverage>
-                      <VoteInfo>{vote_count} votes</VoteInfo>
-                    </Vote>
-                  </Description>
-                </MovieCard>
-              )
+              }) => {
+                const year = release_date ? new Date(release_date).getFullYear() : "—";
+                return (
+                  <MovieItem key={id}>
+                    <MovieCard>
+                      <CardLink to={`/movies/${id}`}>
+                        {poster_path ? (
+                          <Poster
+                            src={poster(poster_path)}
+                            alt={title || original_title || "Movie poster"}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        ) : (
+                          <PosterPlaceholder aria-label="No poster available" role="img" />
+                        )}
+
+                        <CardContent>
+                          <CardTitle>{title || original_title || "—"}</CardTitle>
+                          <CardMeta>{year}</CardMeta>
+
+                          <GenreRow>
+                            {genre_ids.length ? (
+                              genre_ids.slice(0, 3).map((gid) => (
+                                <GenreTag key={gid}>{genresMap[gid]}</GenreTag>
+                              ))
+                            ) : (
+                              <GenreTag as="span">No genres</GenreTag>
+                            )}
+                          </GenreRow>
+
+                          <VoteRow>
+                            <img src={StarIcon} alt="" />
+                            <VoteAverage>
+                              {(vote_average || 0).toFixed(1).replace(".", ",")}
+                            </VoteAverage>
+                            <VoteInfo>{vote_count || 0} votes</VoteInfo>
+                          </VoteRow>
+                        </CardContent>
+                      </CardLink>
+                    </MovieCard>
+                  </MovieItem>
+                );
+              }
             )}
           </List>
-          {movies && movies.length > 0 && (
+
+          {movies.length > 0 && (
             <Pagination
               currentPage={page}
               totalPages={totalPages}
@@ -206,7 +222,7 @@ const MovieList = () => {
                 setSearchParams((prev) => {
                   const params = new URLSearchParams(prev);
                   params.set("page", String(newPage));
-                  if (moviesQuery) params.set("search", moviesQuery);
+                  if (query) params.set("search", query);
                   return params;
                 })
               }
@@ -216,6 +232,4 @@ const MovieList = () => {
       )}
     </Container>
   );
-};
-
-export default MovieList;
+}
