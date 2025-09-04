@@ -1,14 +1,88 @@
-demo: https://oleksagrzegorz.github.io/movie-browser/
+# 🎬 Movies Browser  
 
-# React + Vite
+A modern web application for browsing movies and TV shows. Built with **React** and bundled with **Vite** for lightning-fast development. State management is powered by **Redux Toolkit**, navigation is handled with **React Router**, and styling is implemented with **styled-components**.  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+We followed the **Scrum methodology** during development, organizing our work into sprints and tracking progress in **Trello**. The user interface was created based on a **Figma design project**, ensuring a consistent and visually appealing look.  
 
-Currently, two official plugins are available:
+## 🚀 Features  
+- 🔍 **Browse movies & TV shows** – discover popular titles.  
+- 📄 **Detailed pages** – get cast, release date, description, and more.  
+- 🎨 **Modern UI** – styled with `styled-components` for a responsive and elegant look.  
+- ⚡ **Global state management** – powered by `react-redux` and `@reduxjs/toolkit`.  
+- 🧭 **Smooth navigation** – client-side routing via `react-router`.  
+- ⚡ **Vite-powered development** – fast builds and hot module replacement.  
+- 🛠️ **Agile workflow** – Scrum methodology with Trello for task management.  
+- 🎨 **UI/UX design** – based on a collaborative Figma project.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack  
+- **React** – component-based UI library  
+- **Vite** – next-generation frontend tooling  
+- **React Router** – navigation & routing  
+- **Redux Toolkit** – efficient global state management  
+- **React Redux** – bindings for React & Redux  
+- **styled-components** – CSS-in-JS styling solution  
+- **Trello** – project & sprint management  
+- **Figma** – design system & mockups  
 
-## Expanding the ESLint configuration
+## 📂 Project Structure  
+```
+movie-browser/
+│── dist/ # build output
+│── node_modules/ # dependencies
+│── public/ # public assets
+│ └── favicon.svg
+│── src/
+│ ├── api/ # API utilities
+│ ├── common/ # shared components/helpers
+│ ├── features/ # feature-based structure
+│ │ ├── errorPage/
+│ │ ├── movieDetails/
+│ │ ├── movieList/
+│ │ ├── noResult/
+│ │ ├── personDetails/
+│ │ └── personList/
+│ ├── images/ # static images
+│ ├── store/ # Redux store & slices
+│ │ ├── searchSlice.js
+│ │ └── store.js
+│ ├── App.jsx # root component
+│ ├── GlobalStyle.js # global styles
+│ ├── main.jsx # Vite entry point
+│ └── theme.js # styled-components theme
+│── .env # environment variables
+│── .gitignore
+│── eslint.config.js # ESLint configuration
+│── index.html # HTML template
+│── package-lock.json
+│── package.json
+└── README.md
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Installation & Setup  
+1. Clone the repository:  
+   ```bash
+   git clone https://oleksagrzegorz.github.io/movie-browser/
+   cd movies-browser
+   ```  
+2. Install dependencies:  
+   ```bash
+   npm install
+   ```  
+3. Run the development server:  
+   ```bash
+   npm run dev
+   ```  
+4. Open [http://localhost:5173](http://localhost:5173) to view the app in your browser.  
+
+## 🌐 Live Demo  
+Check out the live version here:  
+👉 [Movies Browser](https://oleksagrzegorz.github.io/movie-browser/)
+
+## 📸 Screenshots  
+Tu będzie gif jak już wszystko będzie na cito  
+
+## 👨‍💻 Team  
+This project was developed by:  
+- Grzegorz Oleksa (https://github.com/oleksaGrzegorz)
+- Paweł Paluch (https://github.com/pawel-paluch)
+- Aleksandra Jurkiewicz (https://github.com/AleksandraJurkiewicz)
