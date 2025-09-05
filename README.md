@@ -4,6 +4,16 @@ A modern web application for browsing movies and TV shows. Built with **React** 
 
 We followed the **Scrum methodology** during development, organizing our work into sprints and tracking progress in **Trello**. The user interface was created based on a **Figma design project**, ensuring a consistent and visually appealing look.  
 
+## 🌐 Live Demo  
+Check out the live version here:  
+👉 [Movies Browser](https://oleksagrzegorz.github.io/movie-browser/)
+
+## 📸 Screenshots  
+### Demo 1
+![Demo1] (public/demo1.gif) 
+### Demo 2
+![Demo2] (public/demo2.gif)
+
 ## 🚀 Features  
 - 🔍 **Browse movies & TV shows** – discover popular titles.  
 - 📄 **Detailed pages** – get cast, release date, description, and more.  
@@ -72,14 +82,7 @@ movie-browser/
    ```bash
    npm run dev
    ```  
-4. Open [http://localhost:5173](http://localhost:5173) to view the app in your browser.  
-
-## 🌐 Live Demo  
-Check out the live version here:  
-👉 [Movies Browser](https://oleksagrzegorz.github.io/movie-browser/)
-
-## 📸 Screenshots  
-Tu będzie gif jak już wszystko będzie na cito  
+4. Open [http://localhost:5173](http://localhost:5173) to view the app in your browser.   
 
 ## 👨‍💻 Team  
 This project was developed by:  
