@@ -10,9 +10,9 @@ Check out the live version here:
 
 ## 📸 Screenshots  
 ### Demo 1
-![Demo1] (public/demo1.gif) 
+![Demo1](public/demo1.gif) 
 ### Demo 2
-![Demo2] (public/demo2.gif)
+![Demo2](public/demo2.gif)
 
 ## 🚀 Features  
 - 🔍 **Browse movies & TV shows** – discover popular titles.  
