@@ -47,8 +47,9 @@ export const HeroBg = styled.div`
         content: "";
         position: absolute;
         inset: 0;
-        -webkit-box-shadow: inset 0px 0px 50px 50px #000000;
-        box-shadow: inset 0px 0px 50px 50px #000000;
+        -webkit-box-shadow: inset 0 0 50px 50px
+            ${({ theme }) => theme.color.black};
+        box-shadow: inset 0 0 50px 50px ${({ theme }) => theme.color.black};
     }
 `;
 
@@ -193,6 +194,7 @@ export const Title = styled.h2`
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         font-size: 20px;
         margin-bottom: 0;
+    }
 `;
 
 export const Year = styled.div`
@@ -249,21 +251,6 @@ export const Badges = styled.div`
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         margin: 0;
-    }
-`;
-
-export const Badge = styled.span`
-    background: #e4e6f0;
-    color: ${({ theme }) => theme.color.black};
-    font-size: 14px;
-    line-height: 140%;
-    padding: 8px 16px;
-    border-radius: ${({ theme }) => theme.radii.sm};
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 10px;
-        line-height: 110%;
-        padding: 4px 8px;
     }
 `;
 

@@ -8,6 +8,7 @@ import { PosterImage } from "../../common/components/Poster";
 import DelayedLoader from "../../common/Loader/DelayedLoader";
 import StarIcon from "../../images/star.svg";
 import ProfilePlaceholder from "../../images/profile.svg";
+import { Badge } from "../../common/components/Badge";
 import {
   Container,
   HeroShell,
@@ -30,7 +31,6 @@ import {
   MetaLabel,
   MetaValue,
   Badges,
-  Badge,
   RatingRow,
   Star,
   RatingValue,
