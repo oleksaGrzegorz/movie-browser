@@ -454,7 +454,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
     font-size: 14px;
     line-height: 140%;
     padding: 8px 16px;
-    border-radius: ${({theme:n})=>n.radii.xs};
+    border-radius: ${({theme:n})=>n.radii.sm};
 
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
         font-size: 10px;
@@ -681,17 +681,36 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         font-size: 13px;
         line-height: 130%;
     }
-`;function qf({id:n,name:u,profileUrl:c,subtitle:o,to:f=`/people/${n}`}){return E.jsx(bl,{to:f,"aria-label":`Open details of ${u}`,children:E.jsxs(Y3,{children:[E.jsx(G3,{children:E.jsx(Ur,{src:c,alt:u,fallback:xr,ratio:"176/231",size:"small"})}),E.jsxs(Q3,{children:[E.jsx(X3,{title:u,children:u}),o?E.jsx(V3,{children:o}):null]})]})})}const Z3=Q.div`
+`;function qf({id:n,name:u,profileUrl:c,subtitle:o,to:f=`/people/${n}`}){return E.jsx(bl,{to:f,"aria-label":`Open details of ${u}`,children:E.jsxs(Y3,{children:[E.jsx(G3,{children:E.jsx(Ur,{src:c,alt:u,fallback:xr,ratio:"176/231",size:"small"})}),E.jsxs(Q3,{children:[E.jsx(X3,{title:u,children:u}),o?E.jsx(V3,{children:o}):null]})]})})}Q.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+`;const Z3=Q.span`
+    display: inline-block;
+    background: #e4e6f0;
+    color: ${({theme:n})=>n.color.black};
+    border-radius: ${({theme:n})=>n.radii.sm};
+    font-size: ${({theme:n})=>n.typography.badge.size};
+    line-height: ${({theme:n})=>n.typography.badge.lineHeight};
+    padding: 8px 16px;
+
+    @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
+        font-size: ${({theme:n})=>n.typography.badge.mobileSize};
+        line-height: ${({theme:n})=>n.typography.badge.mobileLineHeight};
+        padding: 4px 8px;
+    }
+`,K3=Q.div`
     width: 100%;
     max-width: 1368px;
     margin: 0 auto;
     padding: 0 16px 80px;
     box-sizing: border-box;
-`,K3=Q.div`
+`,J3=Q.div`
     width: 100%;
     background: ${({theme:n})=>n.color.black};
     padding: 0;
-`,J3=Q.header`
+`,F3=Q.header`
     position: relative;
     width: 100%;
     max-width: 1368px;
@@ -711,7 +730,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         height: 360px;
         border-radius: ${({theme:n})=>n.radii.md};
     }
-`,F3=Q.div`
+`,W3=Q.div`
     position: absolute;
     inset: 0;
     background-size: cover;
@@ -722,10 +741,11 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         content: "";
         position: absolute;
         inset: 0;
-        -webkit-box-shadow: inset 0px 0px 50px 50px #000000;
-        box-shadow: inset 0px 0px 50px 50px #000000;
+        -webkit-box-shadow: inset 0 0 50px 50px
+            ${({theme:n})=>n.color.black};
+        box-shadow: inset 0 0 50px 50px ${({theme:n})=>n.color.black};
     }
-`,W3=Q.div`
+`,P3=Q.div`
     position: relative;
     z-index: 1;
     width: 100%;
@@ -742,7 +762,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         padding: 20px;
         max-width: 100%;
     }
-`,P3=Q.h1`
+`,I3=Q.h1`
     margin: 0 0 12px 0;
     color: ${({theme:n})=>n.color.white};
     font-size: 64px;
@@ -756,12 +776,12 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
         font-size: 24px;
     }
-`,I3=Q.div`
+`,e4=Q.div`
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
-`,e4=Q.img`
+`,t4=Q.img`
     width: 40px;
     height: 40px;
     margin-top: -10px;
@@ -771,7 +791,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         height: 16px;
         margin-top: 0;
     }
-`,t4=Q.span`
+`,a4=Q.span`
     color: ${({theme:n})=>n.color.white};
     font-size: 30px;
     line-height: 130%;
@@ -780,7 +800,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
         font-size: 16px;
     }
-`,a4=Q.span`
+`,n4=Q.span`
     color: ${({theme:n})=>n.color.white};
     font-size: 16px;
     line-height: 150%;
@@ -791,7 +811,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         line-height: 130%;
         margin-top: 0;
     }
-`,n4=Q.div`
+`,l4=Q.div`
     color: ${({theme:n})=>n.color.white};
     font-size: ${({theme:n})=>n.typography.caption.size};
     line-height: ${({theme:n})=>n.typography.caption.lineHeight};
@@ -800,7 +820,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         font-size: 12px;
         line-height: 120%;
     }
-`,l4=Q.section`
+`,i4=Q.section`
     background: ${({theme:n})=>n.color.white};
     border-radius: ${({theme:n})=>n.radii.sm};
     box-shadow: ${({theme:n})=>n.shadows?.card??`0px 4px 12px 0px ${n.color.shadow}`};
@@ -820,7 +840,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         padding: 16px;
         margin: 12px 0 0 0;
     }
-`,i4=Q.div`
+`,u4=Q.div`
     width: 100%;
     aspect-ratio: 2 / 3;
     overflow: hidden;
@@ -831,11 +851,11 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         aspect-ratio: auto;
         border-radius: ${({theme:n})=>n.radii.xs};
     }
-`,u4=Q.div`
+`,r4=Q.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
-`,r4=Q.h2`
+`,c4=Q.h2`
     font-weight: 600;
     color: ${({theme:n})=>n.color.black};
     font-size: 36px;
@@ -845,7 +865,8 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
         font-size: 20px;
         margin-bottom: 0;
-`,c4=Q.div`
+    }
+`,o4=Q.div`
     color: ${({theme:n})=>n.color.black};
     font-size: 22px;
     line-height: 150%;
@@ -856,7 +877,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         line-height: 120%;
         margin-bottom: 0;
     }
-`,o4=Q.div`
+`,f4=Q.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -881,7 +902,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
     }
 `,Vp=Q.span`
     color: ${({theme:n})=>n.color.black};
-`,f4=Q.div`
+`,s4=Q.div`
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -889,19 +910,6 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
 
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
         margin: 0;
-    }
-`,s4=Q.span`
-    background: #e4e6f0;
-    color: ${({theme:n})=>n.color.black};
-    font-size: 14px;
-    line-height: 140%;
-    padding: 8px 16px;
-    border-radius: ${({theme:n})=>n.radii.sm};
-
-    @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
-        font-size: 10px;
-        line-height: 110%;
-        padding: 4px 8px;
     }
 `,d4=Q.div`
     display: flex;
@@ -954,7 +962,7 @@ Please change the parent <Route path="${N}"> to <Route path="${N==="/"?"*":`${N}
         font-size: 14px;
         line-height: 160%;
     }
-`,Si=(n,u="w780")=>n?`https://image.tmdb.org/t/p/${u}${n}`:null,v4=n=>{if(!n)return"—";const u=new Date(n),c=String(u.getDate()).padStart(2,"0"),o=String(u.getMonth()+1).padStart(2,"0"),f=u.getFullYear();return`${c}.${o}.${f}`};function b4(){const{id:n}=Em(),[u,c]=R.useState(null),[o,f]=R.useState({cast:[],crew:[]}),[d,g]=R.useState(!0);R.useEffect(()=>{let S=!1;return(async()=>{g(!0);try{const C=await A3(n),j=await z3(n);S||(c(C||null),f({cast:j?.cast||[],crew:j?.crew||[]}))}finally{S||g(!1)}})(),()=>{S=!0}},[n]);const y=u?.backdrop_path?Si(u.backdrop_path,"w1280"):u?.poster_path?Si(u.poster_path,"w780"):null,m=R.useMemo(()=>(u?.genres||[]).map(S=>S.name),[u?.genres]),p=Number.isFinite(u?.vote_average)?u.vote_average.toFixed(1).replace(".",","):"–",v=(u?.production_countries||[]).map(S=>S.name).filter(Boolean).join(", ")||"—";return E.jsxs(E.Fragment,{children:[E.jsx(Lr,{active:d,minDuration:500,fadeDuration:300}),!d&&u&&E.jsxs(E.Fragment,{children:[E.jsx(K3,{children:E.jsxs(J3,{children:[y&&E.jsx(F3,{style:{backgroundImage:`url(${y})`}}),E.jsxs(W3,{children:[E.jsx(P3,{children:u.title||u.original_title}),E.jsxs(I3,{children:[E.jsx(e4,{src:Hf,alt:""}),E.jsx(t4,{children:p}),E.jsx(a4,{children:"/10"})]}),Number.isFinite(u.vote_count)&&E.jsxs(n4,{children:[u.vote_count," votes"]})]})]})}),E.jsxs(Z3,{children:[E.jsxs(l4,{children:[E.jsx(i4,{children:E.jsx(Ur,{src:Si(u.poster_path,"w342"),alt:u.title||u.original_title,fallback:null,ratio:"2/3",size:"small"})}),E.jsxs(u4,{children:[E.jsx(r4,{children:u.title||u.original_title}),E.jsx(c4,{children:u.release_date?new Date(u.release_date).getFullYear():"—"}),E.jsxs(o4,{children:[E.jsxs(Qp,{children:[E.jsx(Xp,{children:"Production:"}),E.jsx(Vp,{children:v})]}),E.jsxs(Qp,{children:[E.jsx(Xp,{children:"Release date:"}),E.jsx(Vp,{children:v4(u.release_date)})]})]}),!!m.length&&E.jsx(f4,{children:m.map(S=>E.jsx(s4,{children:S},S))}),E.jsxs(d4,{children:[E.jsx(h4,{src:Hf,alt:""}),E.jsx(p4,{children:p}),E.jsx(m4,{children:"/10"}),Number.isFinite(u.vote_count)&&E.jsxs(g4,{children:[u.vote_count," votes"]})]}),u.overview&&E.jsx(y4,{children:u.overview})]})]}),o.cast?.length>0&&E.jsxs(E.Fragment,{children:[E.jsx(br,{children:"Cast"}),E.jsx(kf,{children:o.cast.slice(0,24).map(S=>E.jsx(qf,{id:S.id,name:S.name,subtitle:S.character,profileUrl:Si(S.profile_path,"w342"),fallbackAvatar:xr,to:`/people/${S.id}`},`c-${S.id}-${S.cast_id||S.credit_id}`))})]}),o.crew?.length>0&&E.jsxs(E.Fragment,{children:[E.jsx(br,{children:"Crew"}),E.jsx(kf,{children:o.crew.slice(0,24).map(S=>E.jsx(qf,{id:S.id,name:S.name,subtitle:S.job,profileUrl:Si(S.profile_path,"w342"),fallbackAvatar:xr,to:`/people/${S.id}`},`w-${S.id}-${S.credit_id}`))})]})]})]})]})}const x4=Q.div`
+`,Si=(n,u="w780")=>n?`https://image.tmdb.org/t/p/${u}${n}`:null,v4=n=>{if(!n)return"—";const u=new Date(n),c=String(u.getDate()).padStart(2,"0"),o=String(u.getMonth()+1).padStart(2,"0"),f=u.getFullYear();return`${c}.${o}.${f}`};function b4(){const{id:n}=Em(),[u,c]=R.useState(null),[o,f]=R.useState({cast:[],crew:[]}),[d,g]=R.useState(!0);R.useEffect(()=>{let S=!1;return(async()=>{g(!0);try{const C=await A3(n),j=await z3(n);S||(c(C||null),f({cast:j?.cast||[],crew:j?.crew||[]}))}finally{S||g(!1)}})(),()=>{S=!0}},[n]);const y=u?.backdrop_path?Si(u.backdrop_path,"w1280"):u?.poster_path?Si(u.poster_path,"w780"):null,m=R.useMemo(()=>(u?.genres||[]).map(S=>S.name),[u?.genres]),p=Number.isFinite(u?.vote_average)?u.vote_average.toFixed(1).replace(".",","):"–",v=(u?.production_countries||[]).map(S=>S.name).filter(Boolean).join(", ")||"—";return E.jsxs(E.Fragment,{children:[E.jsx(Lr,{active:d,minDuration:500,fadeDuration:300}),!d&&u&&E.jsxs(E.Fragment,{children:[E.jsx(J3,{children:E.jsxs(F3,{children:[y&&E.jsx(W3,{style:{backgroundImage:`url(${y})`}}),E.jsxs(P3,{children:[E.jsx(I3,{children:u.title||u.original_title}),E.jsxs(e4,{children:[E.jsx(t4,{src:Hf,alt:""}),E.jsx(a4,{children:p}),E.jsx(n4,{children:"/10"})]}),Number.isFinite(u.vote_count)&&E.jsxs(l4,{children:[u.vote_count," votes"]})]})]})}),E.jsxs(K3,{children:[E.jsxs(i4,{children:[E.jsx(u4,{children:E.jsx(Ur,{src:Si(u.poster_path,"w342"),alt:u.title||u.original_title,fallback:null,ratio:"2/3",size:"small"})}),E.jsxs(r4,{children:[E.jsx(c4,{children:u.title||u.original_title}),E.jsx(o4,{children:u.release_date?new Date(u.release_date).getFullYear():"—"}),E.jsxs(f4,{children:[E.jsxs(Qp,{children:[E.jsx(Xp,{children:"Production:"}),E.jsx(Vp,{children:v})]}),E.jsxs(Qp,{children:[E.jsx(Xp,{children:"Release date:"}),E.jsx(Vp,{children:v4(u.release_date)})]})]}),!!m.length&&E.jsx(s4,{children:m.map(S=>E.jsx(Z3,{children:S},S))}),E.jsxs(d4,{children:[E.jsx(h4,{src:Hf,alt:""}),E.jsx(p4,{children:p}),E.jsx(m4,{children:"/10"}),Number.isFinite(u.vote_count)&&E.jsxs(g4,{children:[u.vote_count," votes"]})]}),u.overview&&E.jsx(y4,{children:u.overview})]})]}),o.cast?.length>0&&E.jsxs(E.Fragment,{children:[E.jsx(br,{children:"Cast"}),E.jsx(kf,{children:o.cast.slice(0,24).map(S=>E.jsx(qf,{id:S.id,name:S.name,subtitle:S.character,profileUrl:Si(S.profile_path,"w342"),fallbackAvatar:xr,to:`/people/${S.id}`},`c-${S.id}-${S.cast_id||S.credit_id}`))})]}),o.crew?.length>0&&E.jsxs(E.Fragment,{children:[E.jsx(br,{children:"Crew"}),E.jsx(kf,{children:o.crew.slice(0,24).map(S=>E.jsx(qf,{id:S.id,name:S.name,subtitle:S.job,profileUrl:Si(S.profile_path,"w342"),fallbackAvatar:xr,to:`/people/${S.id}`},`w-${S.id}-${S.credit_id}`))})]})]})]})]})}const x4=Q.div`
     max-width: 1368px;
     width: 100%;
     margin: 0 auto;
