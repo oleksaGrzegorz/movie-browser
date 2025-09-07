@@ -95,7 +95,7 @@ export const Badge = styled.span`
     font-size: 14px;
     line-height: 140%;
     padding: 8px 16px;
-    border-radius: ${({ theme }) => theme.radii.xs};
+    border-radius: ${({ theme }) => theme.radii.sm};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         font-size: 10px;
