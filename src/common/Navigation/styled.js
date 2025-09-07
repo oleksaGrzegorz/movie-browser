@@ -14,8 +14,10 @@ export const StyledNav = styled.nav`
         align-items: flex-start;
     }
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         min-height: 150px;
         align-items: flex-start;
     }
@@ -37,8 +39,10 @@ export const Container = styled.div`
         row-gap: 12px;
     }
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         padding-top: 18px;
         row-gap: 6px;
     }
@@ -78,8 +82,10 @@ export const Menu = styled.nav`
     gap: 8px;
     margin-left: 50px;
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         margin-left: 30px;
     }
 
@@ -119,8 +125,10 @@ export const SearchWrapper = styled.div`
     height: 48px;
     margin-left: auto;
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         order: 3;
         flex: 1 1 100%;
         width: 100%;

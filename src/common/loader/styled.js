@@ -31,5 +31,5 @@ export const Text = styled.span`
     margin-top: 16px;
     font-size: 16px;
     line-height: 140%;
-    color: ${({ theme }) => theme.color.textSecondary};
+    color: ${({ theme }) => theme.color.white};
 `;

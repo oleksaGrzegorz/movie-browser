@@ -1,541 +1,331 @@
 import styled from "styled-components";
-import { Link as RouterLink } from "react-router-dom";
 
 export const Container = styled.div`
-  margin: 0 auto;
-  margin-bottom: 336px;
-  overflow-x: hidden;
-  @media (max-width: 768px) {
-    margin-bottom: 88px;
-  }
-`;
-
-export const Backdrop = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  background-color: black;
-  height: 770px;
-  margin-bottom: 20px;
-  overflow: hidden;
-
-  @media (max-width: 768px) {
-    max-height: 248px;
     width: 100%;
-  }
+    max-width: 1368px;
+    margin: 0 auto;
+    padding: 0 16px 80px;
+    box-sizing: border-box;
 `;
 
-export const BackdropImageContainer = styled.div`
-  position: relative;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-export const BackdropImage = styled.img`
-  width: auto;
-  height: 100%;
-  object-fit: cover;
-
-  @media (max-width: 768px) {
+export const HeroShell = styled.div`
     width: 100%;
-  }
-`;
-
-export const BackdropOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-      to right,
-      #000000 0%,
-      rgba(0, 0, 0, 0.8) 3%,
-      rgba(0, 0, 0, 0.4) 8%,
-      rgba(0, 0, 0, 0.1) 15%,
-      transparent 20%,
-      transparent 80%,
-      rgba(0, 0, 0, 0.1) 85%,
-      rgba(0, 0, 0, 0.4) 92%,
-      rgba(0, 0, 0, 0.8) 97%,
-      #000000 100%
-    ),
-    linear-gradient(
-      to bottom,
-      #000000 0%,
-      rgba(0, 0, 0, 0.6) 2%,
-      rgba(0, 0, 0, 0.2) 6%,
-      rgba(0, 0, 0, 0.05) 12%,
-      transparent 18%
-    ),
-    linear-gradient(
-      to top,
-      #000000 0%,
-      rgba(0, 0, 0, 0.9) 5%,
-      rgba(0, 0, 0, 0.6) 12%,
-      rgba(0, 0, 0, 0.3) 20%,
-      rgba(0, 0, 0, 0.1) 30%,
-      transparent 40%
-    );
-
-  @media (max-width: 768px) {
-    background: linear-gradient(
-        to right,
-        #000000 0%,
-        rgba(0, 0, 0, 0.8) 5%,
-        transparent 20%,
-        transparent 80%,
-        rgba(0, 0, 0, 0.8) 95%,
-        #000000 100%
-      ),
-      linear-gradient(
-        to bottom,
-        #000000 0%,
-        rgba(0, 0, 0, 0.5) 20%,
-        rgba(0, 0, 0, 0.2) 50%,
-        transparent 80%
-      );
-  }
-`;
-
-export const BackdropContent = styled.div`
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
-  color: white;
-  z-index: 2;
-  padding: 16px;
-  border-radius: 8px;
-
-  @media (max-width: 768px) {
+    background: ${({ theme }) => theme.color.black};
     padding: 0;
-    bottom: 1px;
-    left: 1px;
+`;
+
+export const Hero = styled.header`
+    position: relative;
+    width: 100%;
+    max-width: 1368px;
+    height: 770px;
+    margin: 0 auto;
     display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-    margin-left: 16px;
-  }
+    align-items: flex-end;
+    border-radius: ${({ theme }) => theme.radii.lg};
+    overflow: hidden;
+    background: ${({ theme }) => theme.color.black};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        height: 520px;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        height: 360px;
+        border-radius: ${({ theme }) => theme.radii.md};
+    }
 `;
 
-export const BackdropTitle = styled.h1`
-  font-size: 64px;
-  font-weight: 600;
-  margin: 0 0 10px 0;
-  line-height: 120%;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+export const HeroBg = styled.div`
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55);
 
-  @media (max-width: 768px) {
-    font-size: 24px;
-    color: white;
-    flex-basis: 100%;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  }
+    &:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        -webkit-box-shadow: inset 0px 0px 50px 50px #000000;
+        box-shadow: inset 0px 0px 50px 50px #000000;
+    }
 `;
 
-export const BackdropInfo = styled.div`
-  @media (max-width: 768px) {
+export const HeroContent = styled.div`
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 920px;
+    padding: 60px 16px;
+    color: ${({ theme }) => theme.color.white};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        padding: 32px;
+        max-width: 760px;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        padding: 20px;
+        max-width: 100%;
+    }
+`;
+
+export const HeroTitle = styled.h1`
+    margin: 0 0 12px 0;
+    color: ${({ theme }) => theme.color.white};
+    font-size: 64px;
+    line-height: 120%;
+    font-weight: 600;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        font-size: 40px;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 24px;
+    }
+`;
+
+export const HeroRating = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  }
-`;
-
-export const BackdropRating = styled.div`
-  font-weight: 500;
-  font-size: 30px;
-  line-height: 130%;
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-`;
-
-export const StyledStarIcon = styled.img`
-  width: ${(props) => props.size || 24}px;
-  height: ${(props) => props.size || 24}px;
-  margin-right: 8px;
-  @media (max-width: 768px) {
-    width: 16px;
-    height: 16px;
-  }
-`;
-
-export const RatingWrapper = styled.div`
-  display: flex;
-  align-items: baseline;
-`;
-
-export const BackdropRatingExtra = styled.span`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 120%;
-  margin-left: 7px;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
-`;
-
-export const BackdropVotes = styled.span`
-  display: block;
-  font-size: 0.9rem;
-  opacity: 0.9;
-  margin-top: 16px;
-  margin-bottom: 36px;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-    margin: 0px;
-    display: inline;
-    position: relative;
-    margin-left: 8px;
-    top: 2px;
-  }
-`;
-
-export const ContentWrapper = styled.div`
-  max-width: 1368px;
-  margin: 0 auto;
-`;
-
-export const InfoSection = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  padding: 40px;
-  box-shadow: 0px 4px 12px 0px #bac7d580;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    padding: 16px;
-    margin: 0 16px;
-    margin-top: 16px;
-    align-items: start;
-  }
-`;
-
-export const Poster = styled.img`
-  max-width: 312px;
-  border-radius: 5px;
-  grid-row: span 2;
-
-  @media (max-width: 768px) {
-    max-width: 114px;
-    grid-row: auto;
-    margin-bottom: 16px;
-  }
-`;
-
-export const PosterPlaceholder = styled.div`
-  width: 100%;
-  width: 312px;
-  height: 468px;
-  border-radius: 5px;
-  background-color: #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  grid-row: span 2;
-
-  @media (max-width: 768px) {
-    width: 114px;
-    height: 171px;
-    font-size: 2rem;
-    grid-row: auto;
-    margin-bottom: 16px;
-  }
-`;
-
-export const StyledVideoIcon = styled.img`
-  width: 74px;
-  height: 56px;
-
-  @media (max-width: 768px) {
-    width: 37px;
-    height: 28px;
-  }
-`;
-
-export const MovieInfo = styled.div`
-  min-width: 250px;
-  grid-column: 2;
-  grid-row: 1;
-  min-width: 0;
-  margin-left: 40px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    margin-left: 16px;
-  }
-`;
-
-export const Title = styled.h1`
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 120%;
-  margin-top: 0px;
-  margin-bottom: 24px;
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-    margin-bottom: 4px;
-  }
-`;
-
-export const Year = styled.p`
-  font-weight: 400;
-  font-size: 22px;
-  line-height: 120%;
-  margin-top: 0px;
-  margin-bottom: 24px;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-    margin-bottom: 8px;
-    color: #74788b;
-  }
-`;
-
-export const Label = styled.span`
-  color: #74788b;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const Production = styled.p`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 120%;
-  margin-bottom: 0px;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-`;
-
-export const ReleaseDate = styled.p`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 120%;
-  margin-top: 8px;
-  margin-bottom: 24px;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-`;
-
-export const Genres = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
-  justify-content: flex-start;
-
-  @media (max-width: 768px) {
-    font-size: 10px;
-    border-radius: 5px;
-    margin-bottom: 8px;
     gap: 8px;
-  }
+    margin-bottom: 8px;
 `;
 
-export const GenreTag = styled.span`
-  background-color: #e4e6f0;
-  border-radius: 5px;
-  padding: 8px 16px;
-  @media (max-width: 768px) {
-    padding: 4px 8px;
-  }
+export const HeroStar = styled.img`
+    width: 40px;
+    height: 40px;
+    margin-top: -10px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        width: 16px;
+        height: 16px;
+        margin-top: 0;
+    }
 `;
 
-export const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+export const HeroValue = styled.span`
+    color: ${({ theme }) => theme.color.white};
+    font-size: 30px;
+    line-height: 130%;
+    font-weight: 500;
 
-  @media (max-width: 768px) {
-    flex-wrap: nowrap;
-  }
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 16px;
+    }
 `;
 
-export const MovieRating = styled.span`
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 130%;
-  margin-right: 8px;
+export const HeroSlashTen = styled.span`
+    color: ${({ theme }) => theme.color.white};
+    font-size: 16px;
+    line-height: 150%;
+    margin-top: 6px;
 
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 13px;
+        line-height: 130%;
+        margin-top: 0;
+    }
 `;
 
-export const MovieVotes10 = styled.span`
-  margin-right: 12px;
-  font-size: 14px;
-  @media (max-width: 768px) {
-    display: none;
-  }
+export const HeroVotes = styled.div`
+    color: ${({ theme }) => theme.color.white};
+    font-size: ${({ theme }) => theme.typography.caption.size};
+    line-height: ${({ theme }) => theme.typography.caption.lineHeight};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 12px;
+        line-height: 120%;
+    }
 `;
 
-export const MovieVotes = styled.span`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 120%;
-  margin-right: 12px;
+export const DetailsCard = styled.section`
+    background: ${({ theme }) => theme.color.white};
+    border-radius: ${({ theme }) => theme.radii.sm};
+    box-shadow: ${({ theme }) =>
+        theme.shadows?.card ?? `0px 4px 12px 0px ${theme.color.shadow}`};
+    display: grid;
+    grid-template-columns: 312px 1fr;
+    gap: 24px;
+    padding: 40px;
+    margin: 64px 0 0 0;
 
-  @media (max-width: 768px) {
-    font-size: 12px;
-    color: #74788b;
-  }
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        grid-template-columns: 264px 1fr;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        grid-template-columns: 114px 1fr;
+        gap: 16px;
+        padding: 16px;
+        margin: 12px 0 0 0;
+    }
 `;
 
-export const Section = styled.div`
-  margin-top: 30px;
+export const PosterCol = styled.div`
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        width: 114px;
+        height: 169px;
+        aspect-ratio: auto;
+        border-radius: ${({ theme }) => theme.radii.xs};
+    }
 `;
 
-export const Header = styled.h1`
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 120%;
-  margin-top: 64px;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-    padding: 0 16px;
-    margin-bottom: 0;
-    margin-top: 21px;
-  }
+export const InfoCol = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 `;
 
-export const ExtraMovieInfo = styled.div`
-  grid-column: 2;
-  grid-row: 2;
-  margin: 0;
-  margin-left: 40px;
+export const Title = styled.h2`
+    font-weight: 600;
+    color: ${({ theme }) => theme.color.black};
+    font-size: 36px;
+    line-height: 120%;
+    margin-bottom: 8px;
 
-  @media (max-width: 768px) {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin: 0;
-  }
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 20px;
+        margin-bottom: 0;
+`;
+
+export const Year = styled.div`
+    color: ${({ theme }) => theme.color.black};
+    font-size: 22px;
+    line-height: 150%;
+    margin-bottom: 8px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 12px;
+        line-height: 120%;
+        margin-bottom: 0;
+    }
+`;
+
+export const Meta = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 18px;
+    line-height: 150%;
+    color: ${({ theme }) => theme.color.darkerGrey};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 12px;
+        line-height: 120%;
+        gap: 6px;
+    }
+`;
+
+export const MetaRow = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+`;
+
+export const MetaLabel = styled.span`
+    color: ${({ theme }) => theme.color.darkerGrey};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        display: none;
+    }
+`;
+
+export const MetaValue = styled.span`
+    color: ${({ theme }) => theme.color.black};
+`;
+
+export const Badges = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        margin: 0;
+    }
+`;
+
+export const Badge = styled.span`
+    background: #e4e6f0;
+    color: ${({ theme }) => theme.color.black};
+    font-size: 14px;
+    line-height: 140%;
+    padding: 8px 16px;
+    border-radius: ${({ theme }) => theme.radii.sm};
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 10px;
+        line-height: 110%;
+        padding: 4px 8px;
+    }
+`;
+
+export const RatingRow = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+`;
+
+export const Star = styled.img`
+    width: 24px;
+    height: 24px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        width: 16px;
+        height: 16px;
+    }
+`;
+
+export const RatingValue = styled.span`
+    color: ${({ theme }) => theme.color.black};
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 160%;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 13px;
+    }
+`;
+
+export const SlashTen = styled.span`
+    color: ${({ theme }) => theme.color.black};
+    font-size: 16px;
+    line-height: 150%;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 13px;
+        line-height: 130%;
+    }
+`;
+
+export const Votes = styled.span`
+    color: ${({ theme }) => theme.color.black};
+    font-size: 14px;
+    line-height: 150%;
+    margin-left: 2px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 13px;
+        line-height: 130%;
+    }
 `;
 
 export const Overview = styled.p`
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 160%;
-  margin-top: 10px;
-
-  @media (max-width: 768px) {
-    font-size: 13px;
     margin: 0;
-  }
-`;
+    color: ${({ theme }) => theme.color.black};
+    font-size: 20px;
+    line-height: 160%;
 
-export const StyledLink = styled(RouterLink)`
-  display: contents;
-`;
-
-export const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 24px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 16px;
-    margin-top: 0;
-  }
-`;
-
-export const GridItem = styled.div`
-  max-width: 208px;
-  text-align: center;
-  opacity: 1;
-  padding: 16px;
-  gap: 12px;
-  box-shadow: 0px 4px 12px 0px #bac7d580;
-  transition: 0.2s;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
-export const PosterImage = styled.img`
-  border-radius: 5px;
-  object-fit: cover;
-  width: 176px;
-`;
-
-export const PersonInfo = styled.p`
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 130%;
-  text-align: center;
-  margin-top: 12px;
-  margin-bottom: 8px;
-  word-break: break-word;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
-`;
-
-export const ExtraPersonInfo = styled.p`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 150%;
-  text-align: center;
-  margin-top: 8px;
-  margin-bottom: 16px;
-  color: ${({ theme }) => theme.color.darkerGrey};
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
-`;
-
-export const PlaceholderIcon = styled.div`
-  max-width: 176px;
-  height: 231px;
-  padding-top: 150%;
-  background-color: #ccc;
-  border-radius: 5px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const Icon = styled.img`
-  width: 72px;
-  height: 72px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  @media (max-width: 768px) {
-    width: 48px;
-    height: 48px;
-  }
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: 14px;
+        line-height: 160%;
+    }
 `;
