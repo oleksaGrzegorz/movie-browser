@@ -128,6 +128,7 @@ export const Value = styled.span`
     color: ${({ theme }) => theme.color.black};
     font-size: 16px;
     line-height: 160%;
+    font-weight: 600;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         font-size: 13px;

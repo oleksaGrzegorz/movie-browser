@@ -7,7 +7,7 @@ import MovieCard from "../../common/components/MovieCard";
 import { fetchPopularMovies, fetchGenres, searchMovies } from "../../api/fetchMovieApi";
 import { Container, MainHeader } from "./styled";
 import { MoviesGrid } from "../../common/components/Grids";
-import DelayedLoader from "../../common/Loader/DelayedLoader";
+import Loader from "../../common/Loader/Loader";
 
 const poster = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
@@ -25,15 +25,15 @@ export default function MovieList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const page = Math.max(1, Number(searchParams.get("page") || 1));
-  const query = searchParams.get("search") || "";
+  const query = (searchParams.get("search") || "").trim();
   const debouncedQuery = useDebounce(query, 500);
   const isMoviesTab = location.pathname.startsWith("/movies");
 
   const [movies, setMovies] = useState([]);
   const [genresMap, setGenresMap] = useState({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [ready, setReady] = useState(false);
 
   const prevQueryRef = useRef("");
 
@@ -71,7 +71,7 @@ export default function MovieList() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setReady(false);
       setError(null);
       try {
         if (debouncedQuery && isMoviesTab) {
@@ -91,7 +91,7 @@ export default function MovieList() {
       } catch (e) {
         if (!cancelled) setError(e || true);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setReady(true);
       }
     })();
     return () => {
@@ -115,54 +115,55 @@ export default function MovieList() {
 
   return (
     <Container>
-      <DelayedLoader active={loading} minDuration={500} fadeDuration={300} />
-      {!loading && (
-        <>
-          <MainHeader>
-            {debouncedQuery ? `Results for “${debouncedQuery}”` : "Popular Movies"}
-          </MainHeader>
+      <MainHeader>
+        {debouncedQuery ? `Results for “${debouncedQuery}”` : "Popular Movies"}
+      </MainHeader>
 
-          {hasResults ? (
-            <>
-              <MoviesGrid>
-                {movies.map((m) => {
-                  const id = m.id;
-                  const title = m.title || m.original_title;
-                  const year = m.release_date ? new Date(m.release_date).getFullYear() : undefined;
-                  const genres = Array.isArray(m.genre_ids)
-                    ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
-                    : [];
-                  return (
-                    <MovieCard
-                      key={id}
-                      id={id}
-                      title={title}
-                      year={year}
-                      posterUrl={poster(m.poster_path)}
-                      genres={genres}
-                      voteAverage={
-                        Number.isFinite(m.vote_average)
-                          ? m.vote_average.toFixed(1).replace(".", ",")
-                          : undefined
-                      }
-                      voteCount={m.vote_count}
-                      to={`/movies/${id}`}
-                    />
-                  );
-                })}
-              </MoviesGrid>
+      <Loader ready={ready} delayMs={1000}>
+        {hasResults ? (
+          <>
+            <MoviesGrid>
+              {movies.map((m) => {
+                const id = m.id;
+                const title = m.title || m.original_title;
+                const year = m.release_date ? new Date(m.release_date).getFullYear() : undefined;
+                const genres = Array.isArray(m.genre_ids)
+                  ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
+                  : [];
 
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <NoResult query={debouncedQuery} />
-          )}
-        </>
-      )}
+                const voteCount = Number.isFinite(m.vote_count) ? m.vote_count : 0;
+                const avgNumber = Number(m.vote_average);
+                const hasVotes = voteCount > 0 && Number.isFinite(avgNumber) && avgNumber > 0;
+                const voteAverage = hasVotes
+                  ? avgNumber.toFixed(1).replace(".", ",")
+                  : null;
+
+                return (
+                  <MovieCard
+                    key={id}
+                    id={id}
+                    title={title}
+                    year={year}
+                    posterUrl={poster(m.poster_path)}
+                    genres={genres}
+                    voteAverage={voteAverage}
+                    voteCount={voteCount}
+                    to={`/movies/${id}`}
+                  />
+                );
+              })}
+            </MoviesGrid>
+
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        ) : (
+          <NoResult query={debouncedQuery} />
+        )}
+      </Loader>
     </Container>
   );
 }

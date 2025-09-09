@@ -5,7 +5,8 @@ import SectionTitle from "../../common/components/SectionTitle";
 import { MoviesGrid } from "../../common/components/Grids";
 import MovieCard from "../../common/components/MovieCard";
 import { PosterImage } from "../../common/components/Poster";
-import DelayedLoader from "../../common/Loader/DelayedLoader";
+import Loader from "../../common/Loader/Loader";
+
 import ProfilePlaceholder from "../../images/profile.svg";
 import {
   Container,
@@ -36,7 +37,7 @@ export default function PersonDetails() {
   const [details, setDetails] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [genresMap, setGenresMap] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let off = false;
@@ -58,7 +59,7 @@ export default function PersonDetails() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setReady(false);
       try {
         const d = await fetchPersonDetails(id);
         const c = await fetchPersonCredits(id);
@@ -67,7 +68,7 @@ export default function PersonDetails() {
           setCredits({ cast: c?.cast || [], crew: c?.crew || [] });
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setReady(true);
       }
     })();
     return () => {
@@ -104,83 +105,84 @@ export default function PersonDetails() {
 
   return (
     <Container>
-      <DelayedLoader active={loading} minDuration={500} fadeDuration={300} />
-      {!loading && details && (
-        <>
-          <HeaderCard>
-            <Avatar>
-              <PosterImage
-                src={tmdb(details.profile_path)}
-                alt={details.name || "Profile photo"}
-                fallback={ProfilePlaceholder}
-                ratio="2/3"
-                size="large"
-              />
-            </Avatar>
+      <Loader ready={ready} delayMs={1000}>
+        {details && (
+          <>
+            <HeaderCard>
+              <Avatar>
+                <PosterImage
+                  src={tmdb(details.profile_path)}
+                  alt={details.name || "Profile photo"}
+                  fallback={ProfilePlaceholder}
+                  ratio="2/3"
+                  size="large"
+                />
+              </Avatar>
 
-            <Info>
-              <Name>{details.name}</Name>
+              <Info>
+                <Name>{details.name}</Name>
 
-              <Row className="inline">
-                <Label className="desktop-only">Date of birth:</Label>
-                <Label className="mobile-only">Birth:</Label>
-                <Value className="nowrap">{formatDate(details.birthday)}</Value>
-              </Row>
+                <Row className="inline">
+                  <Label className="desktop-only">Date of birth:</Label>
+                  <Label className="mobile-only">Birth:</Label>
+                  <Value className="nowrap">{formatDate(details.birthday)}</Value>
+                </Row>
 
-              <Row>
-                <Label>Place of birth:</Label>
-                <Value className="stack-on-mobile">{details.place_of_birth || "—"}</Value>
-              </Row>
-            </Info>
+                <Row>
+                  <Label>Place of birth:</Label>
+                  <Value className="stack-on-mobile">{details.place_of_birth || "—"}</Value>
+                </Row>
+              </Info>
 
-            {details.biography && <Bio>{details.biography}</Bio>}
-          </HeaderCard>
+              {details.biography && <Bio>{details.biography}</Bio>}
+            </HeaderCard>
 
-          {castCount > 0 && (
-            <>
-              <SectionTitle>Movies – cast ({castCount})</SectionTitle>
-              <MoviesGrid>
-                {castClean.map((m) => (
-                  <MovieCard
-                    key={`c-${m.id}`}
-                    id={m.id}
-                    title={m.title}
-                    year={m.year}
-                    posterUrl={m.posterUrl}
-                    genres={m.genres}
-                    subtitle={m.subtitle}
-                    voteAverage={m.voteAverage}
-                    voteCount={m.voteCount}
-                    to={`/movies/${m.id}`}
-                  />
-                ))}
-              </MoviesGrid>
-            </>
-          )}
+            {castCount > 0 && (
+              <>
+                <SectionTitle>Movies – cast ({castCount})</SectionTitle>
+                <MoviesGrid>
+                  {castClean.map((m) => (
+                    <MovieCard
+                      key={`c-${m.id}`}
+                      id={m.id}
+                      title={m.title}
+                      year={m.year}
+                      posterUrl={m.posterUrl}
+                      genres={m.genres}
+                      subtitle={m.subtitle}
+                      voteAverage={m.voteAverage}
+                      voteCount={m.voteCount}
+                      to={`/movies/${m.id}`}
+                    />
+                  ))}
+                </MoviesGrid>
+              </>
+            )}
 
-          {crewCount > 0 && (
-            <>
-              <SectionTitle>Movies – crew ({crewCount})</SectionTitle>
-              <MoviesGrid>
-                {crewClean.map((m) => (
-                  <MovieCard
-                    key={`w-${m.id}`}
-                    id={m.id}
-                    title={m.title}
-                    year={m.year}
-                    posterUrl={m.posterUrl}
-                    genres={m.genres}
-                    subtitle={m.subtitle}
-                    voteAverage={m.voteAverage}
-                    voteCount={m.voteCount}
-                    to={`/movies/${m.id}`}
-                  />
-                ))}
-              </MoviesGrid>
-            </>
-          )}
-        </>
-      )}
+            {crewCount > 0 && (
+              <>
+                <SectionTitle>Movies – crew ({crewCount})</SectionTitle>
+                <MoviesGrid>
+                  {crewClean.map((m) => (
+                    <MovieCard
+                      key={`w-${m.id}`}
+                      id={m.id}
+                      title={m.title}
+                      year={m.year}
+                      posterUrl={m.posterUrl}
+                      genres={m.genres}
+                      subtitle={m.subtitle}
+                      voteAverage={m.voteAverage}
+                      voteCount={m.voteCount}
+                      to={`/movies/${m.id}`}
+                    />
+                  ))}
+                </MoviesGrid>
+              </>
+            )}
+          </>
+        )}
+      </Loader>
     </Container>
   );
 }

@@ -5,7 +5,7 @@ import SectionTitle from "../../common/components/SectionTitle";
 import PersonCard from "../../common/components/PersonCard";
 import { PeopleGrid } from "../../common/components/Grids";
 import { PosterImage } from "../../common/components/Poster";
-import DelayedLoader from "../../common/Loader/DelayedLoader";
+import Loader from "../../common/Loader/Loader";
 import StarIcon from "../../images/star.svg";
 import ProfilePlaceholder from "../../images/profile.svg";
 import { Badge } from "../../common/components/Badge";
@@ -89,9 +89,13 @@ export default function MovieDetails() {
     [details?.genres]
   );
 
-  const rating = Number.isFinite(details?.vote_average)
-    ? details.vote_average.toFixed(1).replace(".", ",")
-    : "–";
+  const hasVotes =
+    Number.isFinite(details?.vote_count) && details.vote_count > 0;
+
+  const rating =
+    Number.isFinite(details?.vote_average) && hasVotes
+      ? details.vote_average.toFixed(1).replace(".", ",")
+      : null;
 
   const production =
     (details?.production_countries || [])
@@ -100,9 +104,8 @@ export default function MovieDetails() {
       .join(", ") || "—";
 
   return (
-    <>
-      <DelayedLoader active={loading} minDuration={500} fadeDuration={300} />
-      {!loading && details && (
+    <Loader ready={!loading} delayMs={1000}>
+      {details && (
         <>
           <HeroShell>
             <Hero>
@@ -111,12 +114,16 @@ export default function MovieDetails() {
                 <HeroTitle>{details.title || details.original_title}</HeroTitle>
                 <HeroRating>
                   <HeroStar src={StarIcon} alt="" />
-                  <HeroValue>{rating}</HeroValue>
-                  <HeroSlashTen>/10</HeroSlashTen>
+                  {rating ? (
+                    <>
+                      <HeroValue>{rating}</HeroValue>
+                      <HeroSlashTen>/10</HeroSlashTen>
+                    </>
+                  ) : (
+                    <HeroValue>No votes yet</HeroValue>
+                  )}
                 </HeroRating>
-                {Number.isFinite(details.vote_count) && (
-                  <HeroVotes>{details.vote_count} votes</HeroVotes>
-                )}
+                {hasVotes && <HeroVotes>{details.vote_count} votes</HeroVotes>}
               </HeroContent>
             </Hero>
           </HeroShell>
@@ -163,10 +170,14 @@ export default function MovieDetails() {
 
                 <RatingRow>
                   <Star src={StarIcon} alt="" />
-                  <RatingValue>{rating}</RatingValue>
-                  <SlashTen>/10</SlashTen>
-                  {Number.isFinite(details.vote_count) && (
-                    <Votes>{details.vote_count} votes</Votes>
+                  {rating ? (
+                    <>
+                      <RatingValue>{rating}</RatingValue>
+                      <SlashTen>/10</SlashTen>
+                      <Votes>{details.vote_count} votes</Votes>
+                    </>
+                  ) : (
+                    <Votes>No votes yet</Votes>
                   )}
                 </RatingRow>
 
@@ -214,6 +225,6 @@ export default function MovieDetails() {
           </Container>
         </>
       )}
-    </>
+    </Loader>
   );
 }
