@@ -9,18 +9,18 @@ export const Container = styled.div`
 `;
 
 export const MainHeader = styled.h1`
-    margin: 56px 0 24px; /* odstęp od góry 80px */
+    margin: 56px 0 24px;
     color: ${({ theme }) => theme.color.textPrimary};
     font-size: ${({ theme }) => theme.typography.h1.size};
     font-weight: ${({ theme }) => theme.typography.h1.weight};
     line-height: ${({ theme }) => theme.typography.h1.lineHeight};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
-        margin: 64px 0 16px; /* trochę mniejszy na tabletach */
+        margin: 64px 0 16px;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        margin: 48px 0 12px; /* jeszcze mniejszy na mobilu */
+        margin: 48px 0 12px;
         font-size: 24px;
         line-height: 120%;
     }
