@@ -1,4 +1,3 @@
-// src/api/fetchMovieApi.js
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -33,7 +32,7 @@ export const searchMovies = async ({ query, page = 1 }) => {
 
     const res = await fetch(url.toString());
     if (!res.ok) throw new Error("Failed to search movies");
-    return await res.json(); // { results, total_pages, ... }
+    return await res.json();
 };
 
 export const fetchPeople = async (page = 1) => {
@@ -41,7 +40,20 @@ export const fetchPeople = async (page = 1) => {
         `${BASE_URL}/person/popular?api_key=${API_KEY}&language=en-US&page=${page}`
     );
     if (!res.ok) throw new Error("Failed to fetch people");
-    return await res.json(); // { results, total_pages, ... }
+    return await res.json();
+};
+
+export const fetchSearchPeople = async (query, page = 1) => {
+    const url = new URL(`${BASE_URL}/search/person`);
+    url.searchParams.set("api_key", API_KEY);
+    url.searchParams.set("language", "en-US");
+    url.searchParams.set("query", query);
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("include_adult", "false");
+
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Failed to search people");
+    return await res.json();
 };
 
 export const fetchPersonDetails = async (id) => {
@@ -61,8 +73,6 @@ export const fetchPersonCredits = async (id) => {
     return { cast: data.cast || [], crew: data.crew || [] };
 };
 
-/* === NEW: single movie details & credits (for MovieDetails.jsx) === */
-
 export const fetchMovieDetails = async (id) => {
     const res = await fetch(
         `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
@@ -76,5 +86,5 @@ export const fetchMovieCredits = async (id) => {
         `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}&language=en-US`
     );
     if (!res.ok) throw new Error("Failed to fetch movie credits");
-    return await res.json(); // { cast: [], crew: [] }
+    return await res.json();
 };
