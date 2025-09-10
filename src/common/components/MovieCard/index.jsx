@@ -29,6 +29,7 @@ export default function MovieCard({
   to = `/movies/${id}`,
 }) {
   const subDesktop = [subtitle, year].filter(Boolean).join(" ");
+  const hasVotes = voteAverage && voteCount > 0;
 
   return (
     <LinkBlock to={to} aria-label={`Open details of ${title}`}>
@@ -53,15 +54,13 @@ export default function MovieCard({
               ))}
             </Badges>
           )}
-          {(voteAverage || voteCount) && (
-            <MetaBlock>
-              <RatingRow>
-                <StarIconImg />
-                <Value>{voteAverage ?? "–"}</Value>
-                {voteCount ? <Votes>{voteCount} votes</Votes> : null}
-              </RatingRow>
-            </MetaBlock>
-          )}
+          <MetaBlock>
+            <RatingRow>
+              <StarIconImg />
+              <Value>{hasVotes ? voteAverage : "No votes yet"}</Value>
+              {hasVotes && <Votes>{voteCount} votes</Votes>}
+            </RatingRow>
+          </MetaBlock>
         </Body>
       </MovieTile>
     </LinkBlock>

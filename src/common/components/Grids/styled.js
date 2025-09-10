@@ -27,10 +27,10 @@ export const PeopleGrid = styled.div`
     grid-template-columns: repeat(var(--cols), 1fr);
     align-items: stretch;
 
-    @media (max-width: 1366px) {
+    @media (max-width: ${({ theme }) => theme.breakpoint.desktop}px) {
         --cols: 5;
     }
-    @media (max-width: 1100px) {
+    @media (max-width: ${({ theme }) => theme.breakpoint.laptop}px) {
         --cols: 4;
     }
     @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {

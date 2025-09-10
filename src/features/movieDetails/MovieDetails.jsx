@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { fetchMovieDetails, fetchMovieCredits } from "../../api/fetchMovieApi";
 import SectionTitle from "../../common/components/SectionTitle";
 import PersonCard from "../../common/components/PersonCard";
@@ -57,6 +58,9 @@ export default function MovieDetails() {
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [loading, setLoading] = useState(true);
 
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -90,12 +94,12 @@ export default function MovieDetails() {
   );
 
   const hasVotes =
-    Number.isFinite(details?.vote_count) && details.vote_count > 0;
+    Number.isFinite(details?.vote_count) && details.vote_count > 0 &&
+    Number.isFinite(details?.vote_average) && details.vote_average > 0;
 
-  const rating =
-    Number.isFinite(details?.vote_average) && hasVotes
-      ? details.vote_average.toFixed(1).replace(".", ",")
-      : null;
+  const rating = hasVotes
+    ? details.vote_average.toFixed(1).replace(".", ",")
+    : null;
 
   const production =
     (details?.production_countries || [])
@@ -104,7 +108,12 @@ export default function MovieDetails() {
       .join(", ") || "—";
 
   return (
-    <Loader ready={!loading} delayMs={1000}>
+    <Loader
+      ready={!loading && !isSearching}
+      delayMs={1000}
+      isTyping={isTyping}
+      showTypingIndicator={false}
+    >
       {details && (
         <>
           <HeroShell>
@@ -114,14 +123,8 @@ export default function MovieDetails() {
                 <HeroTitle>{details.title || details.original_title}</HeroTitle>
                 <HeroRating>
                   <HeroStar src={StarIcon} alt="" />
-                  {rating ? (
-                    <>
-                      <HeroValue>{rating}</HeroValue>
-                      <HeroSlashTen>/10</HeroSlashTen>
-                    </>
-                  ) : (
-                    <HeroValue>No votes yet</HeroValue>
-                  )}
+                  <HeroValue>{rating || "No votes yet"}</HeroValue>
+                  {rating && <HeroSlashTen>/10</HeroSlashTen>}
                 </HeroRating>
                 {hasVotes && <HeroVotes>{details.vote_count} votes</HeroVotes>}
               </HeroContent>
@@ -170,14 +173,12 @@ export default function MovieDetails() {
 
                 <RatingRow>
                   <Star src={StarIcon} alt="" />
-                  {rating ? (
+                  <RatingValue>{rating || "No votes yet"}</RatingValue>
+                  {rating && (
                     <>
-                      <RatingValue>{rating}</RatingValue>
                       <SlashTen>/10</SlashTen>
                       <Votes>{details.vote_count} votes</Votes>
                     </>
-                  ) : (
-                    <Votes>No votes yet</Votes>
                   )}
                 </RatingRow>
 

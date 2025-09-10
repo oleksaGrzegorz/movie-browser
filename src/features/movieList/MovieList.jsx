@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import NoResult from "../noResult/noResult";
 import ErrorPage from "../errorPage/ErrorPage";
 import Pagination from "../../common/Pagination/Pagination";
@@ -12,30 +13,22 @@ import Loader from "../../common/Loader/Loader";
 const poster = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const h = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(h);
-  }, [value, delay]);
-  return debouncedValue;
-}
-
 export default function MovieList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+
   const page = Math.max(1, Number(searchParams.get("page") || 1));
-  const query = (searchParams.get("search") || "").trim();
-  const debouncedQuery = useDebounce(query, 500);
+  const query = (searchParams.get("search") || "");
   const isMoviesTab = location.pathname.startsWith("/movies");
+
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
 
   const [movies, setMovies] = useState([]);
   const [genresMap, setGenresMap] = useState({});
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
-  const [ready, setReady] = useState(false);
-
-  const prevQueryRef = useRef("");
+  const [fetchReady, setFetchReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -54,6 +47,7 @@ export default function MovieList() {
     };
   }, []);
 
+  const prevQueryRef = useRef("");
   useEffect(() => {
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
@@ -71,11 +65,11 @@ export default function MovieList() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      setReady(false);
+      setFetchReady(false);
       setError(null);
       try {
-        if (debouncedQuery && isMoviesTab) {
-          const res = await searchMovies({ query: debouncedQuery, page });
+        if (query && isMoviesTab) {
+          const res = await searchMovies({ query, page });
           if (!cancelled) {
             setMovies(res.results || []);
             setTotalPages(Math.min(res.total_pages || 1, 500));
@@ -85,25 +79,25 @@ export default function MovieList() {
           if (!cancelled) {
             const list = res.movies || res.results || [];
             setMovies(list);
-            setTotalPages(Math.min(res.totalPages || res.total_pages || 1, 500));
+            setTotalPages(Math.min(res.total_pages || res.totalPages || 1, 500));
           }
         }
       } catch (e) {
         if (!cancelled) setError(e || true);
       } finally {
-        if (!cancelled) setReady(true);
+        if (!cancelled) setFetchReady(true);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, page, isMoviesTab]);
+  }, [query, page, isMoviesTab]);
 
   const handlePageChange = (nextPage) => {
     setSearchParams((prev) => {
       const p = new URLSearchParams(prev);
       p.set("page", String(nextPage));
-      if (debouncedQuery) p.set("search", debouncedQuery);
+      if (query) p.set("search", query);
       return p;
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -112,14 +106,20 @@ export default function MovieList() {
   if (error) return <ErrorPage />;
 
   const hasResults = movies && movies.length > 0;
+  const headerText = query ? `Results for "${query}"` : "Popular Movies";
+  const loaderDelay = isTyping ? 0 : 1000;
+  const loaderReady = fetchReady && !isTyping && !isSearching;
 
   return (
     <Container>
-      <MainHeader>
-        {debouncedQuery ? `Results for “${debouncedQuery}”` : "Popular Movies"}
-      </MainHeader>
+      <MainHeader>{headerText}</MainHeader>
 
-      <Loader ready={ready} delayMs={1000}>
+      <Loader
+        ready={loaderReady}
+        delayMs={loaderDelay}
+        isTyping={isTyping}
+        showTypingIndicator={true}
+      >
         {hasResults ? (
           <>
             <MoviesGrid>
@@ -132,11 +132,9 @@ export default function MovieList() {
                   : [];
 
                 const voteCount = Number.isFinite(m.vote_count) ? m.vote_count : 0;
-                const avgNumber = Number(m.vote_average);
-                const hasVotes = voteCount > 0 && Number.isFinite(avgNumber) && avgNumber > 0;
-                const voteAverage = hasVotes
-                  ? avgNumber.toFixed(1).replace(".", ",")
-                  : null;
+                const avgNum = Number(m.vote_average);
+                const hasVotes = voteCount > 0 && Number.isFinite(avgNum) && avgNum > 0;
+                const voteAverage = hasVotes ? avgNum.toFixed(1).replace(".", ",") : null;
 
                 return (
                   <MovieCard
@@ -161,7 +159,7 @@ export default function MovieList() {
             />
           </>
         ) : (
-          <NoResult query={debouncedQuery} />
+          <NoResult query={query} />
         )}
       </Loader>
     </Container>

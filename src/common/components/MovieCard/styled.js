@@ -27,7 +27,7 @@ export const PosterBox = styled.div`
     width: 100%;
     aspect-ratio: 2 / 3;
     overflow: hidden;
-    border-radius: ${({ theme }) => theme.radii.xs};
+    border-radius: ${({ theme }) => theme.radii.sm};
 `;
 
 export const Body = styled.div`
@@ -47,25 +47,26 @@ export const Body = styled.div`
 
 export const Title = styled.h3`
     margin: 0;
-    color: ${({ theme }) => theme.color.black};
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 130%;
+    color: ${({ theme }) => theme.color.textPrimary};
+    font-weight: ${({ theme }) => theme.typography.movieTitle.weight};
+    font-size: ${({ theme }) => theme.typography.movieTitle.size};
+    line-height: ${({ theme }) => theme.typography.movieTitle.lineHeight};
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 16px;
-        line-height: 130%;
+        font-size: ${({ theme }) => theme.typography.movieTitle.mobileSize};
+        line-height: ${({ theme }) =>
+            theme.typography.movieTitle.mobileLineHeight};
     }
 `;
 
 export const SubDesktop = styled.div`
-    color: ${({ theme }) => theme.color.darkerGrey};
-    font-size: 16px;
-    line-height: 150%;
+    color: ${({ theme }) => theme.color.textSecondary};
+    font-size: ${({ theme }) => theme.typography.movieMeta.size};
+    line-height: ${({ theme }) => theme.typography.movieMeta.lineHeight};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         display: none;
@@ -77,9 +78,10 @@ export const SubMobile = styled.div`
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         display: block;
-        color: ${({ theme }) => theme.color.darkerGrey};
-        font-size: 13px;
-        line-height: 130%;
+        color: ${({ theme }) => theme.color.textSecondary};
+        font-size: ${({ theme }) => theme.typography.movieMeta.mobileSize};
+        line-height: ${({ theme }) =>
+            theme.typography.movieMeta.mobileLineHeight};
     }
 `;
 
@@ -90,22 +92,26 @@ export const Badges = styled.div`
 `;
 
 export const Badge = styled.span`
-    background: #e4e6f0;
-    color: ${({ theme }) => theme.color.black};
-    font-size: 14px;
-    line-height: 140%;
+    background: ${({ theme }) => theme.color.grey};
+    color: ${({ theme }) => theme.color.textPrimary};
+    font-size: ${({ theme }) => theme.typography.badge.size};
+    line-height: ${({ theme }) => theme.typography.badge.lineHeight};
     padding: 8px 16px;
     border-radius: ${({ theme }) => theme.radii.sm};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 10px;
-        line-height: 110%;
+        font-size: ${({ theme }) => theme.typography.badge.mobileSize};
+        line-height: ${({ theme }) => theme.typography.badge.mobileLineHeight};
         padding: 4px 8px;
     }
 `;
 
 export const MetaBlock = styled.div`
-    margin-top: auto;
+    margin-top: 16px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        margin-top: 8px;
+    }
 `;
 
 export const RatingRow = styled.div`
@@ -125,23 +131,26 @@ export const StarIconImg = styled.img.attrs({ src: StarIcon, alt: "" })`
 `;
 
 export const Value = styled.span`
-    color: ${({ theme }) => theme.color.black};
-    font-size: 16px;
-    line-height: 160%;
-    font-weight: 600;
+    color: ${({ theme }) => theme.color.textPrimary};
+    font-size: ${({ theme }) => theme.typography.ratingValue.size};
+    line-height: ${({ theme }) => theme.typography.ratingValue.lineHeight};
+    font-weight: ${({ theme }) => theme.typography.ratingValue.weight};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 13px;
+        font-size: ${({ theme }) => theme.typography.ratingValue.mobileSize};
+        line-height: ${({ theme }) =>
+            theme.typography.ratingValue.mobileLineHeight};
     }
 `;
 
 export const Votes = styled.span`
-    color: ${({ theme }) => theme.color.darkerGrey};
-    font-size: 16px;
-    line-height: 150%;
+    color: ${({ theme }) => theme.color.textSecondary};
+    font-size: ${({ theme }) => theme.typography.ratingVotes.size};
+    line-height: ${({ theme }) => theme.typography.ratingVotes.lineHeight};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 13px;
-        line-height: 130%;
+        font-size: ${({ theme }) => theme.typography.ratingVotes.mobileSize};
+        line-height: ${({ theme }) =>
+            theme.typography.ratingVotes.mobileLineHeight};
     }
 `;

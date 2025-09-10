@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Pagination from "../../common/Pagination/Pagination";
 import PersonCard from "../../common/components/PersonCard";
 import { fetchPeople, fetchSearchPeople } from "../../api/fetchMovieApi";
@@ -21,6 +22,9 @@ export default function PersonList() {
   const [totalPages, setTotalPages] = useState(1);
   const [ready, setReady] = useState(false);
 
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
+
   useEffect(() => {
     let cancelled = false;
     setReady(false);
@@ -40,7 +44,7 @@ export default function PersonList() {
   }, [query, page]);
 
   const title = useMemo(
-    () => (query ? `Results for “${query}”` : "Popular People"),
+    () => (query ? `Results for "${query}"` : "Popular People"),
     [query]
   );
 
@@ -56,12 +60,20 @@ export default function PersonList() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const showLoader = !ready || isTyping || isSearching;
+  const loaderDelay = isTyping ? 0 : 1000;
+
   return (
     <Container>
       <MainHeader>{title}</MainHeader>
 
       <main>
-        <Loader ready={ready} delayMs={1000}>
+        <Loader
+          ready={!showLoader}
+          delayMs={loaderDelay}
+          isTyping={isTyping}
+          showTypingIndicator={true}
+        >
           {hasResults ? (
             <>
               <GridSection>

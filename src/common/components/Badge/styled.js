@@ -9,8 +9,8 @@ export const Badges = styled.div`
 
 export const Badge = styled.span`
     display: inline-block;
-    background: #e4e6f0;
-    color: ${({ theme }) => theme.color.black};
+    background: ${({ theme }) => theme.color.grey};
+    color: ${({ theme }) => theme.color.textPrimary};
     border-radius: ${({ theme }) => theme.radii.sm};
     font-size: ${({ theme }) => theme.typography.badge.size};
     line-height: ${({ theme }) => theme.typography.badge.lineHeight};

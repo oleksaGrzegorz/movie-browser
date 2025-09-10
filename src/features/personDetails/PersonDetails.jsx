@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../../api/fetchMovieApi";
 import SectionTitle from "../../common/components/SectionTitle";
 import { MoviesGrid } from "../../common/components/Grids";
@@ -39,6 +40,9 @@ export default function PersonDetails() {
   const [genresMap, setGenresMap] = useState({});
   const [ready, setReady] = useState(false);
 
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
+
   useEffect(() => {
     let off = false;
     (async () => {
@@ -76,20 +80,25 @@ export default function PersonDetails() {
     };
   }, [id]);
 
-  const mapMovie = (m, roleKey) => ({
-    id: m.id,
-    title: m.title || m.original_title,
-    year: m.release_date ? new Date(m.release_date).getFullYear() : undefined,
-    subtitle: m[roleKey] || undefined,
-    posterUrl: tmdb(m.poster_path),
-    genres: Array.isArray(m.genre_ids)
-      ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
-      : [],
-    voteAverage: Number.isFinite(m.vote_average)
-      ? m.vote_average.toFixed(1).replace(".", ",")
-      : undefined,
-    voteCount: m.vote_count,
-  });
+  const mapMovie = (m, roleKey) => {
+    const voteCount = Number.isFinite(m.vote_count) ? m.vote_count : 0;
+    const avgNum = Number(m.vote_average);
+    const hasVotes = voteCount > 0 && Number.isFinite(avgNum) && avgNum > 0;
+    const voteAverage = hasVotes ? avgNum.toFixed(1).replace(".", ",") : null;
+
+    return {
+      id: m.id,
+      title: m.title || m.original_title,
+      year: m.release_date ? new Date(m.release_date).getFullYear() : undefined,
+      subtitle: m[roleKey] || undefined,
+      posterUrl: tmdb(m.poster_path),
+      genres: Array.isArray(m.genre_ids)
+        ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
+        : [],
+      voteAverage,
+      voteCount,
+    };
+  };
 
   const castClean = useMemo(
     () => (credits.cast || []).filter((m) => m?.id).map((m) => mapMovie(m, "character")),
@@ -103,9 +112,17 @@ export default function PersonDetails() {
   const castCount = castClean.length;
   const crewCount = crewClean.length;
 
+  const showLoader = !ready || isTyping || isSearching;
+  const loaderDelay = isTyping ? 0 : 1000;
+
   return (
     <Container>
-      <Loader ready={ready} delayMs={1000}>
+      <Loader
+        ready={!showLoader}
+        delayMs={loaderDelay}
+        isTyping={isTyping}
+        showTypingIndicator={false}
+      >
         {details && (
           <>
             <HeaderCard>
@@ -139,7 +156,7 @@ export default function PersonDetails() {
 
             {castCount > 0 && (
               <>
-                <SectionTitle>Movies – cast ({castCount})</SectionTitle>
+                <SectionTitle>Movies — cast ({castCount})</SectionTitle>
                 <MoviesGrid>
                   {castClean.map((m) => (
                     <MovieCard
@@ -161,7 +178,7 @@ export default function PersonDetails() {
 
             {crewCount > 0 && (
               <>
-                <SectionTitle>Movies – crew ({crewCount})</SectionTitle>
+                <SectionTitle>Movies — crew ({crewCount})</SectionTitle>
                 <MoviesGrid>
                   {crewClean.map((m) => (
                     <MovieCard

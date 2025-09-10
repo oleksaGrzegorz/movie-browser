@@ -23,6 +23,7 @@ import {
   searchPeople,
   clearMoviesResults,
   clearPeopleResults,
+  setSearchStatus,
 } from "../../store/searchSlice";
 
 const Navigation = () => {
@@ -32,31 +33,35 @@ const Navigation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const isPeopleTab = pathname.includes("/people");
-  const placeholder = isPeopleTab
-    ? "Search for people..."
-    : "Search for movies...";
+  const placeholder = isPeopleTab ? "Search for people..." : "Search for movies...";
 
   const [input, setInput] = useState("");
 
   const debounceRef = useRef(
-    debounce((query, isPeople) => {
-      const trimmed = query.trim();
+    debounce((rawQuery, isPeople) => {
+      const normalized = rawQuery.replace(/\s{2,}/g, " ");
+      const isEmpty = normalized.length === 0 || normalized.trim().length === 0;
+
       if (isPeople) {
-        if (!trimmed) {
+        if (isEmpty) {
           dispatch(clearPeopleResults());
+          dispatch(setSearchStatus({ isTyping: false, isSearching: false }));
           return;
         }
-        dispatch(setPeopleQuery(trimmed));
-        dispatch(searchPeople({ query: trimmed, page: 1 }));
-        navigate("/people?search=" + encodeURIComponent(trimmed));
+        dispatch(setPeopleQuery(normalized));
+        dispatch(setSearchStatus({ isTyping: false, isSearching: true }));
+        dispatch(searchPeople({ query: normalized, page: 1 }));
+        navigate("/people?search=" + encodeURIComponent(normalized), { replace: true });
       } else {
-        if (!trimmed) {
+        if (isEmpty) {
           dispatch(clearMoviesResults());
+          dispatch(setSearchStatus({ isTyping: false, isSearching: false }));
           return;
         }
-        dispatch(setMoviesQuery(trimmed));
-        dispatch(searchMovies({ query: trimmed, page: 1 }));
-        navigate("/movies?search=" + encodeURIComponent(trimmed));
+        dispatch(setMoviesQuery(normalized));
+        dispatch(setSearchStatus({ isTyping: false, isSearching: true }));
+        dispatch(searchMovies({ query: normalized, page: 1 }));
+        navigate("/movies?search=" + encodeURIComponent(normalized), { replace: true });
       }
     }, 500)
   );
@@ -71,6 +76,7 @@ const Navigation = () => {
       setSearchParams({});
     }
 
+    dispatch(setSearchStatus({ isTyping: true, isSearching: false }));
     debounceRef.current(value, isPeopleTab);
   };
 
@@ -78,12 +84,13 @@ const Navigation = () => {
     const queryFromUrl = searchParams.get("search") || "";
     setInput(queryFromUrl);
 
-    if (!queryFromUrl) {
+    if (queryFromUrl === "") {
       if (isPeopleTab) {
         dispatch(clearPeopleResults());
       } else {
         dispatch(clearMoviesResults());
       }
+      dispatch(setSearchStatus({ isTyping: false, isSearching: false }));
     }
   }, [isPeopleTab, dispatch, searchParams]);
 

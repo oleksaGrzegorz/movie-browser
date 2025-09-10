@@ -1,25 +1,61 @@
 import { useEffect, useRef, useState } from "react";
-import { GateWrap, GateInner, Spinner, FadeSlideIn } from "./styled";
+import { useLocation } from "react-router-dom";
+import { GateWrap, GateInner, Spinner, FadeSlideIn, TypingIndicator } from "./styled";
 
-export default function Loader({ ready, delayMs = 2000, children }) {
+export default function Loader({
+    ready,
+    delayMs = 1000,
+    children,
+    isTyping = false,
+    showTypingIndicator = false
+}) {
     const [waited, setWaited] = useState(false);
     const [show, setShow] = useState(false);
-    const t = useRef(null);
+    const timeoutRef = useRef(null);
+    const location = useLocation();
+
+    const isPeopleTab = location.pathname.includes("/people");
 
     useEffect(() => {
-        t.current = setTimeout(() => setWaited(true), delayMs);
-        return () => clearTimeout(t.current);
-    }, [delayMs]);
+        if (!ready) {
+            setShow(false);
+            setWaited(false);
+        }
+    }, [ready]);
 
     useEffect(() => {
-        if (ready && waited) setShow(true);
+        timeoutRef.current = setTimeout(() => {
+            setWaited(true);
+        }, delayMs);
+
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [delayMs, ready]);
+
+    useEffect(() => {
+        if (ready && waited) {
+            setShow(true);
+        }
     }, [ready, waited]);
+
+    const getLoadingText = () => {
+        if (isTyping && showTypingIndicator) {
+            return isPeopleTab ? "Searching people..." : "Searching movies...";
+        }
+        return "Loading...";
+    };
 
     if (!show) {
         return (
             <GateWrap>
                 <GateInner>
-                    <Spinner />
+                    <Spinner $bounce={isTyping} />
+                    <TypingIndicator>
+                        {getLoadingText()}
+                    </TypingIndicator>
                 </GateInner>
             </GateWrap>
         );

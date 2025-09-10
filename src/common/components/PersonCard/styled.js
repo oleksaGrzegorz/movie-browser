@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PersonTile = styled.article`
-    background: ${({ theme }) => theme.color.white};
+    background: ${({ theme }) => theme.color.surface};
     border-radius: ${({ theme }) => theme.radii.sm};
     box-shadow: ${({ theme }) => theme.shadows.card};
 
@@ -14,8 +14,7 @@ export const PersonTile = styled.article`
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: ${({ theme }) =>
-            theme.shadows?.soft ?? "0 1px 2px rgba(0,0,0,0.08)"};
+        box-shadow: ${({ theme }) => theme.shadows.soft};
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
@@ -40,7 +39,7 @@ export const Body = styled.div`
 
 export const Name = styled.h3`
     margin: 0;
-    color: ${({ theme }) => theme.color.black};
+    color: ${({ theme }) => theme.color.textPrimary};
     font-weight: 600;
     font-size: 22px;
     line-height: 130%;
@@ -53,7 +52,7 @@ export const Name = styled.h3`
 `;
 
 export const Subtitle = styled.div`
-    color: ${({ theme }) => theme.color.darkerGrey};
+    color: ${({ theme }) => theme.color.textSecondary};
     font-size: 18px;
     line-height: 150%;
     text-align: center;
