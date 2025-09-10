@@ -25,7 +25,7 @@ const tmdb = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
 const formatDate = (iso) => {
-  if (!iso) return "—";
+  if (!iso) return "Unknown";
   const d = new Date(iso);
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -147,7 +147,7 @@ export default function PersonDetails() {
 
                 <Row>
                   <Label>Place of birth:</Label>
-                  <Value className="stack-on-mobile">{details.place_of_birth || "—"}</Value>
+                  <Value className="stack-on-mobile">{details.place_of_birth || "Unknown"}</Value>
                 </Row>
               </Info>
 

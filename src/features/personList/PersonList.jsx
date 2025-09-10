@@ -43,12 +43,16 @@ export default function PersonList() {
     };
   }, [query, page]);
 
-  const title = useMemo(
-    () => (query ? `Results for "${query}"` : "Popular People"),
-    [query]
-  );
-
   const hasResults = people.length > 0;
+
+  const title = useMemo(
+    () => {
+      if (!query) return "Popular People";
+      if (hasResults) return `Results for "${query}"`;
+      return `Sorry, there are no results for "${query}"`;
+    },
+    [query, hasResults]
+  );
 
   const handlePageChange = (nextPage) => {
     setSearchParams((prev) => {

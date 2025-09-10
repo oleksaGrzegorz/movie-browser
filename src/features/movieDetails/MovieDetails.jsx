@@ -9,6 +9,7 @@ import { PosterImage } from "../../common/components/Poster";
 import Loader from "../../common/Loader/Loader";
 import StarIcon from "../../images/star.svg";
 import ProfilePlaceholder from "../../images/profile.svg";
+import VideoPlaceholder from "../../images/video.svg";
 import { Badge } from "../../common/components/Badge";
 import {
   Container,
@@ -44,7 +45,7 @@ const tmdb = (path, size = "w780") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
 const formatDate = (iso) => {
-  if (!iso) return "—";
+  if (!iso) return "Unknown";
   const d = new Date(iso);
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -105,7 +106,7 @@ export default function MovieDetails() {
     (details?.production_countries || [])
       .map((c) => c.name)
       .filter(Boolean)
-      .join(", ") || "—";
+      .join(", ") || "Unknown";
 
   return (
     <Loader
@@ -137,7 +138,7 @@ export default function MovieDetails() {
                 <PosterImage
                   src={tmdb(details.poster_path, "w342")}
                   alt={details.title || details.original_title}
-                  fallback={null}
+                  fallback={VideoPlaceholder}
                   ratio="2/3"
                   size="small"
                 />
@@ -149,7 +150,7 @@ export default function MovieDetails() {
                 <Year>
                   {details.release_date
                     ? new Date(details.release_date).getFullYear()
-                    : "—"}
+                    : "Unknown"}
                 </Year>
 
                 <Meta>

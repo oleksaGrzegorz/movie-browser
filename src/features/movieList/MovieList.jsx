@@ -106,7 +106,14 @@ export default function MovieList() {
   if (error) return <ErrorPage />;
 
   const hasResults = movies && movies.length > 0;
-  const headerText = query ? `Results for "${query}"` : "Popular Movies";
+
+  const getHeaderText = () => {
+    if (!query) return "Popular Movies";
+    if (hasResults) return `Results for "${query}"`;
+    return `Sorry, there are no results for "${query}"`;
+  };
+
+  const headerText = getHeaderText();
   const loaderDelay = isTyping ? 0 : 1000;
   const loaderReady = fetchReady && !isTyping && !isSearching;
 
