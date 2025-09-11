@@ -48,7 +48,7 @@ export default function PersonList() {
   const title = useMemo(
     () => {
       if (!query) return "Popular People";
-      if (hasResults) return `Results for "${query}"`;
+      if (hasResults) return `Search results for "${query}"`;
       return `Sorry, there are no results for "${query}"`;
     },
     [query, hasResults]
