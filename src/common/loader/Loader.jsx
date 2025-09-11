@@ -41,21 +41,11 @@ export default function Loader({
         }
     }, [ready, waited]);
 
-    const getLoadingText = () => {
-        if (isTyping && showTypingIndicator) {
-            return isPeopleTab ? "Searching people..." : "Searching movies...";
-        }
-        return "Loading...";
-    };
-
     if (!show) {
         return (
             <GateWrap>
                 <GateInner>
                     <Spinner $bounce={isTyping} />
-                    <TypingIndicator>
-                        {getLoadingText()}
-                    </TypingIndicator>
                 </GateInner>
             </GateWrap>
         );
