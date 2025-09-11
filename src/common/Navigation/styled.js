@@ -93,13 +93,13 @@ export const Menu = styled.nav`
             `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
             theme,
         }) => `${theme.breakpoint.laptop - 1}px`}) {
-        margin-left: 30px;
+        margin-left: auto;
+        order: 2;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        margin-left: 0;
-        order: 2;
         margin-left: auto;
+        order: 2;
     }
 `;
 
