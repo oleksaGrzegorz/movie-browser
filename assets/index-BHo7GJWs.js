@@ -139,13 +139,13 @@ Please change the parent <Route path="${A}"> to <Route path="${A==="/"?"*":`${A}
     margin-left: 50px;
 
     @media (min-width: ${({theme:n})=>`${n.breakpoint.mobileL+1}px`}) and (max-width: ${({theme:n})=>`${n.breakpoint.laptop-1}px`}) {
-        margin-left: 30px;
+        margin-left: auto;
+        order: 2;
     }
 
     @media (max-width: ${({theme:n})=>n.breakpoint.mobileL}px) {
-        margin-left: 0;
-        order: 2;
         margin-left: auto;
+        order: 2;
     }
 `,Kp=G(Um)`
     color: ${({theme:n})=>n.color.surface};
