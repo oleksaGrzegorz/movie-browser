@@ -58,9 +58,19 @@ export default function MovieDetails() {
   const [details, setDetails] = useState(null);
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 667);
 
   const searchState = useSelector((state) => state.search);
   const { isTyping, isSearching } = searchState;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 667);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -117,20 +127,24 @@ export default function MovieDetails() {
     >
       {details && (
         <>
-          <HeroShell>
-            <Hero>
-              {heroBg && <HeroBg style={{ backgroundImage: `url(${heroBg})` }} />}
-              <HeroContent>
-                <HeroTitle>{details.title || details.original_title}</HeroTitle>
-                <HeroRating>
-                  <HeroStar src={StarIcon} alt="" />
-                  <HeroValue>{rating || "No votes yet"}</HeroValue>
-                  {rating && <HeroSlashTen>/10</HeroSlashTen>}
-                </HeroRating>
-                {hasVotes && <HeroVotes>{details.vote_count} votes</HeroVotes>}
-              </HeroContent>
-            </Hero>
-          </HeroShell>
+          {heroBg && (
+            <HeroShell>
+              <Hero>
+                <HeroBg style={{ backgroundImage: `url(${heroBg})` }} />
+                <HeroContent>
+                  <HeroTitle>{details.title || details.original_title}</HeroTitle>
+                  <div className="hero-rating-container">
+                    <HeroRating>
+                      <HeroStar src={StarIcon} alt="" />
+                      <HeroValue>{rating || "No votes yet"}</HeroValue>
+                      {rating && <HeroSlashTen>/10</HeroSlashTen>}
+                    </HeroRating>
+                    {hasVotes && <HeroVotes>{details.vote_count} votes</HeroVotes>}
+                  </div>
+                </HeroContent>
+              </Hero>
+            </HeroShell>
+          )}
 
           <Container>
             <DetailsCard>
@@ -183,8 +197,16 @@ export default function MovieDetails() {
                   )}
                 </RatingRow>
 
-                {details.overview && <Overview>{details.overview}</Overview>}
+                {!isMobile && details.overview && (
+                  <Overview>{details.overview}</Overview>
+                )}
               </InfoCol>
+
+              {isMobile && details.overview && (
+                <Overview style={{ gridColumn: '1 / -1', marginTop: '16px' }}>
+                  {details.overview}
+                </Overview>
+              )}
             </DetailsCard>
 
             {credits.cast?.length > 0 && (

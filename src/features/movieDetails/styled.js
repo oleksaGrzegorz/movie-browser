@@ -70,6 +70,14 @@ export const HeroContent = styled.div`
         padding: 20px;
         max-width: 100%;
     }
+
+    .hero-rating-container {
+        @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
 `;
 
 export const HeroTitle = styled.h1`
@@ -93,6 +101,10 @@ export const HeroRating = styled.div`
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        margin-bottom: 0;
+    }
 `;
 
 export const HeroStar = styled.img`
@@ -159,6 +171,10 @@ export const DetailsCard = styled.section`
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         grid-template-columns: 114px 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "poster info"
+            "overview overview";
         gap: 16px;
         padding: 16px;
         margin: 12px 0 0 0;
@@ -171,6 +187,7 @@ export const PosterCol = styled.div`
     overflow: hidden;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        grid-area: poster;
         width: 114px;
         height: 169px;
         aspect-ratio: auto;
@@ -182,6 +199,10 @@ export const InfoCol = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        grid-area: info;
+    }
 `;
 
 export const Title = styled.h2`
@@ -259,6 +280,12 @@ export const RatingRow = styled.div`
     align-items: center;
     gap: 8px;
     margin-bottom: 10px;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        flex-wrap: nowrap;
+        gap: 4px;
+        margin-bottom: 0;
+    }
 `;
 
 export const Star = styled.img`
@@ -302,6 +329,7 @@ export const Votes = styled.span`
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         font-size: 13px;
         line-height: 130%;
+        margin-left: 0;
     }
 `;
 
@@ -311,8 +339,14 @@ export const Overview = styled.p`
     font-size: 20px;
     line-height: 160%;
 
+    @media (min-width: ${({ theme }) => theme.breakpoint.mobileL + 1}px) {
+        margin-top: 12px;
+    }
+
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        grid-area: overview;
         font-size: 14px;
         line-height: 160%;
+        margin-top: 8px;
     }
 `;
