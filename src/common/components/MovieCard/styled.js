@@ -107,10 +107,12 @@ export const Badge = styled.span`
 `;
 
 export const MetaBlock = styled.div`
-    margin-top: 16px;
+    margin-top: auto;
+    padding-top: 10px;
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         margin-top: 8px;
+        padding-top: 0;
     }
 `;
 
