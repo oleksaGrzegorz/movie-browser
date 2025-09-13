@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const Container = styled.div`
     max-width: 1368px;
@@ -12,270 +11,159 @@ export const Container = styled.div`
 export const HeaderCard = styled.section`
     display: grid;
     grid-template-columns: 400px 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
         "avatar info"
         "avatar bio";
-    gap: 32px;
-    background: ${({ theme }) => theme.color.surface};
+    gap: 40px;
+    margin: 80px 0 56px 0;
+    background: ${({ theme }) => theme.color.white};
+    padding: 40px;
     border-radius: ${({ theme }) => theme.radii.sm};
-    box-shadow: ${({ theme }) => theme.shadows.card};
-    padding: 36px;
-    margin: 48px 0 32px;
+    align-items: start;
+    justify-items: start;
+    align-content: start;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        grid-template-columns: 320px 1fr;
+        gap: 24px;
+        margin: 64px 0 40px 0;
+        padding: 32px;
+    }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         grid-template-columns: 114px 1fr;
+        grid-template-rows: auto auto;
         grid-template-areas:
             "avatar info"
             "bio bio";
         gap: 16px;
+        margin: 24px 0;
         padding: 16px;
-        margin: 16px 0 24px;
     }
 `;
 
 export const Avatar = styled.div`
     grid-area: avatar;
     width: 100%;
-    aspect-ratio: 2/3;
-    border-radius: ${({ theme }) => theme.radii.sm};
-    overflow: hidden;
-    background: ${({ theme }) => theme.color.placeholder};
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 400px;
+    align-self: start;
+    justify-self: start;
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
+        max-width: 320px;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        width: 114px;
-        height: 169px;
-        aspect-ratio: auto;
+        max-width: 114px;
     }
 `;
 
 export const Info = styled.div`
     grid-area: info;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    align-items: start;
+    justify-items: start;
+    min-height: 0;
 `;
 
 export const Name = styled.h1`
+    margin: 0 0 8px 0;
     font-size: ${({ theme }) => theme.typography.h1.size};
     font-weight: ${({ theme }) => theme.typography.h1.weight};
     line-height: ${({ theme }) => theme.typography.h1.lineHeight};
-    margin: 0 0 12px;
+    color: ${({ theme }) => theme.color.textPrimary};
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 24px;
+        font-size: 14px;
+        line-height: 120%;
     }
 `;
 
-export const MetaRow = styled.p`
-    margin: 0 0 4px 0;
-    display: flex;
-    gap: 6px;
-    font-size: 18px;
-`;
+export const Row = styled.div`
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: start;
+    gap: 8px;
 
-export const MetaRowStackOnMobile = styled(MetaRow)`
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        flex-direction: column;
-        gap: 2px;
+        grid-template-columns: 1fr;
+
+        &.inline {
+            grid-template-columns: auto 1fr;
+            align-items: baseline;
+            column-gap: 8px;
+        }
     }
-`;
 
-export const LabelDesktop = styled.span`
-    color: ${({ theme }) => theme.color.textSecondary};
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+    .mobile-only {
         display: none;
     }
-`;
 
-export const LabelMobile = styled.span`
-    color: ${({ theme }) => theme.color.textSecondary};
-    display: none;
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        display: inline;
-        font-size: 12px;
+        .desktop-only {
+            display: none;
+        }
+        .mobile-only {
+            display: inline;
+        }
     }
 `;
 
-export const MetaValue = styled.span`
-    color: ${({ theme }) => theme.color.textPrimary};
+export const Label = styled.span`
+    color: ${({ theme }) => theme.color.darkerGrey};
+    font-size: ${({ theme }) => theme.typography.label.size};
+    line-height: ${({ theme }) => theme.typography.label.lineHeight};
+    font-weight: ${({ theme }) => theme.typography.label.weight};
+
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 12px;
+        font-size: ${({ theme }) => theme.typography.label.mobileSize};
+        line-height: ${({ theme }) => theme.typography.label.mobileLineHeight};
+    }
+`;
+
+export const Value = styled.span`
+    color: ${({ theme }) => theme.color.textPrimary};
+    font-size: ${({ theme }) => theme.typography.value.size};
+    line-height: ${({ theme }) => theme.typography.value.lineHeight};
+    font-weight: ${({ theme }) => theme.typography.value.weight};
+
+    &.stack-on-mobile {
+        display: inline;
+    }
+    &.nowrap {
+        white-space: nowrap;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        font-size: ${({ theme }) => theme.typography.value.mobileSize};
+        line-height: ${({ theme }) => theme.typography.value.mobileLineHeight};
+
+        &.stack-on-mobile {
+            display: block;
+            margin-top: -2px;
+        }
     }
 `;
 
 export const Bio = styled.p`
     grid-area: bio;
     margin: 0;
-    line-height: 150%;
-    font-size: 20px;
+    font-size: ${({ theme }) => theme.typography.leadParagraph.size};
+    line-height: ${({ theme }) => theme.typography.leadParagraph.lineHeight};
+    color: ${({ theme }) => theme.color.black};
+    place-self: start stretch;
+    min-height: 0;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.laptop}px) {
+        font-size: 18px;
+        line-height: 160%;
+    }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         font-size: 14px;
+        line-height: 160%;
     }
-`;
-
-export const SectionTitle = styled.h2`
-    margin: 56px 0 16px;
-    font-weight: 600;
-
-    @media (min-width: 992px) {
-        font-size: 36px;
-        line-height: 120%;
-    }
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 20px;
-        margin: 16px 0 12px;
-    }
-`;
-
-export const MoviesGrid = styled.ul`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 32px;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.laptop - 1}px) {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    @media (max-width: ${({ theme }) => theme.breakpoint.tablet}px) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-`;
-
-export const MovieCard = styled.li`
-    background: ${({ theme }) => theme.color.surface};
-    border-radius: ${({ theme }) => theme.radii.sm};
-    box-shadow: ${({ theme }) => theme.shadows.card};
-    overflow: hidden;
-    color: inherit;
-    padding: 16px;
-    transition: 0.2s;
-
-    &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
-export const CardLink = styled(Link)`
-    display: block;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        display: grid;
-        grid-template-columns: 114px 1fr;
-        gap: 16px;
-        align-items: start;
-    }
-`;
-
-export const Poster = styled.img`
-    width: 100%;
-    aspect-ratio: 2/3;
-    display: block;
-    object-fit: cover;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        width: 114px;
-        height: 169px;
-        aspect-ratio: auto;
-        border-radius: ${({ theme }) => theme.radii.sm};
-    }
-`;
-
-export const PosterPlaceholder = styled.div`
-    width: 100%;
-    aspect-ratio: 2/3;
-    background: ${({ theme }) => theme.color.placeholder};
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        width: 114px;
-        height: 169px;
-        aspect-ratio: auto;
-        border-radius: ${({ theme }) => theme.radii.sm};
-    }
-`;
-
-export const CardContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 12px 12px 16px;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        padding: 0;
-    }
-`;
-
-export const CardTitle = styled.h3`
-    font-size: 22px;
-    line-height: 130%;
-    font-weight: 500;
-    margin: 0 0 4px;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 16px;
-    }
-`;
-
-export const CardMeta = styled.p`
-    margin: 0 0 8px;
-    color: ${({ theme }) => theme.color.textSecondary};
-    font-size: 16px;
-    line-height: 140%;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 13px;
-    }
-`;
-
-export const Genre = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 8px 0 16px;
-`;
-
-export const GenreButton = styled.span`
-    background-color: #e4e6f0;
-    border-radius: 5px;
-    padding: 6px 10px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 10px;
-        padding: 5px 7px;
-    }
-`;
-
-export const VoteRow = styled.p`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: auto 0 0;
-
-    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        font-size: 13px;
-    }
-`;
-
-export const VoteAverage = styled.span`
-    font-weight: 600;
-`;
-
-export const VoteInfo = styled.span`
-    color: ${({ theme }) => theme.color.textSecondary};
 `;

@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 
 export const StyledNav = styled.nav`
-    background: ${({ theme }) => theme.color.black};
-    color: ${({ theme }) => theme.color.white};
+    background: ${({ theme }) => theme.color.textPrimary};
+    color: ${({ theme }) => theme.color.surface};
     width: 100%;
     min-height: 94px;
     display: flex;
@@ -14,8 +14,10 @@ export const StyledNav = styled.nav`
         align-items: flex-start;
     }
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         min-height: 150px;
         align-items: flex-start;
     }
@@ -35,10 +37,13 @@ export const Container = styled.div`
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
         padding-top: 12px;
         row-gap: 12px;
+        align-items: flex-start;
     }
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         padding-top: 18px;
         row-gap: 6px;
     }
@@ -50,6 +55,12 @@ export const Brand = styled(Link)`
     gap: 10px;
     text-decoration: none;
     color: inherit;
+    flex-shrink: 0;
+
+    @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
+        order: 1;
+        align-self: center;
+    }
 `;
 
 export const LogoIMG = styled.img`
@@ -78,18 +89,22 @@ export const Menu = styled.nav`
     gap: 8px;
     margin-left: 50px;
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
-        margin-left: 30px;
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
+        margin-left: auto;
+        order: 2;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
-        margin-left: 10px;
+        margin-left: auto;
+        order: 2;
     }
 `;
 
 export const StyledNavLink = styled(NavLink)`
-    color: ${({ theme }) => theme.color.white};
+    color: ${({ theme }) => theme.color.surface};
     text-decoration: none;
     text-transform: uppercase;
     font-size: 14px;
@@ -97,12 +112,13 @@ export const StyledNavLink = styled(NavLink)`
     border: 2px solid transparent;
     border-radius: 24px;
     transition: 0.2s;
+    white-space: nowrap;
 
     &.active {
-        border-color: ${({ theme }) => theme.color.white};
+        border-color: ${({ theme }) => theme.color.surface};
     }
     &:hover {
-        border-color: ${({ theme }) => theme.color.white};
+        border-color: ${({ theme }) => theme.color.surface};
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoint.mobileL}px) {
@@ -119,11 +135,14 @@ export const SearchWrapper = styled.div`
     height: 48px;
     margin-left: auto;
 
-    @media (min-width: ${({ theme }) => `${theme.breakpoint.mobileL + 1}px`}) 
-           and (max-width: ${({ theme }) => `${theme.breakpoint.laptop - 1}px`}) {
+    @media (min-width: ${({ theme }) =>
+            `${theme.breakpoint.mobileL + 1}px`}) and (max-width: ${({
+            theme,
+        }) => `${theme.breakpoint.laptop - 1}px`}) {
         order: 3;
         flex: 1 1 100%;
         width: 100%;
+        margin-left: 0;
         margin-top: 16px;
     }
 
@@ -131,6 +150,7 @@ export const SearchWrapper = styled.div`
         order: 3;
         flex: 1 1 100%;
         width: 100%;
+        margin-left: 0;
         margin-top: 12px;
     }
 `;
@@ -141,8 +161,8 @@ export const Browser = styled.input`
     border: none;
     border-radius: 33px;
     padding: 0 16px 0 44px;
-    background: ${({ theme }) => theme.color.white};
-    color: ${({ theme }) => theme.color.black};
+    background: ${({ theme }) => theme.color.surface};
+    color: ${({ theme }) => theme.color.textPrimary};
     font-size: 14px;
 
     &:focus {
@@ -150,7 +170,7 @@ export const Browser = styled.input`
     }
 
     &::placeholder {
-        color: ${({ theme }) => theme.color.darkerGrey};
+        color: ${({ theme }) => theme.color.textSecondary};
         opacity: 1;
     }
 

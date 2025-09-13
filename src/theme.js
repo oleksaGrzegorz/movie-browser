@@ -2,7 +2,7 @@ export const theme = {
     color: {
         bgLightGrey: "#F5F5FA",
         grey: "#E4E6F0",
-        black: "#18181B",
+        black: "#000000",
         darkerGrey: "#7E839A",
         white: "#ffffff",
         blue: "#0044CC",
@@ -45,7 +45,61 @@ export const theme = {
         paragraph: { size: "18px", weight: 400, lineHeight: "120%" },
         leadParagraph: { size: "20px", weight: 400, lineHeight: "160%" },
         caption: { size: "16px", weight: 400, lineHeight: "150%" },
-        captionSemibold: { size: "16px", weight: 600, lineHeight: "150%" },
+        captionSemibold: { size: "22px", weight: 600, lineHeight: "150%" },
+
+        movieTitle: {
+            size: "22px",
+            lineHeight: "130%",
+            weight: 600,
+            mobileSize: "16px",
+            mobileLineHeight: "130%",
+        },
+
+        movieMeta: {
+            size: "16px",
+            lineHeight: "150%",
+            mobileSize: "13px",
+            mobileLineHeight: "130%",
+        },
+
+        ratingValue: {
+            size: "16px",
+            lineHeight: "160%",
+            weight: 600,
+            mobileSize: "13px",
+            mobileLineHeight: "160%",
+        },
+
+        ratingVotes: {
+            size: "16px",
+            lineHeight: "150%",
+            mobileSize: "13px",
+            mobileLineHeight: "150%",
+        },
+
+        label: {
+            size: "18px",
+            lineHeight: "120%",
+            weight: 400,
+            mobileSize: "12px",
+            mobileLineHeight: "120%",
+        },
+
+        value: {
+            size: "18px",
+            lineHeight: "120%",
+            weight: 400,
+            mobileSize: "12px",
+            mobileLineHeight: "120%",
+        },
+
+        badge: {
+            size: "14px",
+            lineHeight: "140%",
+            mobileSize: "10px",
+            mobileLineHeight: "110%",
+        },
+
         tag: { size: "14px", weight: 400, lineHeight: "140%" },
         tagSemibold: { size: "14px", weight: 600, lineHeight: "140%" },
     },
@@ -59,5 +113,18 @@ export const theme = {
     shadows: {
         card: "0px 4px 12px 0px rgba(186,199,213,0.5)",
         soft: "0 1px 2px rgba(0,0,0,0.08)",
+    },
+
+    badge: {
+        size: "14px",
+        lineHeight: "140%",
+        mobileSize: "10px",
+        mobileLineHeight: "110%",
+    },
+
+    transitions: {
+        default: "all 0.2s ease",
+        bounce: "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        smooth: "all 0.15s ease-out",
     },
 };

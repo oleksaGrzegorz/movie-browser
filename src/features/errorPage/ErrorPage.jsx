@@ -1,10 +1,10 @@
 import danger from "../../images/danger.svg";
-import { ImageWrapper, ErrorImage, ErrorTitle, ErrorWrapper, ErrorText, TextBreaker, HomeLink } from "./styled";
+import { ErrorWrapper, ImageWrapper, ErrorImage, ErrorTitle, ErrorText, TextBreaker, HomeLink } from "./styled";
 
 const ErrorPage = () => (
   <ErrorWrapper>
     <ImageWrapper>
-      <ErrorImage src={danger} alt="errorImage" />
+      <ErrorImage src={danger} alt="Error occurred" />
     </ImageWrapper>
     <ErrorTitle>
       Ooops! Something went wrong...

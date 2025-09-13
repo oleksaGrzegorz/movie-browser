@@ -1,82 +1,45 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
-import Loader from "../../common/Loader/Loader";
+import { useSelector } from "react-redux";
 import NoResult from "../noResult/noResult";
 import ErrorPage from "../errorPage/ErrorPage";
 import Pagination from "../../common/Pagination/Pagination";
-import StarIcon from "../../images/star.svg";
-import {
-  Container,
-  MainHeader,
-  List,
-  MovieItem,
-  MovieCard,
-  CardLink,
-  Poster,
-  PosterPlaceholder,
-  CardContent,
-  CardTitle,
-  CardMeta,
-  GenreRow,
-  GenreTag,
-  VoteRow,
-  VoteAverage,
-  VoteInfo,
-} from "./styled";
+import MovieCard from "../../common/components/MovieCard";
 import { fetchPopularMovies, fetchGenres, searchMovies } from "../../api/fetchMovieApi";
+import { Container, MainHeader } from "./styled";
+import { MoviesGrid } from "../../common/components/Grids";
+import Loader from "../../common/Loader/Loader";
 
 const poster = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-const getCols = (w) => {
-  if (w <= 667) return 1;
-  if (w <= 900) return 2;
-  if (w <= 1200) return 3;
-  return 4;
-};
-
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const h = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(h);
-  }, [value, delay]);
-  return debouncedValue;
-}
-
 export default function MovieList() {
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const page = Math.max(1, Number(searchParams.get("page") || 1));
-  const query = searchParams.get("search") || "";
-  const debouncedQuery = useDebounce(query, 500);
+  const query = (searchParams.get("search") || "");
   const isMoviesTab = location.pathname.startsWith("/movies");
+
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
 
   const [movies, setMovies] = useState([]);
   const [genresMap, setGenresMap] = useState({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
-  const [width, setWidth] = useState(() => window.innerWidth);
-
-  const cols = useMemo(() => getCols(width), [width]);
-
-  useEffect(() => {
-    const onResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const [fetchReady, setFetchReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
         const list = await fetchGenres();
-        if (cancelled) return;
-        const map = {};
-        for (const { id, name } of list) map[id] = name;
-        setGenresMap(map);
+        if (!cancelled && Array.isArray(list)) {
+          const map = {};
+          for (const g of list) map[g.id] = g.name;
+          setGenresMap(map);
+        }
       } catch { }
     })();
     return () => {
@@ -85,7 +48,6 @@ export default function MovieList() {
   }, []);
 
   const prevQueryRef = useRef("");
-
   useEffect(() => {
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
@@ -102,13 +64,12 @@ export default function MovieList() {
 
   useEffect(() => {
     let cancelled = false;
-    let t;
-    setLoading(true);
-
     (async () => {
+      setFetchReady(false);
+      setError(null);
       try {
-        if (isMoviesTab && debouncedQuery.trim()) {
-          const res = await searchMovies({ query: debouncedQuery, page });
+        if (query && isMoviesTab) {
+          const res = await searchMovies({ query, page });
           if (!cancelled) {
             setMovies(res.results || []);
             setTotalPages(Math.min(res.total_pages || 1, 500));
@@ -116,120 +77,98 @@ export default function MovieList() {
         } else if (isMoviesTab) {
           const res = await fetchPopularMovies(page);
           if (!cancelled) {
-            setMovies(res.movies || []);
-            setTotalPages(Math.min(res.totalPages || 1, 500));
+            const list = res.movies || res.results || [];
+            setMovies(list);
+            setTotalPages(Math.min(res.total_pages || res.totalPages || 1, 500));
           }
-        } else {
-          if (!cancelled) setMovies([]);
         }
       } catch (e) {
-        if (!cancelled) setError(e?.message || "Error");
+        if (!cancelled) setError(e || true);
       } finally {
-        if (!cancelled) {
-          t = setTimeout(() => setLoading(false), 1000);
-        }
+        if (!cancelled) setFetchReady(true);
       }
     })();
-
     return () => {
       cancelled = true;
-      if (t) clearTimeout(t);
     };
-  }, [page, debouncedQuery, isMoviesTab]);
+  }, [query, page, isMoviesTab]);
+
+  const handlePageChange = (nextPage) => {
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      p.set("page", String(nextPage));
+      if (query) p.set("search", query);
+      return p;
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   if (error) return <ErrorPage />;
 
-  const hasNoResults = !loading && movies.length === 0 && debouncedQuery;
+  const hasResults = movies && movies.length > 0;
+
+  const getHeaderText = () => {
+    if (!query) return "Popular Movies";
+    if (hasResults) return `Search results for "${query}"`;
+    return `Sorry, there are no results for "${query}"`;
+  };
+
+  const headerText = getHeaderText();
+  const loaderDelay = isTyping ? 0 : 1000;
+  const loaderReady = fetchReady && !isTyping && !isSearching;
 
   return (
     <Container>
-      {!hasNoResults && (
-        <MainHeader>
-          {isMoviesTab &&
-            (debouncedQuery ? `Search results for "${debouncedQuery}"` : "Popular movies")}
-        </MainHeader>
-      )}
+      <MainHeader>{headerText}</MainHeader>
 
-      {loading ? (
-        <Loader full text="Loading..." />
-      ) : hasNoResults ? (
-        <NoResult query={debouncedQuery} />
-      ) : (
-        <>
-          <List style={{ ["--cols"]: cols }}>
-            {movies.map(
-              ({
-                id,
-                poster_path,
-                title,
-                original_title,
-                release_date,
-                genre_ids = [],
-                vote_average,
-                vote_count,
-              }) => {
-                const year = release_date ? new Date(release_date).getFullYear() : "—";
+      <Loader
+        ready={loaderReady}
+        delayMs={loaderDelay}
+        isTyping={isTyping}
+        showTypingIndicator={true}
+      >
+        {hasResults ? (
+          <>
+            <MoviesGrid>
+              {movies.map((m) => {
+                const id = m.id;
+                const title = m.title || m.original_title;
+                const year = m.release_date ? new Date(m.release_date).getFullYear() : undefined;
+                const genres = Array.isArray(m.genre_ids)
+                  ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
+                  : [];
+
+                const voteCount = Number.isFinite(m.vote_count) ? m.vote_count : 0;
+                const avgNum = Number(m.vote_average);
+                const hasVotes = voteCount > 0 && Number.isFinite(avgNum) && avgNum > 0;
+                const voteAverage = hasVotes ? avgNum.toFixed(1).replace(".", ",") : null;
+
                 return (
-                  <MovieItem key={id}>
-                    <MovieCard>
-                      <CardLink to={`/movies/${id}`}>
-                        {poster_path ? (
-                          <Poster
-                            src={poster(poster_path)}
-                            alt={title || original_title || "Movie poster"}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        ) : (
-                          <PosterPlaceholder aria-label="No poster available" role="img" />
-                        )}
-
-                        <CardContent>
-                          <CardTitle>{title || original_title || "—"}</CardTitle>
-                          <CardMeta>{year}</CardMeta>
-
-                          <GenreRow>
-                            {genre_ids.length ? (
-                              genre_ids.slice(0, 3).map((gid) => (
-                                <GenreTag key={gid}>{genresMap[gid]}</GenreTag>
-                              ))
-                            ) : (
-                              <GenreTag as="span">No genres</GenreTag>
-                            )}
-                          </GenreRow>
-
-                          <VoteRow>
-                            <img src={StarIcon} alt="" />
-                            <VoteAverage>
-                              {(vote_average || 0).toFixed(1).replace(".", ",")}
-                            </VoteAverage>
-                            <VoteInfo>{vote_count || 0} votes</VoteInfo>
-                          </VoteRow>
-                        </CardContent>
-                      </CardLink>
-                    </MovieCard>
-                  </MovieItem>
+                  <MovieCard
+                    key={id}
+                    id={id}
+                    title={title}
+                    year={year}
+                    posterUrl={poster(m.poster_path)}
+                    genres={genres}
+                    voteAverage={voteAverage}
+                    voteCount={voteCount}
+                    to={`/movies/${id}`}
+                  />
                 );
-              }
-            )}
-          </List>
+              })}
+            </MoviesGrid>
 
-          {movies.length > 0 && (
             <Pagination
               currentPage={page}
               totalPages={totalPages}
-              onPageChange={(newPage) =>
-                setSearchParams((prev) => {
-                  const params = new URLSearchParams(prev);
-                  params.set("page", String(newPage));
-                  if (query) params.set("search", query);
-                  return params;
-                })
-              }
+              onPageChange={handlePageChange}
             />
-          )}
-        </>
-      )}
+          </>
+        ) : (
+          <NoResult query={query} />
+        )}
+      </Loader>
     </Container>
   );
 }

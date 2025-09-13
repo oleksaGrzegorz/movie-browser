@@ -1,236 +1,205 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../movieList/fetchMovieApi";
+import { useSelector } from "react-redux";
+import { fetchPersonDetails, fetchPersonCredits, fetchGenres } from "../../api/fetchMovieApi";
+import SectionTitle from "../../common/components/SectionTitle";
+import { MoviesGrid } from "../../common/components/Grids";
+import MovieCard from "../../common/components/MovieCard";
+import { PosterImage } from "../../common/components/Poster";
 import Loader from "../../common/Loader/Loader";
+
+import ProfilePlaceholder from "../../images/profile.svg";
 import {
   Container,
   HeaderCard,
   Avatar,
   Info,
   Name,
-  MetaRow,
-  MetaRowStackOnMobile,
-  LabelDesktop,
-  LabelMobile,
-  MetaValue,
+  Row,
+  Label,
+  Value,
   Bio,
-  SectionTitle,
-  MoviesGrid,
-  MovieCard,
-  CardLink,
-  Poster,
-  PosterPlaceholder,
-  CardContent,
-  CardTitle,
-  CardMeta,
-  VoteRow,
-  VoteAverage,
-  VoteInfo,
-  Genre,
-  GenreButton,
 } from "./styled";
-import StarIcon from "../../images/star.svg";
-import ProfilePlaceholder from "../../images/profile.svg";
 
-const poster = (path, size = "w500") =>
+const tmdb = (path, size = "w342") =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
 
-const displayValue = (v) => (v ? v : "—");
+const formatDate = (iso) => {
+  if (!iso) return "Unknown";
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}.${mm}.${yyyy}`;
+};
 
-const PersonDetails = () => {
+export default function PersonDetails() {
   const { id } = useParams();
   const [details, setDetails] = useState(null);
-  const [cast, setCast] = useState([]);
-  const [crew, setCrew] = useState([]);
+  const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [genresMap, setGenresMap] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
+
+  const searchState = useSelector((state) => state.search);
+  const { isTyping, isSearching } = searchState;
 
   useEffect(() => {
+    let off = false;
     (async () => {
-      setLoading(true);
-      const d = await fetchPersonDetails(id);
-      setDetails(d);
-      const credits = await fetchPersonCredits(id);
-      setCast(credits.cast || []);
-      setCrew(credits.crew || []);
-      const genres = await fetchGenres();
-      const map = {};
-      for (const { id: gid, name } of genres) map[gid] = name;
-      setGenresMap(map);
-      setTimeout(() => setLoading(false), 1000);
+      try {
+        const list = await fetchGenres();
+        if (!off && Array.isArray(list)) {
+          const m = {};
+          for (const g of list) m[g.id] = g.name;
+          setGenresMap(m);
+        }
+      } catch { }
     })();
+    return () => {
+      off = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setReady(false);
+      try {
+        const d = await fetchPersonDetails(id);
+        const c = await fetchPersonCredits(id);
+        if (!cancelled) {
+          setDetails(d || null);
+          setCredits({ cast: c?.cast || [], crew: c?.crew || [] });
+        }
+      } finally {
+        if (!cancelled) setReady(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
+  const mapMovie = (m, roleKey) => {
+    const voteCount = Number.isFinite(m.vote_count) ? m.vote_count : 0;
+    const avgNum = Number(m.vote_average);
+    const hasVotes = voteCount > 0 && Number.isFinite(avgNum) && avgNum > 0;
+    const voteAverage = hasVotes ? avgNum.toFixed(1).replace(".", ",") : null;
+
+    return {
+      id: m.id,
+      title: m.title || m.original_title,
+      year: m.release_date ? new Date(m.release_date).getFullYear() : undefined,
+      subtitle: m[roleKey] || undefined,
+      posterUrl: tmdb(m.poster_path),
+      genres: Array.isArray(m.genre_ids)
+        ? m.genre_ids.slice(0, 3).map((gid) => genresMap[gid]).filter(Boolean)
+        : [],
+      voteAverage,
+      voteCount,
+    };
+  };
+
   const castClean = useMemo(
-    () => [...cast].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
-    [cast]
+    () => (credits.cast || []).filter((m) => m?.id).map((m) => mapMovie(m, "character")),
+    [credits.cast, genresMap]
   );
   const crewClean = useMemo(
-    () => [...crew].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)),
-    [crew]
+    () => (credits.crew || []).filter((m) => m?.id).map((m) => mapMovie(m, "job")),
+    [credits.crew, genresMap]
   );
-
-  if (loading) return <Loader full />;
-  if (!details) return <Container />;
 
   const castCount = castClean.length;
   const crewCount = crewClean.length;
 
+  const showLoader = !ready || isTyping || isSearching;
+  const loaderDelay = isTyping ? 0 : 1000;
+
   return (
     <Container>
-      <HeaderCard>
-        <Avatar>
-          {details.profile_path ? (
-            <img
-              src={poster(details.profile_path)}
-              alt={details.name || "Profile photo"}
-              loading="lazy"
-              decoding="async"
-              width={400}
-              height={600}
-            />
-          ) : (
-            <img
-              src={ProfilePlaceholder}
-              alt={details.name || "Profile photo"}
-              loading="lazy"
-              decoding="async"
-              width={400}
-              height={600}
-            />
-          )}
-        </Avatar>
+      <Loader
+        ready={!showLoader}
+        delayMs={loaderDelay}
+        isTyping={isTyping}
+        showTypingIndicator={false}
+      >
+        {details && (
+          <>
+            <HeaderCard>
+              <Avatar>
+                <PosterImage
+                  src={tmdb(details.profile_path)}
+                  alt={details.name || "Profile photo"}
+                  fallback={ProfilePlaceholder}
+                  ratio="2/3"
+                  size="large"
+                />
+              </Avatar>
 
-        <Info>
-          <Name>{details.name}</Name>
+              <Info>
+                <Name>{details.name}</Name>
 
-          <MetaRow>
-            <LabelDesktop>Date of birth:</LabelDesktop>
-            <LabelMobile>Birth:</LabelMobile>
-            <MetaValue>{displayValue(details.birthday)}</MetaValue>
-          </MetaRow>
+                <Row className="inline">
+                  <Label className="desktop-only">Date of birth:</Label>
+                  <Label className="mobile-only">Birth:</Label>
+                  <Value className="nowrap">{formatDate(details.birthday)}</Value>
+                </Row>
 
-          <MetaRowStackOnMobile>
-            <LabelDesktop>Place of birth:</LabelDesktop>
-            <LabelMobile>Place of</LabelMobile>
-            <MetaValue>{displayValue(details.place_of_birth)}</MetaValue>
-          </MetaRowStackOnMobile>
-        </Info>
+                <Row>
+                  <Label>Place of birth:</Label>
+                  <Value className="stack-on-mobile">{details.place_of_birth || "Unknown"}</Value>
+                </Row>
+              </Info>
 
-        <Bio>{displayValue(details.biography)}</Bio>
-      </HeaderCard>
+              {details.biography && <Bio>{details.biography}</Bio>}
+            </HeaderCard>
 
-      <SectionTitle>Movies – cast ({castCount})</SectionTitle>
-      <MoviesGrid>
-        {castClean.map(
-          ({
-            id: mid,
-            poster_path,
-            title,
-            original_title,
-            character,
-            release_date,
-            vote_average,
-            vote_count,
-            genre_ids = [],
-          }) => (
-            <MovieCard key={mid}>
-              <CardLink to={`/movies/${mid}`}>
-                {poster_path ? (
-                  <Poster
-                    src={poster(poster_path)}
-                    alt={title || original_title || "Movie poster"}
-                    loading="lazy"
-                    decoding="async"
-                    width={500}
-                    height={750}
-                  />
-                ) : (
-                  <PosterPlaceholder aria-label="No poster available" role="img" />
-                )}
+            {castCount > 0 && (
+              <>
+                <SectionTitle>Movies — cast ({castCount})</SectionTitle>
+                <MoviesGrid>
+                  {castClean.map((m) => (
+                    <MovieCard
+                      key={`c-${m.id}`}
+                      id={m.id}
+                      title={m.title}
+                      year={m.year}
+                      posterUrl={m.posterUrl}
+                      genres={m.genres}
+                      subtitle={m.subtitle}
+                      voteAverage={m.voteAverage}
+                      voteCount={m.voteCount}
+                      to={`/movies/${m.id}`}
+                    />
+                  ))}
+                </MoviesGrid>
+              </>
+            )}
 
-                <CardContent>
-                  <CardTitle>{title || original_title || "—"}</CardTitle>
-                  <CardMeta>
-                    {character || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
-                  </CardMeta>
-
-                  <Genre>
-                    {genre_ids.length
-                      ? genre_ids.map((gid) => (
-                        <GenreButton key={gid}>{genresMap[gid]}</GenreButton>
-                      ))
-                      : <GenreButton as="span">No genres</GenreButton>}
-                  </Genre>
-
-                  <VoteRow>
-                    <img src={StarIcon} alt="" />
-                    <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-                    <VoteInfo>{vote_count || 0} votes</VoteInfo>
-                  </VoteRow>
-                </CardContent>
-              </CardLink>
-            </MovieCard>
-          )
+            {crewCount > 0 && (
+              <>
+                <SectionTitle>Movies — crew ({crewCount})</SectionTitle>
+                <MoviesGrid>
+                  {crewClean.map((m) => (
+                    <MovieCard
+                      key={`w-${m.id}`}
+                      id={m.id}
+                      title={m.title}
+                      year={m.year}
+                      posterUrl={m.posterUrl}
+                      genres={m.genres}
+                      subtitle={m.subtitle}
+                      voteAverage={m.voteAverage}
+                      voteCount={m.voteCount}
+                      to={`/movies/${m.id}`}
+                    />
+                  ))}
+                </MoviesGrid>
+              </>
+            )}
+          </>
         )}
-      </MoviesGrid>
-
-      <SectionTitle>Movies – crew ({crewCount})</SectionTitle>
-      <MoviesGrid>
-        {crewClean.map(
-          ({
-            id: mid,
-            poster_path,
-            title,
-            original_title,
-            job,
-            release_date,
-            vote_average,
-            vote_count,
-            genre_ids = [],
-          }) => (
-            <MovieCard key={mid}>
-              <CardLink to={`/movies/${mid}`}>
-                {poster_path ? (
-                  <Poster
-                    src={poster(poster_path)}
-                    alt={title || original_title || "Movie poster"}
-                    loading="lazy"
-                    decoding="async"
-                    width={500}
-                    height={750}
-                  />
-                ) : (
-                  <PosterPlaceholder aria-label="No poster available" role="img" />
-                )}
-
-                <CardContent>
-                  <CardTitle>{title || original_title || "—"}</CardTitle>
-                  <CardMeta>
-                    {job || "—"} {release_date ? `(${new Date(release_date).getFullYear()})` : ""}
-                  </CardMeta>
-
-                  <Genre>
-                    {genre_ids.length
-                      ? genre_ids.map((gid) => (
-                        <GenreButton key={gid}>{genresMap[gid]}</GenreButton>
-                      ))
-                      : <GenreButton as="span">No genres</GenreButton>}
-                  </Genre>
-
-                  <VoteRow>
-                    <img src={StarIcon} alt="" />
-                    <VoteAverage>{(vote_average || 0).toFixed(1).replace(".", ",")}</VoteAverage>
-                    <VoteInfo>{vote_count || 0} votes</VoteInfo>
-                  </VoteRow>
-                </CardContent>
-              </CardLink>
-            </MovieCard>
-          )
-        )}
-      </MoviesGrid>
+      </Loader>
     </Container>
   );
-};
-
-export default PersonDetails;
+}

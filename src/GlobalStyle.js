@@ -84,4 +84,13 @@ export const GlobalStyle = createGlobalStyle`
       scroll-behavior: auto !important;
     }
   }
+
+  .loading-bounce {
+  animation: bounce 0.6s infinite alternate;
+}
+
+@keyframes bounce {
+  from { opacity: 0.7; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(2px); }
+}
 `;
