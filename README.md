@@ -34,40 +34,6 @@ Check out the live version here:
 - **Trello** – project & sprint management  
 - **Figma** – design system & mockups  
 
-## 📂 Project Structure  
-```
-movie-browser/
-│── dist/ # build output
-│── node_modules/ # dependencies
-│── public/ # public assets
-│ └── favicon.svg
-│── src/
-│ ├── api/ # API utilities
-│ ├── common/ # shared components/helpers
-│ ├── features/ # feature-based structure
-│ │ ├── errorPage/
-│ │ ├── movieDetails/
-│ │ ├── movieList/
-│ │ ├── noResult/
-│ │ ├── personDetails/
-│ │ └── personList/
-│ ├── images/ # static images
-│ ├── store/ # Redux store & slices
-│ │ ├── searchSlice.js
-│ │ └── store.js
-│ ├── App.jsx # root component
-│ ├── GlobalStyle.js # global styles
-│ ├── main.jsx # Vite entry point
-│ └── theme.js # styled-components theme
-│── .env # environment variables
-│── .gitignore
-│── eslint.config.js # ESLint configuration
-│── index.html # HTML template
-│── package-lock.json
-│── package.json
-└── README.md
-```
-
 ## ⚙️ Installation & Setup  
 1. Clone the repository:  
    ```bash
